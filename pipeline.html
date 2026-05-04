@@ -12,8 +12,8 @@
       --surface:   #141414;
       --surface2:  #1A1A1A;
       --border:    #252525;
-      --accent:    #C0392B;
-      --accent-h:  #E74C3C;
+      --accent:    #7c6af7;
+      --accent-h:  #9b8ff9;
       --text:      #FFFFFF;
       --text-muted:#888888;
       --text-dim:  #555555;
@@ -113,16 +113,6 @@
     /* ─── Main layout ─────────────────────────────────────────── */
     main { padding: 32px; max-width: 1280px; margin: 0 auto; }
 
-    .toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 28px;
-    }
-
-    .toolbar-title { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
-    .toolbar-title span { color: var(--text-muted); font-weight: 400; font-size: 14px; margin-left: 10px; }
-
     /* ─── Empty state ─────────────────────────────────────────── */
     .empty-state {
       display: flex;
@@ -138,74 +128,121 @@
     .empty-state p { font-size: 15px; color: var(--text-muted); }
     .empty-state small { font-size: 12px; color: var(--text-dim); }
 
-    /* ─── Phase group ─────────────────────────────────────────── */
-    .phase-group {
-      margin-bottom: 10px;
+    /* ─── Stat cards ─────────────────────────────────────────── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+    }
+
+    .stat-card-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .stat-card-value {
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    /* ─── Client table ───────────────────────────────────────── */
+    .tbl-wrap {
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
     }
 
-    .phase-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 16px;
-      background: var(--surface);
-      cursor: pointer;
-      user-select: none;
-      transition: background 0.12s;
+    .client-table {
+      width: 100%;
+      border-collapse: collapse;
     }
-    .phase-header:hover { background: var(--surface2); }
 
-    .phase-num {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: var(--accent);
-      color: #fff;
+    .client-table thead th {
       font-size: 11px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 12px 16px;
+      text-align: left;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
     }
-    .phase-num.inactive { background: var(--border); color: var(--text-dim); }
 
-    .phase-name { font-size: 13px; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; flex: 1; }
-    .phase-badge { font-size: 11px; color: var(--text-muted); background: var(--border); padding: 2px 8px; border-radius: 10px; }
-    .phase-toggle { color: var(--text-dim); font-size: 12px; transition: transform 0.2s; }
-    .phase-group.collapsed .phase-toggle { transform: rotate(-90deg); }
-    .phase-clients { background: var(--bg); }
-    .phase-group.collapsed .phase-clients { display: none; }
-
-    /* ─── Client card ─────────────────────────────────────────── */
-    .client-card {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: 16px;
-      padding: 13px 16px;
-      border-top: 1px solid var(--border);
+    .client-table tbody tr {
+      border-bottom: 1px solid var(--border);
       transition: background 0.1s;
       cursor: pointer;
     }
-    .client-card:hover { background: var(--surface); }
-    .client-info { min-width: 0; }
+    .client-table tbody tr:last-child { border-bottom: none; }
+    .client-table tbody tr:hover { background: var(--surface2); }
 
-    .client-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .client-table td {
+      padding: 13px 16px;
+      vertical-align: middle;
+      font-size: 13px;
+    }
 
-    .client-meta { display: flex; align-items: center; gap: 14px; margin-top: 3px; flex-wrap: wrap; }
-    .client-company { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .td-name  { font-weight: 600; }
+    .td-firma { color: var(--text-muted); }
+    .td-date  { color: var(--text-dim); font-size: 12px; white-space: nowrap; }
 
+    /* ─── Tag / pill helpers ─────────────────────────────────── */
     .tag { display: inline-flex; align-items: center; font-size: 11px; padding: 2px 7px; border-radius: 3px; font-weight: 500; white-space: nowrap; }
-    .tag-website  { background: #0d1f2d; color: #4a9fd4; }
-    .tag-chatbot  { background: #1a1a0d; color: #b8a832; }
-    .tag-beides   { background: #1a0d1a; color: #b86fd4; }
+    .tag-website { background: #0d1f2d; color: #4a9fd4; }
+    .tag-chatbot { background: #1a1a0d; color: #b8a832; }
+    .tag-beides  { background: #1a0d1a; color: #b86fd4; }
 
-    .client-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-    .days-badge { font-size: 11px; color: var(--text-dim); white-space: nowrap; }
+    /* ─── Phase pill badges ──────────────────────────────────── */
+    .phase-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .ph-1 { background: #1e1e1e; color: #888;    border: 1px solid #2e2e2e; }
+    .ph-2 { background: #0d1f33; color: #4a9fd4; border: 1px solid #1a3a5c; }
+    .ph-3 { background: #1a1030; color: #9b8ff9; border: 1px solid #2d1f55; }
+    .ph-4 { background: #1e1a08; color: #c9a830; border: 1px solid #3d3210; }
+    .ph-5 { background: #1e1208; color: #e07830; border: 1px solid #3d2410; }
+    .ph-6 { background: #1e0808; color: #e04040; border: 1px solid #3d1010; }
+    .ph-7 { background: #0d1e0d; color: #4ab84a; border: 1px solid #1a3d1a; }
+    .ph-8 { background: #0a160a; color: #2d9d2d; border: 1px solid #153815; }
+
+    /* ─── Status pill badges ─────────────────────────────────── */
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .st-arbeit { background: #160e33; color: #9b8ff9; border: 1px solid #2d1f55; }
+    .st-warten { background: #1e1a08; color: #c9a830; border: 1px solid #3d3210; }
+    .st-done   { background: #0a1f14; color: #3aaa72; border: 1px solid #1a3d28; }
+
+    /* ─── Row actions ────────────────────────────────────────── */
+    .row-actions { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
 
     .action-btn {
       width: 28px;
@@ -344,7 +381,7 @@
       line-height: 1.3;
     }
     .phase-opt:hover { border-color: #444; color: var(--text); }
-    .phase-opt.active { border-color: var(--accent); background: rgba(192,57,43,0.12); color: var(--text); }
+    .phase-opt.active { border-color: var(--accent); background: rgba(124,106,247,0.12); color: var(--text); }
 
     /* ─── Documents section ───────────────────────────────────── */
     .doc-section {
@@ -498,7 +535,7 @@
       transition: background 0.1s;
     }
     .tl-item:hover { background: var(--surface2); }
-    .tl-item.tl-current { background: rgba(192,57,43,0.09); }
+    .tl-item.tl-current { background: rgba(124,106,247,0.09); }
 
     .tl-dot {
       width: 26px;
@@ -672,12 +709,7 @@
 
 <!-- ═══════════════════════════════════════════════════════ MAIN -->
 <main id="pipelineMain">
-  <div class="toolbar">
-    <div class="toolbar-title">
-      Alle Phasen
-      <span id="subCount"></span>
-    </div>
-  </div>
+  <div id="stat-grid" class="stat-grid"></div>
   <div id="pipeline"></div>
 </main>
 
@@ -725,6 +757,14 @@
             <option value="6">6 – Abnahme</option>
             <option value="7">7 – Rechnung</option>
             <option value="8">8 – Abgeschlossen</option>
+          </select>
+        </div>
+        <div class="form-field full">
+          <label>Status</label>
+          <select id="f-status">
+            <option value="In Bearbeitung">In Bearbeitung</option>
+            <option value="Warten auf Rückmeldung">Warten auf Rückmeldung</option>
+            <option value="Abgeschlossen">Abgeschlossen</option>
           </select>
         </div>
         <div class="form-field full">
@@ -1496,14 +1536,35 @@ function tagClass(type) {
 }
 
 function renderPipeline() {
-  const clients  = loadClients();
-  const collapsed = loadCollapsed();
+  const clients   = loadClients().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   const container = document.getElementById('pipeline');
+  const statGrid  = document.getElementById('stat-grid');
 
   document.getElementById('globalCount').textContent =
     clients.length === 1 ? '1 Kunde' : `${clients.length} Kunden`;
-  const active = clients.filter(c => c.currentPhase < 8).length;
-  document.getElementById('subCount').textContent = clients.length ? `${active} aktiv` : '';
+
+  const total    = clients.length;
+  const inArbeit = clients.filter(c => (c.status || 'In Bearbeitung') === 'In Bearbeitung').length;
+  const warten   = clients.filter(c => c.status === 'Warten auf Rückmeldung').length;
+  const done     = clients.filter(c => c.status === 'Abgeschlossen').length;
+
+  statGrid.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-card-label">Gesamt</div>
+      <div class="stat-card-value">${total}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">In Arbeit</div>
+      <div class="stat-card-value" style="color:#7c6af7">${inArbeit}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">Warten auf Rückmeldung</div>
+      <div class="stat-card-value" style="color:#c9a830">${warten}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">Abgeschlossen</div>
+      <div class="stat-card-value" style="color:#3aaa72">${done}</div>
+    </div>`;
 
   if (clients.length === 0) {
     container.innerHTML = `
@@ -1513,37 +1574,39 @@ function renderPipeline() {
           <path d="M16 12V9a2 2 0 012-2h12a2 2 0 012 2v3" stroke="#555" stroke-width="1.5"/>
           <path d="M16 22h16M16 28h10" stroke="#555" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
-        <p>Keine Kunden vorhanden</p>
-        <small>Klicke auf „Neuer Kunde" um loszulegen.</small>
+        <p>Noch keine Kunden</p>
+        <small>Lege jetzt deinen ersten Kunden an.</small>
+        <button class="btn btn-primary" onclick="openNewModal()" style="margin-top:4px">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          Neuer Kunde
+        </button>
       </div>`;
     return;
   }
 
-  container.innerHTML = PHASES.map(phase => {
-    const group      = clients.filter(c => c.currentPhase === phase.id);
-    const isCollapsed = collapsed[phase.id];
-    const hasClients  = group.length > 0;
+  const PHASE_COLORS = ['','ph-1','ph-2','ph-3','ph-4','ph-5','ph-6','ph-7','ph-8'];
 
-    const cards = group.map(client => {
-      const days      = daysSince(client.createdAt);
-      const daysLabel = days === 0 ? 'Heute' : days === 1 ? '1 Tag' : `${days} Tage`;
-      const docCount  = getDocsForPhase(client.currentPhase, client.projectType).length;
-      const sentCount = Object.keys(client.sentDocs || {}).length;
-      const docBadge  = docCount > 0
-        ? `<span class="days-badge" title="${sentCount}/${docCount} Dokumente gesendet">${sentCount}/${docCount} Dok.</span>`
-        : '';
-      return `
-        <div class="client-card" onclick="showDetailView('${client.id}')">
-          <div class="client-info">
-            <div class="client-name">${esc(client.name)}</div>
-            <div class="client-meta">
-              ${client.company ? `<span class="client-company">${esc(client.company)}</span>` : ''}
-              <span class="tag ${tagClass(client.projectType)}">${esc(client.projectType)}</span>
-            </div>
-          </div>
-          <div class="client-actions">
-            ${docBadge}
-            <span class="days-badge">${daysLabel}</span>
+  const rows = clients.map(client => {
+    const phaseLabel = PHASES.find(p => p.id === client.currentPhase)?.label || '–';
+    const status     = client.status || 'In Bearbeitung';
+    const stClass    = status === 'Abgeschlossen'          ? 'st-done'
+                     : status === 'Warten auf Rückmeldung' ? 'st-warten'
+                     : 'st-arbeit';
+    const ptClass    = client.projectType === 'Website' ? 'tag-website'
+                     : client.projectType === 'Chatbot'  ? 'tag-chatbot' : 'tag-beides';
+    const created    = new Date(client.createdAt).toLocaleDateString('de-DE');
+    return `
+      <tr onclick="showDetailView('${client.id}')">
+        <td class="td-name">${esc(client.name)}</td>
+        <td class="td-firma">${esc(client.company || '–')}</td>
+        <td><span class="tag ${ptClass}">${esc(client.projectType)}</span></td>
+        <td><span class="phase-pill ${PHASE_COLORS[client.currentPhase]}">${esc(phaseLabel)}</span></td>
+        <td><span class="status-pill ${stClass}">${esc(status)}</span></td>
+        <td class="td-date">${created}</td>
+        <td>
+          <div class="row-actions">
             <button class="action-btn del" title="Löschen"
                     onclick="event.stopPropagation(); deleteClient('${client.id}')">
               <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
@@ -1551,29 +1614,27 @@ function renderPipeline() {
               </svg>
             </button>
           </div>
-        </div>`;
-    }).join('');
-
-    return `
-      <div class="phase-group${isCollapsed ? ' collapsed' : ''}" id="phase-${phase.id}">
-        <div class="phase-header" onclick="togglePhase(${phase.id})">
-          <div class="phase-num${!hasClients ? ' inactive' : ''}">${phase.id}</div>
-          <div class="phase-name">${phase.label}</div>
-          <div class="phase-badge">${group.length}</div>
-          <svg class="phase-toggle" width="10" height="10" viewBox="0 0 10 10" fill="none">
-            <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div class="phase-clients">${cards}</div>
-      </div>`;
+        </td>
+      </tr>`;
   }).join('');
-}
 
-function togglePhase(id) {
-  const collapsed = loadCollapsed();
-  collapsed[id] = !collapsed[id];
-  saveCollapsed(collapsed);
-  document.getElementById(`phase-${id}`).classList.toggle('collapsed', !!collapsed[id]);
+  container.innerHTML = `
+    <div class="tbl-wrap">
+      <table class="client-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Firma</th>
+            <th>Projekttyp</th>
+            <th>Phase</th>
+            <th>Status</th>
+            <th>Erstellt</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
 }
 
 function esc(str) {
@@ -1584,8 +1645,9 @@ function esc(str) {
 // ─── New client modal ─────────────────────────────────────────────────────
 function openNewModal() {
   ['f-name','f-company','f-email','f-phone','f-notes'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('f-type').value  = 'Website';
-  document.getElementById('f-phase').value = '1';
+  document.getElementById('f-type').value   = 'Website';
+  document.getElementById('f-phase').value  = '1';
+  document.getElementById('f-status').value = 'In Bearbeitung';
   openModal('newOverlay');
   setTimeout(() => document.getElementById('f-name').focus(), 60);
 }
@@ -1603,6 +1665,7 @@ function saveNewClient() {
     phone:       document.getElementById('f-phone').value.trim(),
     projectType: document.getElementById('f-type').value,
     currentPhase: parseInt(document.getElementById('f-phase').value),
+    status:      document.getElementById('f-status').value || 'In Bearbeitung',
     createdAt:   new Date().toISOString(),
     notes:       document.getElementById('f-notes').value.trim(),
     sentDocs:    {},
@@ -1672,6 +1735,14 @@ function buildDVInfoForm(c) {
         </select>
       </div>
       <div class="form-field">
+        <label>Status</label>
+        <select id="dv-status">
+          <option${(c.status||'In Bearbeitung')==='In Bearbeitung'?' selected':''}>In Bearbeitung</option>
+          <option${c.status==='Warten auf Rückmeldung'?' selected':''}>Warten auf Rückmeldung</option>
+          <option${c.status==='Abgeschlossen'?' selected':''}>Abgeschlossen</option>
+        </select>
+      </div>
+      <div class="form-field">
         <label>Erstellt</label>
         <input type="text" value="${new Date(c.createdAt).toLocaleDateString('de-DE')}"
           disabled style="color:var(--text-muted);cursor:default;" />
@@ -1720,6 +1791,7 @@ function saveDVClient() {
     email:       document.getElementById('dv-email').value.trim(),
     phone:       document.getElementById('dv-phone').value.trim(),
     projectType: document.getElementById('dv-type').value,
+    status:      document.getElementById('dv-status').value,
     notes:       document.getElementById('dv-notes').value.trim(),
   };
   saveClients(clients);
@@ -1777,7 +1849,7 @@ function overlayClick(e, id) {
 function flashInvalid(id) {
   const el = document.getElementById(id);
   el.focus();
-  el.style.borderColor = '#C0392B';
+  el.style.borderColor = '#7c6af7';
   setTimeout(() => el.style.borderColor = '', 1200);
 }
 
