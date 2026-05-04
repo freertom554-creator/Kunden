@@ -68,28 +68,12 @@
       flex-shrink: 0;
     }
 
-    .logo-sep {
-      color: var(--text-dim);
-      font-weight: 300;
-      margin: 0 4px;
-    }
+    .logo-sep { color: var(--text-dim); font-weight: 300; margin: 0 4px; }
+    .logo-sub { color: var(--text-muted); font-weight: 400; }
 
-    .logo-sub {
-      color: var(--text-muted);
-      font-weight: 400;
-    }
+    .header-right { display: flex; align-items: center; gap: 12px; }
 
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .client-count {
-      font-size: 12px;
-      color: var(--text-muted);
-      letter-spacing: 0.03em;
-    }
+    .client-count { font-size: 12px; color: var(--text-muted); letter-spacing: 0.03em; }
 
     /* ─── Buttons ─────────────────────────────────────────────── */
     .btn {
@@ -107,11 +91,7 @@
       white-space: nowrap;
     }
 
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
-    }
-
+    .btn-primary { background: var(--accent); color: #fff; }
     .btn-primary:hover { background: var(--accent-h); }
 
     .btn-ghost {
@@ -119,7 +99,6 @@
       color: var(--text-muted);
       border: 1px solid var(--border);
     }
-
     .btn-ghost:hover { border-color: #444; color: var(--text); }
 
     .btn-danger {
@@ -127,15 +106,12 @@
       color: #E74C3C;
       border: 1px solid #3a1a1a;
     }
-
     .btn-danger:hover { background: #1e0e0e; }
 
+    .btn-sm { padding: 5px 11px; font-size: 12px; }
+
     /* ─── Main layout ─────────────────────────────────────────── */
-    main {
-      padding: 32px;
-      max-width: 1280px;
-      margin: 0 auto;
-    }
+    main { padding: 32px; max-width: 1280px; margin: 0 auto; }
 
     .toolbar {
       display: flex;
@@ -144,18 +120,8 @@
       margin-bottom: 28px;
     }
 
-    .toolbar-title {
-      font-size: 20px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-    }
-
-    .toolbar-title span {
-      color: var(--text-muted);
-      font-weight: 400;
-      font-size: 14px;
-      margin-left: 10px;
-    }
+    .toolbar-title { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+    .toolbar-title span { color: var(--text-muted); font-weight: 400; font-size: 14px; margin-left: 10px; }
 
     /* ─── Empty state ─────────────────────────────────────────── */
     .empty-state {
@@ -168,14 +134,8 @@
       text-align: center;
       gap: 12px;
     }
-
     .empty-state svg { opacity: 0.3; }
-
-    .empty-state p {
-      font-size: 15px;
-      color: var(--text-muted);
-    }
-
+    .empty-state p { font-size: 15px; color: var(--text-muted); }
     .empty-state small { font-size: 12px; color: var(--text-dim); }
 
     /* ─── Phase group ─────────────────────────────────────────── */
@@ -196,7 +156,6 @@
       user-select: none;
       transition: background 0.12s;
     }
-
     .phase-header:hover { background: var(--surface2); }
 
     .phase-num {
@@ -212,37 +171,13 @@
       justify-content: center;
       flex-shrink: 0;
     }
-
     .phase-num.inactive { background: var(--border); color: var(--text-dim); }
 
-    .phase-name {
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-      flex: 1;
-    }
-
-    .phase-badge {
-      font-size: 11px;
-      color: var(--text-muted);
-      background: var(--border);
-      padding: 2px 8px;
-      border-radius: 10px;
-    }
-
-    .phase-toggle {
-      color: var(--text-dim);
-      font-size: 12px;
-      transition: transform 0.2s;
-    }
-
+    .phase-name { font-size: 13px; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; flex: 1; }
+    .phase-badge { font-size: 11px; color: var(--text-muted); background: var(--border); padding: 2px 8px; border-radius: 10px; }
+    .phase-toggle { color: var(--text-dim); font-size: 12px; transition: transform 0.2s; }
     .phase-group.collapsed .phase-toggle { transform: rotate(-90deg); }
-
-    .phase-clients {
-      background: var(--bg);
-    }
-
+    .phase-clients { background: var(--bg); }
     .phase-group.collapsed .phase-clients { display: none; }
 
     /* ─── Client card ─────────────────────────────────────────── */
@@ -256,61 +191,21 @@
       transition: background 0.1s;
       cursor: default;
     }
-
     .client-card:hover { background: var(--surface); }
-
     .client-info { min-width: 0; }
 
-    .client-name {
-      font-size: 14px;
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    .client-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    .client-meta {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-top: 3px;
-      flex-wrap: wrap;
-    }
+    .client-meta { display: flex; align-items: center; gap: 14px; margin-top: 3px; flex-wrap: wrap; }
+    .client-company { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    .client-company {
-      font-size: 12px;
-      color: var(--text-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      font-size: 11px;
-      padding: 2px 7px;
-      border-radius: 3px;
-      font-weight: 500;
-      white-space: nowrap;
-    }
-
+    .tag { display: inline-flex; align-items: center; font-size: 11px; padding: 2px 7px; border-radius: 3px; font-weight: 500; white-space: nowrap; }
     .tag-website  { background: #0d1f2d; color: #4a9fd4; }
     .tag-chatbot  { background: #1a1a0d; color: #b8a832; }
     .tag-beides   { background: #1a0d1a; color: #b86fd4; }
 
-    .client-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    .days-badge {
-      font-size: 11px;
-      color: var(--text-dim);
-      white-space: nowrap;
-    }
+    .client-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .days-badge { font-size: 11px; color: var(--text-dim); white-space: nowrap; }
 
     .action-btn {
       width: 28px;
@@ -326,7 +221,6 @@
       transition: border-color 0.15s, color 0.15s, background 0.15s;
       font-family: var(--font);
     }
-
     .action-btn:hover { border-color: #444; color: var(--text); background: var(--surface2); }
     .action-btn.del:hover { border-color: #5a1a1a; color: #E74C3C; background: #1e0808; }
 
@@ -341,7 +235,6 @@
       justify-content: center;
       padding: 24px;
     }
-
     .overlay.open { display: flex; }
 
     .modal {
@@ -354,19 +247,20 @@
       overflow-y: auto;
       box-shadow: 0 24px 60px rgba(0,0,0,0.6);
     }
+    .modal-xl { max-width: 740px; }
 
     .modal-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 20px 24px 16px;
+      background: var(--surface);
       border-bottom: 1px solid var(--border);
     }
-
-    .modal-title {
-      font-size: 16px;
-      font-weight: 600;
-    }
+    .modal-title { font-size: 16px; font-weight: 600; }
 
     .modal-close {
       width: 30px;
@@ -381,24 +275,14 @@
       justify-content: center;
       font-size: 16px;
       transition: color 0.15s, border-color 0.15s;
+      flex-shrink: 0;
     }
-
     .modal-close:hover { color: var(--text); border-color: #444; }
 
     .modal-body { padding: 24px; }
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .form-field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
     .form-field.full { grid-column: 1 / -1; }
 
     label {
@@ -422,10 +306,7 @@
       outline: none;
       appearance: none;
     }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--accent);
-    }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); }
 
     select {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
@@ -433,56 +314,23 @@
       background-position: right 10px center;
       padding-right: 30px;
     }
-
     select option { background: #1A1A1A; }
-
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
+    textarea { resize: vertical; min-height: 80px; }
 
     .modal-footer {
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
       display: flex;
       justify-content: flex-end;
       gap: 10px;
       padding: 16px 24px 20px;
+      background: var(--surface);
       border-top: 1px solid var(--border);
     }
 
-    /* ─── Detail modal additions ──────────────────────────────── */
-    .detail-row {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-
-    .detail-item {
-      flex: 1;
-      min-width: 140px;
-    }
-
-    .detail-label {
-      font-size: 11px;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 4px;
-    }
-
-    .detail-value {
-      font-size: 13px;
-      color: var(--text);
-    }
-
     /* ─── Phase selector in detail modal ─────────────────────── */
-    .phase-selector {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      margin-top: 6px;
-    }
-
+    .phase-selector { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 6px; }
     .phase-opt {
       padding: 7px 4px;
       border-radius: var(--radius);
@@ -495,15 +343,107 @@
       transition: all 0.15s;
       line-height: 1.3;
     }
-
     .phase-opt:hover { border-color: #444; color: var(--text); }
     .phase-opt.active { border-color: var(--accent); background: rgba(192,57,43,0.12); color: var(--text); }
+
+    /* ─── Documents section ───────────────────────────────────── */
+    .doc-section {
+      margin-top: 22px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .doc-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .doc-list { display: flex; flex-direction: column; gap: 7px; }
+
+    .doc-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      transition: border-color 0.12s;
+    }
+    .doc-item:hover { border-color: #333; }
+
+    .doc-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--surface2);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--text-dim);
+    }
+
+    .doc-name { flex: 1; font-size: 13px; color: var(--text); min-width: 0; }
+
+    .doc-sent-badge {
+      font-size: 10px;
+      color: #3aaa72;
+      background: #0a1f14;
+      border: 1px solid #1a3d28;
+      padding: 2px 8px;
+      border-radius: 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .doc-empty { font-size: 12px; color: var(--text-dim); font-style: italic; padding: 4px 0; }
+
+    /* ─── Document preview modal ──────────────────────────────── */
+    .doc-preview {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      font-size: 12.5px;
+      line-height: 1.85;
+      color: #ddd;
+      white-space: pre-wrap;
+      font-family: "Courier New", Courier, monospace;
+      max-height: 54vh;
+      overflow-y: auto;
+    }
 
     /* ─── Scrollbar ───────────────────────────────────────────── */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: #333; }
+
+    /* ─── Print ───────────────────────────────────────────────── */
+    @media print {
+      body > *:not(#printRoot) { display: none !important; }
+      #printRoot {
+        display: block !important;
+        position: static !important;
+        background: white;
+        color: black;
+        padding: 48px 56px;
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 11pt;
+        line-height: 1.75;
+        max-width: none;
+      }
+      #printRoot pre {
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 11pt;
+        white-space: pre-wrap;
+      }
+    }
   </style>
 </head>
 <body>
@@ -537,7 +477,7 @@
   <div id="pipeline"></div>
 </main>
 
-<!-- ═══════════════════════════════════════════════════ NEW MODAL -->
+<!-- ═══════════════════════════════════════════════ NEW MODAL -->
 <div class="overlay" id="newOverlay" onclick="overlayClick(event,'newOverlay')">
   <div class="modal">
     <div class="modal-header">
@@ -612,6 +552,34 @@
   </div>
 </div>
 
+<!-- ════════════════════════════════════════════ DOCUMENT MODAL -->
+<div class="overlay" id="docOverlay" onclick="overlayClick(event,'docOverlay')">
+  <div class="modal modal-xl">
+    <div class="modal-header">
+      <div class="modal-title" id="doc-modal-title">Dokument</div>
+      <button class="modal-close" onclick="closeModal('docOverlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="doc-preview" id="doc-preview-content"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('docOverlay')">Schließen</button>
+      <button class="btn btn-primary" onclick="printCurrentDoc()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <rect x="2" y="4.5" width="9" height="6" rx="1" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M4.5 4.5V2.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5v2" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M4.5 8.5h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          <circle cx="10" cy="6.5" r=".75" fill="currentColor"/>
+        </svg>
+        Als PDF speichern
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden print container -->
+<div id="printRoot" style="display:none"></div>
+
 <script>
 // ─── Constants ────────────────────────────────────────────────────────────
 const PHASES = [
@@ -625,7 +593,7 @@ const PHASES = [
   { id: 8, label: 'Abgeschlossen' },
 ];
 
-const STORAGE_KEY = 'ns_pipeline_clients';
+const STORAGE_KEY   = 'ns_pipeline_clients';
 const COLLAPSED_KEY = 'ns_pipeline_collapsed';
 
 // ─── Data layer ───────────────────────────────────────────────────────────
@@ -652,8 +620,635 @@ function generateId() {
 }
 
 function daysSince(iso) {
-  const ms = Date.now() - new Date(iso).getTime();
-  return Math.floor(ms / 86400000);
+  return Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+}
+
+// ─── Document templates ───────────────────────────────────────────────────
+const DOC_TEMPLATES = {
+  'Angebot Website':
+`ANGEBOT – WEBSITE-ENTWICKLUNG
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+An:
+[Name]
+[Firma]
+[Email]  ·  [Telefon]
+
+Sehr geehrte/r [Name],
+
+vielen Dank für Ihr Interesse an den Leistungen von NextStructure. Hiermit
+unterbreiten wir Ihnen unser Angebot für die Entwicklung Ihrer professionellen
+Website.
+
+LEISTUNGSUMFANG
+────────────────────────────────────────
+  • Konzeption und Wireframing
+  • Individuelles responsives Design (Desktop, Tablet, Mobil)
+  • Entwicklung der Website inkl. CMS-Anbindung
+  • Kontaktformular mit datenschutzkonformer Verarbeitung
+  • SEO-Grundoptimierung (Meta-Tags, Ladezeit, Struktur)
+  • Cookie-Banner und Datenschutzseite
+  • Übergabe, Dokumentation und Einweisung
+
+KONDITIONEN
+────────────────────────────────────────
+  Projektdauer:       Ca. 4–6 Wochen nach Auftragserteilung
+  Zahlungsbedingung:  50 % bei Auftragserteilung, 50 % bei Abnahme
+  Angebotsgültigkeit: 30 Tage ab Ausstellungsdatum
+
+Wir freuen uns auf eine erfolgreiche Zusammenarbeit.
+
+Mit freundlichen Grüßen,
+NextStructure`,
+
+  'Leistungsbeschreibung Website':
+`LEISTUNGSBESCHREIBUNG – WEBSITE
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Auftraggeber:
+[Name]  |  [Firma]
+[Email]  ·  [Telefon]
+
+1.  PROJEKTUMFANG
+    Entwicklung einer professionellen Website für [Firma].
+
+2.  DESIGNPHASE
+    – Erstellung von Wireframes und Designentwürfen
+    – Freigabe durch den Auftraggeber vor Entwicklungsstart
+    – Bis zu 2 Überarbeitungsrunden inklusive
+
+3.  ENTWICKLUNG
+    – Technologie: modernes CMS oder Static-Site-Ansatz
+    – Responsives Design für alle gängigen Endgeräte
+    – Performance-optimierter, sauberer Quellcode
+
+4.  INHALTE
+    – Texte und Medien werden vom Auftraggeber bereitgestellt
+    – Integration von bereitgestelltem Material inklusive
+
+5.  ABNAHME & ÜBERGABE
+    – Testbetrieb auf Staging-System
+    – Formelle Abnahme per Abnahmeprotokoll
+    – Übergabe von Zugangsdaten und Dokumentation
+
+6.  GEWÄHRLEISTUNG
+    – 12 Monate auf alle entwickelten Funktionen`,
+
+  'Angebot Chatbot':
+`ANGEBOT – KI-CHATBOT-ENTWICKLUNG
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+An:
+[Name]
+[Firma]
+[Email]  ·  [Telefon]
+
+Sehr geehrte/r [Name],
+
+vielen Dank für Ihr Interesse. Hiermit unterbreiten wir Ihnen unser Angebot für
+die Entwicklung eines maßgeschneiderten KI-Chatbots für [Firma].
+
+LEISTUNGSUMFANG
+────────────────────────────────────────
+  • Anforderungsanalyse und Konzeption
+  • Training und Konfiguration des KI-Modells
+  • Integration in Ihre Website / Plattform
+  • Einrichtung der Wissensdatenbank (FAQ, Prozesse, Produkte)
+  • Anpassung von Tonalität und Design (Corporate Identity)
+  • Testphase und Qualitätssicherung
+  • Übergabe, Dokumentation und Einweisung
+
+KONDITIONEN
+────────────────────────────────────────
+  Projektdauer:       Ca. 3–5 Wochen nach Auftragserteilung
+  Zahlungsbedingung:  50 % bei Auftragserteilung, 50 % bei Abnahme
+  Angebotsgültigkeit: 30 Tage ab Ausstellungsdatum
+
+Mit freundlichen Grüßen,
+NextStructure`,
+
+  'Leistungsbeschreibung Chatbot':
+`LEISTUNGSBESCHREIBUNG – KI-CHATBOT
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Auftraggeber:
+[Name]  |  [Firma]
+[Email]  ·  [Telefon]
+
+1.  PROJEKTUMFANG
+    Entwicklung und Implementierung eines KI-Chatbots für [Firma].
+
+2.  KONZEPTIONSPHASE
+    – Erfassung von Use-Cases und Gesprächsflüssen
+    – Definition der Wissensbasis (Themen, Tonalität, Grenzen)
+    – Freigabe des Konzepts durch den Auftraggeber
+
+3.  ENTWICKLUNG & TRAINING
+    – Auswahl und Konfiguration des KI-Modells
+    – Training mit bereitgestellten Unternehmensdaten
+    – Anpassung von Persönlichkeit und Sprachstil
+
+4.  INTEGRATION
+    – Einbindung per Widget oder API in bestehende Systeme
+    – Design-Anpassung nach Corporate Identity
+
+5.  TESTPHASE
+    – Interne Qualitätssicherung
+    – Testbetrieb mit ausgewählten Nutzern
+
+6.  ÜBERGABE
+    – Dokumentation der Konfiguration
+    – Einweisung des Teams in Administration und Pflege
+    – 12 Monate Gewährleistung auf entwickelte Funktionen`,
+
+  'Auftragsbestätigung Website':
+`AUFTRAGSBESTÄTIGUNG – WEBSITE-ENTWICKLUNG
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Auftraggeber:
+[Name]
+[Firma]
+[Email]  ·  [Telefon]
+
+Sehr geehrte/r [Name],
+
+wir bestätigen hiermit den Eingang Ihres Auftrags zur Entwicklung Ihrer Website
+und freuen uns auf die Umsetzung des Projekts gemeinsam mit [Firma].
+
+AUFTRAGSINHALT
+────────────────────────────────────────
+  Projekttyp:      Website
+  Auftraggeber:    [Firma]
+  Ansprechpartner: [Name]
+
+NÄCHSTE SCHRITTE
+────────────────────────────────────────
+  1. Kick-off-Gespräch zur Abstimmung aller Details
+  2. Übermittlung der Onboarding-Unterlagen und Checkliste
+  3. Bereitstellung der benötigten Zugangsdaten und Inhalte durch Sie
+
+Bitte senden Sie AVV und AGB unterschrieben zurück, sofern noch nicht erfolgt.
+
+Mit freundlichen Grüßen,
+NextStructure`,
+
+  'Auftragsbestätigung Chatbot':
+`AUFTRAGSBESTÄTIGUNG – KI-CHATBOT
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Auftraggeber:
+[Name]
+[Firma]
+[Email]  ·  [Telefon]
+
+Sehr geehrte/r [Name],
+
+wir bestätigen hiermit den Eingang Ihres Auftrags zur Entwicklung eines
+KI-Chatbots und freuen uns auf die Zusammenarbeit mit [Firma].
+
+AUFTRAGSINHALT
+────────────────────────────────────────
+  Projekttyp:      KI-Chatbot
+  Auftraggeber:    [Firma]
+  Ansprechpartner: [Name]
+
+NÄCHSTE SCHRITTE
+────────────────────────────────────────
+  1. Kick-off-Gespräch und Anforderungsaufnahme
+  2. Übermittlung der Onboarding-Unterlagen und Checkliste
+  3. Bereitstellung der Wissensbasis und Unternehmensdaten durch Sie
+
+Bitte senden Sie AVV und AGB unterschrieben zurück, sofern noch nicht erfolgt.
+
+Mit freundlichen Grüßen,
+NextStructure`,
+
+  'AVV':
+`AUFTRAGSVERARBEITUNGSVERTRAG (AVV)
+gemäß Art. 28 DSGVO
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+ZWISCHEN
+
+Auftraggeber (Verantwortlicher):
+[Firma]
+Vertreten durch: [Name]
+[Email]  ·  [Telefon]
+
+UND
+
+Auftragnehmer (Auftragsverarbeiter):
+NextStructure
+
+§ 1  GEGENSTAND
+Der Auftragnehmer verarbeitet personenbezogene Daten im Auftrag und gemäß
+den Weisungen des Auftraggebers im Rahmen des Projekts: [Projekttyp] für [Firma].
+
+§ 2  PFLICHTEN DES AUFTRAGNEHMERS
+  – Verarbeitung ausschließlich auf dokumentierte Weisung des Auftraggebers
+  – Sicherstellung der Vertraulichkeit durch alle befugten Personen
+  – Umsetzung geeigneter technisch-organisatorischer Maßnahmen (TOM)
+  – Unterstützung bei Betroffenenrechten und Datenschutz-Folgenabschätzung
+  – Löschung oder Rückgabe aller personenbezogenen Daten nach Vertragsende
+
+§ 3  LAUFZEIT
+Dieser AVV gilt für die Dauer des zugrundeliegenden Hauptvertrags.
+
+─────────────────────────────────────────────────────────────────
+Auftraggeber ([Firma])           Auftragnehmer (NextStructure)
+
+Ort, Datum: __________________   Ort, Datum: __________________
+Unterschrift: ________________   Unterschrift: ________________`,
+
+  'AGB':
+`ALLGEMEINE GESCHÄFTSBEDINGUNGEN (AGB)
+NextStructure
+Stand: [Datum]
+─────────────────────────────────────────────────────────────────
+
+§ 1  GELTUNGSBEREICH
+Diese AGB gelten für alle Verträge zwischen NextStructure (Auftragnehmer) und
+dem Auftraggeber über Leistungen im Bereich digitaler Produkte und Dienstleistungen.
+
+§ 2  VERTRAGSSCHLUSS
+Ein Vertrag kommt durch die schriftliche Auftragsbestätigung des Auftragnehmers
+zustande. Mündliche Nebenabreden bedürfen der Schriftform.
+
+§ 3  LEISTUNGSERBRINGUNG
+Der Auftragnehmer erbringt die vereinbarten Leistungen nach dem Stand der Technik.
+Änderungen des Leistungsumfangs sind schriftlich zu vereinbaren.
+
+§ 4  MITWIRKUNGSPFLICHTEN
+Der Auftraggeber stellt alle benötigten Informationen, Inhalte und Zugänge
+rechtzeitig bereit. Verzögerungen durch fehlende Mitwirkung gehen zu Lasten
+des Auftraggebers.
+
+§ 5  VERGÜTUNG & ZAHLUNG
+Zahlungen sind innerhalb von 14 Tagen nach Rechnungsstellung fällig.
+Bei Zahlungsverzug werden Zinsen i.H.v. 9 % über dem Basiszinssatz berechnet.
+
+§ 6  NUTZUNGSRECHTE
+Nach vollständiger Zahlung erhält der Auftraggeber das einfache, zeitlich
+unbegrenzte Nutzungsrecht an den im Rahmen des Projekts erstellten Werken.
+
+§ 7  GEWÄHRLEISTUNG
+Die Gewährleistungsfrist beträgt 12 Monate ab formeller Abnahme.
+
+§ 8  HAFTUNG
+Die Haftung des Auftragnehmers ist auf Vorsatz und grobe Fahrlässigkeit
+beschränkt. Eine weitergehende Haftung ist ausgeschlossen.
+
+§ 9  DATENSCHUTZ
+Die Verarbeitung personenbezogener Daten erfolgt gemäß DSGVO und dem
+gesondert abgeschlossenen Auftragsverarbeitungsvertrag (AVV).
+
+§ 10  SCHLUSSBESTIMMUNGEN
+Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts.
+Gerichtsstand ist der Sitz des Auftragnehmers.`,
+
+  'Onboarding-Checkliste Website':
+`ONBOARDING-CHECKLISTE – WEBSITE-PROJEKT
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Kunde:       [Name]  |  [Firma]
+Kontakt:     [Email]  ·  [Telefon]
+Projekttyp:  Website
+
+SCHRITT 1 – ZUGANGSDATEN & ACCOUNTS
+  ☐  Domain und Hosting – Zugangsdaten übermitteln oder neu einrichten
+  ☐  E-Mail-Postfächer – Adressen und Struktur festlegen
+  ☐  Bestehendes CMS / Hosting-Konto: Zugang gewähren (falls vorhanden)
+  ☐  Google Search Console und Analytics: einrichten oder Zugang erteilen
+
+SCHRITT 2 – INHALTE BEREITSTELLEN
+  ☐  Logo in hoher Auflösung (SVG bevorzugt, alternativ PNG 2×)
+  ☐  Farbpalette und Schriftarten (Brand-Guidelines, falls vorhanden)
+  ☐  Texte für alle Seiten (Start, Über uns, Leistungen, Kontakt, …)
+  ☐  Bilder und Medien (lizenzfrei oder eigene Aufnahmen)
+  ☐  Referenzen oder Kundenstimmen (optional)
+
+SCHRITT 3 – RECHTLICHES
+  ☐  Impressumsangaben vollständig (gemäß § 5 TMG)
+  ☐  Datenschutzbeauftragter vorhanden? (Name und Kontakt mitteilen)
+  ☐  AGB und AVV unterschrieben zurücksenden
+
+SCHRITT 4 – KICK-OFF
+  ☐  Kick-off-Termin vereinbart
+  ☐  Projektzeitplan besprochen und freigegeben
+  ☐  Kommunikationskanal festgelegt (E-Mail / Slack / …)
+
+─────────────────────────────────────────────────────────────────
+Bitte alle offenen Punkte bis zum Kick-off-Termin abschließen.`,
+
+  'Onboarding-Checkliste Chatbot':
+`ONBOARDING-CHECKLISTE – KI-CHATBOT-PROJEKT
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Kunde:       [Name]  |  [Firma]
+Kontakt:     [Email]  ·  [Telefon]
+Projekttyp:  KI-Chatbot
+
+SCHRITT 1 – WISSENSBASIS ZUSAMMENSTELLEN
+  ☐  FAQ-Dokument (häufige Fragen und Antworten, möglichst vollständig)
+  ☐  Produktkatalog oder Preisliste (falls relevant)
+  ☐  Unternehmensbeschreibung und Dienstleistungsübersicht
+  ☐  Support-Prozesse und Eskalationswege
+  ☐  Weitere Dokumente für den Bot (PDF, Word, …)
+
+SCHRITT 2 – TECHNISCHE INTEGRATION
+  ☐  Ziel-Plattform definieren (Website, WhatsApp, andere)
+  ☐  Website-Zugang oder bevorzugte Integrationsmethode klären
+  ☐  API-Zugänge für Drittsysteme bereitstellen (falls nötig)
+  ☐  Design-Vorgaben für Chat-Widget (Farben, Logo, Schriften)
+
+SCHRITT 3 – ANFORDERUNGEN DEFINIEREN
+  ☐  Tonalität und Persönlichkeit des Chatbots festlegen
+  ☐  Themen, die der Bot NICHT behandeln soll (klare Grenzen)
+  ☐  Übergabe an Menschen: Wann und wie soll weitergeleitet werden?
+  ☐  Sprache(n): Deutsch, Englisch oder mehrsprachig?
+
+SCHRITT 4 – RECHTLICHES & KICK-OFF
+  ☐  Datenschutzhinweis für Chatbot-Nutzer vorbereiten
+  ☐  AGB und AVV unterschrieben zurücksenden
+  ☐  Kick-off-Termin vereinbart
+  ☐  Projektzeitplan besprochen und freigegeben
+
+─────────────────────────────────────────────────────────────────
+Bitte alle offenen Punkte bis zum Kick-off-Termin abschließen.`,
+
+  'Abnahmeprotokoll Website':
+`ABNAHMEPROTOKOLL – WEBSITE
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Auftraggeber:
+[Name]  |  [Firma]
+[Email]  ·  [Telefon]
+
+Projektgegenstand: Website-Entwicklung für [Firma]
+
+ABNAHMEKRITERIEN
+────────────────────────────────────────
+
+Design & Darstellung
+  ☐  Design entspricht den vereinbarten Vorgaben
+  ☐  Korrekte Darstellung auf Desktop, Tablet und Smartphone
+  ☐  Schriften, Farben und Logo korrekt implementiert
+
+Funktionen
+  ☐  Alle Seiten laden vollständig und fehlerfrei
+  ☐  Kontaktformular funktioniert und sendet E-Mails korrekt
+  ☐  Alle Links und Navigationselemente funktionieren
+  ☐  Bilder und Medien werden korrekt dargestellt
+
+Technisches
+  ☐  Ladezeiten im akzeptablen Bereich (< 3 Sekunden)
+  ☐  SSL-Zertifikat aktiv (HTTPS)
+  ☐  Grundlegende SEO-Einstellungen gesetzt
+  ☐  Cookie-Banner und Datenschutz korrekt eingerichtet
+
+Inhalte
+  ☐  Alle Texte korrekt und vollständig
+  ☐  Impressum und Datenschutzerklärung aktuell
+
+ERGEBNIS
+────────────────────────────────────────
+  ☐  Abnahme erteilt – Projekt gilt als erfolgreich abgeschlossen
+  ☐  Abnahme mit Mängeln (Details siehe Anmerkungen)
+  ☐  Abnahme verweigert – Nachbesserung erforderlich
+
+Anmerkungen:
+_____________________________________________________________
+_____________________________________________________________
+
+─────────────────────────────────────────────────────────────────
+Auftraggeber ([Firma])           Auftragnehmer (NextStructure)
+
+Datum: ______________________    Datum: ______________________
+Unterschrift: _______________    Unterschrift: _______________`,
+
+  'Abnahmeprotokoll Chatbot':
+`ABNAHMEPROTOKOLL – KI-CHATBOT
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Auftraggeber:
+[Name]  |  [Firma]
+[Email]  ·  [Telefon]
+
+Projektgegenstand: KI-Chatbot-Entwicklung für [Firma]
+
+ABNAHMEKRITERIEN
+────────────────────────────────────────
+
+Wissen & Antwortqualität
+  ☐  Chatbot beantwortet die definierten FAQ korrekt
+  ☐  Tonalität entspricht den vereinbarten Vorgaben
+  ☐  Themen außerhalb des Scopes werden korrekt abgegrenzt
+  ☐  Übergabe an menschlichen Mitarbeiter funktioniert zuverlässig
+
+Integration & Darstellung
+  ☐  Chatbot erscheint korrekt auf der Zielplattform
+  ☐  Design entspricht den Corporate-Identity-Vorgaben
+  ☐  Ladezeit und Reaktionszeit sind akzeptabel
+
+Technisches
+  ☐  Verbindung zur Wissensdatenbank stabil
+  ☐  Fehlerbehandlung bei unbekannten Anfragen korrekt
+  ☐  Datenschutzhinweis beim Start des Chats sichtbar
+  ☐  Admin-Zugang und Dashboard an Auftraggeber übergeben
+
+ERGEBNIS
+────────────────────────────────────────
+  ☐  Abnahme erteilt – Projekt gilt als erfolgreich abgeschlossen
+  ☐  Abnahme mit Mängeln (Details siehe Anmerkungen)
+  ☐  Abnahme verweigert – Nachbesserung erforderlich
+
+Anmerkungen:
+_____________________________________________________________
+_____________________________________________________________
+
+─────────────────────────────────────────────────────────────────
+Auftraggeber ([Firma])           Auftragnehmer (NextStructure)
+
+Datum: ______________________    Datum: ______________________
+Unterschrift: _______________    Unterschrift: _______________`,
+
+  'Rechnung':
+`RECHNUNG
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Von:  NextStructure
+
+An:
+[Name]
+[Firma]
+[Email]  ·  [Telefon]
+
+RECHNUNGSPOSITIONEN
+────────────────────────────────────────
+  Projekttyp:    [Projekttyp]
+  Auftraggeber:  [Firma]
+
+  Pos.  Beschreibung                                     Betrag
+  ────  ───────────────────────────────────────────────  ──────────
+   1    Projektrealisierung – [Projekttyp]               [Betrag]
+   2    Abschlusszahlung (50 % des Gesamtvolumens)       [Betrag]
+                                                         ──────────
+                                            Netto:       [Netto]
+                                            MwSt. 19 %:  [MwSt.]
+                                            ──────────────────────
+                                            GESAMT:      [Gesamt]
+
+ZAHLUNGSBEDINGUNGEN
+────────────────────────────────────────
+  Zahlbar bis:  [Zahlungsziel]
+  IBAN:         [IBAN]
+  BIC:          [BIC]
+  Bank:         [Bank]
+
+  Verwendungszweck: [Firma] – [Projekttyp] – [Datum]
+
+─────────────────────────────────────────────────────────────────
+Vielen Dank für Ihr Vertrauen in NextStructure.`,
+};
+
+// ─── Phase → document mapping ─────────────────────────────────────────────
+function getDocsForPhase(phase, projectType) {
+  const isWeb  = projectType === 'Website' || projectType === 'Beides';
+  const isChat = projectType === 'Chatbot'  || projectType === 'Beides';
+  switch (phase) {
+    case 2: return [
+      ...(isWeb  ? ['Angebot Website', 'Leistungsbeschreibung Website'] : []),
+      ...(isChat ? ['Angebot Chatbot', 'Leistungsbeschreibung Chatbot'] : []),
+    ];
+    case 3: return [
+      ...(isWeb  ? ['Auftragsbestätigung Website'] : []),
+      ...(isChat ? ['Auftragsbestätigung Chatbot']  : []),
+      'AVV', 'AGB',
+    ];
+    case 4: return [
+      ...(isWeb  ? ['Onboarding-Checkliste Website'] : []),
+      ...(isChat ? ['Onboarding-Checkliste Chatbot']  : []),
+    ];
+    case 6: return [
+      ...(isWeb  ? ['Abnahmeprotokoll Website'] : []),
+      ...(isChat ? ['Abnahmeprotokoll Chatbot']  : []),
+    ];
+    case 7: return ['Rechnung'];
+    default: return [];
+  }
+}
+
+// ─── Template fill ────────────────────────────────────────────────────────
+function fillTemplate(text, client) {
+  const today = new Date().toLocaleDateString('de-DE');
+  return text
+    .replace(/\[Name\]/g,       client.name        || '–')
+    .replace(/\[Firma\]/g,      client.company     || client.name || '–')
+    .replace(/\[Email\]/g,      client.email       || '–')
+    .replace(/\[Telefon\]/g,    client.phone       || '–')
+    .replace(/\[Projekttyp\]/g, client.projectType || '–')
+    .replace(/\[Datum\]/g,      today);
+}
+
+// ─── Documents section HTML ───────────────────────────────────────────────
+function buildDocsSectionHTML(client) {
+  const docs = getDocsForPhase(client.currentPhase, client.projectType);
+  const sentDocs = client.sentDocs || {};
+
+  const inner = docs.length === 0
+    ? `<div class="doc-empty">Keine Dokumente in dieser Phase.</div>`
+    : `<div class="doc-list">${docs.map(name => {
+        const sentAt = sentDocs[name];
+        const badge  = sentAt
+          ? `<span class="doc-sent-badge">✓ Gesendet ${new Date(sentAt).toLocaleDateString('de-DE')}</span>`
+          : '';
+        return `
+          <div class="doc-item">
+            <div class="doc-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M3 1h6l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V2a1 1 0 011-1z"
+                      stroke="currentColor" stroke-width="1.2"/>
+                <path d="M9 1v3h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M4.5 7h5M4.5 9.5h3.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="doc-name">${esc(name)}</div>
+            ${badge}
+            <button class="btn btn-primary btn-sm"
+              onclick="openDocPreview(${JSON.stringify(name)}, ${JSON.stringify(client.id)})">
+              Generieren
+            </button>
+          </div>`;
+      }).join('')}</div>`;
+
+  return `
+    <div class="doc-section" id="detail-docs">
+      <div class="doc-section-title">Dokumente für diese Phase</div>
+      ${inner}
+    </div>`;
+}
+
+// ─── Document preview ─────────────────────────────────────────────────────
+let _previewText = '';
+
+function openDocPreview(docName, clientId) {
+  const clients = loadClients();
+  const c = clients.find(x => x.id === clientId);
+  if (!c) return;
+
+  const tmpl = DOC_TEMPLATES[docName];
+  if (!tmpl) return;
+
+  const filled = fillTemplate(tmpl, c);
+  _previewText = filled;
+
+  document.getElementById('doc-modal-title').textContent = docName;
+  document.getElementById('doc-preview-content').textContent = filled;
+  openModal('docOverlay');
+
+  // Mark as sent on first generation
+  const idx = clients.findIndex(x => x.id === clientId);
+  if (idx !== -1) {
+    if (!clients[idx].sentDocs) clients[idx].sentDocs = {};
+    if (!clients[idx].sentDocs[docName]) {
+      clients[idx].sentDocs[docName] = new Date().toISOString();
+      saveClients(clients);
+      refreshDocsSection(clientId);
+    }
+  }
+}
+
+function refreshDocsSection(clientId) {
+  const el = document.getElementById('detail-docs');
+  if (!el) return;
+  const clients = loadClients();
+  const c = clients.find(x => x.id === clientId);
+  if (!c) return;
+  const tmp = document.createElement('div');
+  tmp.innerHTML = buildDocsSectionHTML(c);
+  el.replaceWith(tmp.firstElementChild);
+}
+
+function printCurrentDoc() {
+  const title   = document.getElementById('doc-modal-title').textContent;
+  const root    = document.getElementById('printRoot');
+  root.style.display = 'block';
+  root.innerHTML = `<pre>${esc(title)}\n\n${esc(_previewText)}</pre>`;
+  window.print();
+  root.style.display = 'none';
+  root.innerHTML = '';
 }
 
 // ─── Rendering ────────────────────────────────────────────────────────────
@@ -664,16 +1259,14 @@ function tagClass(type) {
 }
 
 function renderPipeline() {
-  const clients = loadClients();
+  const clients  = loadClients();
   const collapsed = loadCollapsed();
   const container = document.getElementById('pipeline');
 
-  // Update counts
   document.getElementById('globalCount').textContent =
     clients.length === 1 ? '1 Kunde' : `${clients.length} Kunden`;
   const active = clients.filter(c => c.currentPhase < 8).length;
-  document.getElementById('subCount').textContent =
-    clients.length ? `${active} aktiv` : '';
+  document.getElementById('subCount').textContent = clients.length ? `${active} aktiv` : '';
 
   if (clients.length === 0) {
     container.innerHTML = `
@@ -690,13 +1283,18 @@ function renderPipeline() {
   }
 
   container.innerHTML = PHASES.map(phase => {
-    const group = clients.filter(c => c.currentPhase === phase.id);
+    const group      = clients.filter(c => c.currentPhase === phase.id);
     const isCollapsed = collapsed[phase.id];
-    const hasClients = group.length > 0;
+    const hasClients  = group.length > 0;
 
     const cards = group.map(client => {
-      const days = daysSince(client.createdAt);
+      const days      = daysSince(client.createdAt);
       const daysLabel = days === 0 ? 'Heute' : days === 1 ? '1 Tag' : `${days} Tage`;
+      const docCount  = getDocsForPhase(client.currentPhase, client.projectType).length;
+      const sentCount = Object.keys(client.sentDocs || {}).length;
+      const docBadge  = docCount > 0
+        ? `<span class="days-badge" title="${sentCount}/${docCount} Dokumente gesendet">${sentCount}/${docCount} Dok.</span>`
+        : '';
       return `
         <div class="client-card" ondblclick="openDetailModal('${client.id}')">
           <div class="client-info">
@@ -707,6 +1305,7 @@ function renderPipeline() {
             </div>
           </div>
           <div class="client-actions">
+            ${docBadge}
             <span class="days-badge">${daysLabel}</span>
             <button class="action-btn" title="Bearbeiten" onclick="openDetailModal('${client.id}')">
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
@@ -741,48 +1340,39 @@ function togglePhase(id) {
   const collapsed = loadCollapsed();
   collapsed[id] = !collapsed[id];
   saveCollapsed(collapsed);
-  const el = document.getElementById(`phase-${id}`);
-  el.classList.toggle('collapsed', !!collapsed[id]);
+  document.getElementById(`phase-${id}`).classList.toggle('collapsed', !!collapsed[id]);
 }
 
 function esc(str) {
   if (!str) return '';
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 // ─── New client modal ─────────────────────────────────────────────────────
 function openNewModal() {
-  document.getElementById('f-name').value = '';
-  document.getElementById('f-company').value = '';
-  document.getElementById('f-email').value = '';
-  document.getElementById('f-phone').value = '';
-  document.getElementById('f-type').value = 'Website';
+  ['f-name','f-company','f-email','f-phone','f-notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-type').value  = 'Website';
   document.getElementById('f-phase').value = '1';
-  document.getElementById('f-notes').value = '';
   openModal('newOverlay');
   setTimeout(() => document.getElementById('f-name').focus(), 60);
 }
 
 function saveNewClient() {
   const name = document.getElementById('f-name').value.trim();
-  if (!name) {
-    document.getElementById('f-name').focus();
-    document.getElementById('f-name').style.borderColor = '#C0392B';
-    setTimeout(() => document.getElementById('f-name').style.borderColor = '', 1200);
-    return;
-  }
+  if (!name) { flashInvalid('f-name'); return; }
 
   const clients = loadClients();
   clients.push({
     id: generateId(),
     name,
-    company: document.getElementById('f-company').value.trim(),
-    email: document.getElementById('f-email').value.trim(),
-    phone: document.getElementById('f-phone').value.trim(),
+    company:     document.getElementById('f-company').value.trim(),
+    email:       document.getElementById('f-email').value.trim(),
+    phone:       document.getElementById('f-phone').value.trim(),
     projectType: document.getElementById('f-type').value,
     currentPhase: parseInt(document.getElementById('f-phase').value),
-    createdAt: new Date().toISOString(),
-    notes: document.getElementById('f-notes').value.trim(),
+    createdAt:   new Date().toISOString(),
+    notes:       document.getElementById('f-notes').value.trim(),
+    sentDocs:    {},
   });
   saveClients(clients);
   closeModal('newOverlay');
@@ -848,7 +1438,8 @@ function openDetailModal(id) {
         <label>Notizen</label>
         <textarea id="d-notes">${esc(c.notes)}</textarea>
       </div>
-    </div>`;
+    </div>
+    ${buildDocsSectionHTML(c)}`;
 
   openModal('detailOverlay');
 }
@@ -863,12 +1454,7 @@ function selectDetailPhase(num) {
 
 function saveDetailClient() {
   const name = document.getElementById('d-name').value.trim();
-  if (!name) {
-    document.getElementById('d-name').focus();
-    document.getElementById('d-name').style.borderColor = '#C0392B';
-    setTimeout(() => document.getElementById('d-name').style.borderColor = '', 1200);
-    return;
-  }
+  if (!name) { flashInvalid('d-name'); return; }
 
   const clients = loadClients();
   const idx = clients.findIndex(x => x.id === _currentClientId);
@@ -877,12 +1463,12 @@ function saveDetailClient() {
   clients[idx] = {
     ...clients[idx],
     name,
-    company: document.getElementById('d-company').value.trim(),
-    email: document.getElementById('d-email').value.trim(),
-    phone: document.getElementById('d-phone').value.trim(),
-    projectType: document.getElementById('d-type').value,
+    company:      document.getElementById('d-company').value.trim(),
+    email:        document.getElementById('d-email').value.trim(),
+    phone:        document.getElementById('d-phone').value.trim(),
+    projectType:  document.getElementById('d-type').value,
     currentPhase: parseInt(document.getElementById('d-phase').value),
-    notes: document.getElementById('d-notes').value.trim(),
+    notes:        document.getElementById('d-notes').value.trim(),
   };
   saveClients(clients);
   closeModal('detailOverlay');
@@ -893,8 +1479,7 @@ function deleteCurrentClient() {
   if (!_currentClientId) return;
   const clients = loadClients();
   const c = clients.find(x => x.id === _currentClientId);
-  if (!c) return;
-  if (!confirm(`„${c.name}" wirklich löschen?`)) return;
+  if (!c || !confirm(`„${c.name}" wirklich löschen?`)) return;
   saveClients(clients.filter(x => x.id !== _currentClientId));
   closeModal('detailOverlay');
   renderPipeline();
@@ -903,8 +1488,7 @@ function deleteCurrentClient() {
 function deleteClient(id) {
   const clients = loadClients();
   const c = clients.find(x => x.id === id);
-  if (!c) return;
-  if (!confirm(`„${c.name}" wirklich löschen?`)) return;
+  if (!c || !confirm(`„${c.name}" wirklich löschen?`)) return;
   saveClients(clients.filter(x => x.id !== id));
   renderPipeline();
 }
@@ -917,21 +1501,27 @@ function openModal(id) {
 
 function closeModal(id) {
   document.getElementById(id).classList.remove('open');
-  document.body.style.overflow = '';
+  if (!document.querySelector('.overlay.open')) document.body.style.overflow = '';
 }
 
 function overlayClick(e, id) {
   if (e.target === document.getElementById(id)) closeModal(id);
 }
 
+function flashInvalid(id) {
+  const el = document.getElementById(id);
+  el.focus();
+  el.style.borderColor = '#C0392B';
+  setTimeout(() => el.style.borderColor = '', 1200);
+}
+
 // ─── Keyboard shortcuts ───────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    closeModal('newOverlay');
-    closeModal('detailOverlay');
+    ['docOverlay','detailOverlay','newOverlay'].forEach(id => closeModal(id));
   }
   if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
-    if (document.getElementById('newOverlay').classList.contains('open')) saveNewClient();
+    if (document.getElementById('newOverlay').classList.contains('open'))    saveNewClient();
     if (document.getElementById('detailOverlay').classList.contains('open')) saveDetailClient();
   }
 });
