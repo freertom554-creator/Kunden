@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NextStructure – Pipeline</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0D0D0D;
+      --surface:   #141414;
+      --surface2:  #1A1A1A;
+      --border:    #252525;
+      --accent:    #C0392B;
+      --accent-h:  #E74C3C;
+      --text:      #FFFFFF;
+      --text-muted:#888888;
+      --text-dim:  #555555;
+      --radius:    6px;
+      --font:      -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Header ─────────────────────────────────────────────── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 58px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 0.04em;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .logo-mark {
+      width: 26px;
+      height: 26px;
+      background: var(--accent);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .logo-sep {
+      color: var(--text-dim);
+      font-weight: 300;
+      margin: 0 4px;
+    }
+
+    .logo-sub {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .client-count {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+    }
+
+    /* ─── Buttons ─────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, opacity 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: var(--accent-h); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover { border-color: #444; color: var(--text); }
+
+    .btn-danger {
+      background: transparent;
+      color: #E74C3C;
+      border: 1px solid #3a1a1a;
+    }
+
+    .btn-danger:hover { background: #1e0e0e; }
+
+    /* ─── Main layout ─────────────────────────────────────────── */
+    main {
+      padding: 32px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .toolbar-title {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .toolbar-title span {
+      color: var(--text-muted);
+      font-weight: 400;
+      font-size: 14px;
+      margin-left: 10px;
+    }
+
+    /* ─── Empty state ─────────────────────────────────────────── */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px;
+      color: var(--text-dim);
+      text-align: center;
+      gap: 12px;
+    }
+
+    .empty-state svg { opacity: 0.3; }
+
+    .empty-state p {
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    .empty-state small { font-size: 12px; color: var(--text-dim); }
+
+    /* ─── Phase group ─────────────────────────────────────────── */
+    .phase-group {
+      margin-bottom: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      background: var(--surface);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.12s;
+    }
+
+    .phase-header:hover { background: var(--surface2); }
+
+    .phase-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .phase-num.inactive { background: var(--border); color: var(--text-dim); }
+
+    .phase-name {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      flex: 1;
+    }
+
+    .phase-badge {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--border);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .phase-toggle {
+      color: var(--text-dim);
+      font-size: 12px;
+      transition: transform 0.2s;
+    }
+
+    .phase-group.collapsed .phase-toggle { transform: rotate(-90deg); }
+
+    .phase-clients {
+      background: var(--bg);
+    }
+
+    .phase-group.collapsed .phase-clients { display: none; }
+
+    /* ─── Client card ─────────────────────────────────────────── */
+    .client-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 13px 16px;
+      border-top: 1px solid var(--border);
+      transition: background 0.1s;
+      cursor: default;
+    }
+
+    .client-card:hover { background: var(--surface); }
+
+    .client-info { min-width: 0; }
+
+    .client-name {
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .client-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 3px;
+      flex-wrap: wrap;
+    }
+
+    .client-company {
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .tag-website  { background: #0d1f2d; color: #4a9fd4; }
+    .tag-chatbot  { background: #1a1a0d; color: #b8a832; }
+    .tag-beides   { background: #1a0d1a; color: #b86fd4; }
+
+    .client-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .days-badge {
+      font-size: 11px;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+
+    .action-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+      font-family: var(--font);
+    }
+
+    .action-btn:hover { border-color: #444; color: var(--text); background: var(--surface2); }
+    .action-btn.del:hover { border-color: #5a1a1a; color: #E74C3C; background: #1e0808; }
+
+    /* ─── Modal overlay ───────────────────────────────────────── */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.72);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .overlay.open { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      width: 30px;
+      height: 30px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .modal-close:hover { color: var(--text); border-color: #444; }
+
+    .modal-body { padding: 24px; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-field.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    input, select, textarea {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 13px;
+      padding: 9px 12px;
+      width: 100%;
+      transition: border-color 0.15s;
+      outline: none;
+      appearance: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 30px;
+    }
+
+    select option { background: #1A1A1A; }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 16px 24px 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ─── Detail modal additions ──────────────────────────────── */
+    .detail-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .detail-item {
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .detail-label {
+      font-size: 11px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .detail-value {
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    /* ─── Phase selector in detail modal ─────────────────────── */
+    .phase-selector {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .phase-opt {
+      padding: 7px 4px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-muted);
+      font-size: 11px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      line-height: 1.3;
+    }
+
+    .phase-opt:hover { border-color: #444; color: var(--text); }
+    .phase-opt.active { border-color: var(--accent); background: rgba(192,57,43,0.12); color: var(--text); }
+
+    /* ─── Scrollbar ───────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #333; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-mark">N</div>
+    NextStructure <span class="logo-sep">·</span>
+    <span class="logo-sub">Pipeline</span>
+  </div>
+  <div class="header-right">
+    <span class="client-count" id="globalCount"></span>
+    <button class="btn btn-primary" onclick="openNewModal()">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      Neuer Kunde
+    </button>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════ MAIN -->
+<main>
+  <div class="toolbar">
+    <div class="toolbar-title">
+      Alle Phasen
+      <span id="subCount"></span>
+    </div>
+  </div>
+  <div id="pipeline"></div>
+</main>
+
+<!-- ═══════════════════════════════════════════════════ NEW MODAL -->
+<div class="overlay" id="newOverlay" onclick="overlayClick(event,'newOverlay')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Neuer Kunde</div>
+      <button class="modal-close" onclick="closeModal('newOverlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Name *</label>
+          <input id="f-name" type="text" placeholder="Max Mustermann" />
+        </div>
+        <div class="form-field">
+          <label>Firma</label>
+          <input id="f-company" type="text" placeholder="Muster GmbH" />
+        </div>
+        <div class="form-field">
+          <label>E-Mail</label>
+          <input id="f-email" type="email" placeholder="max@example.com" />
+        </div>
+        <div class="form-field">
+          <label>Telefon</label>
+          <input id="f-phone" type="tel" placeholder="+49 123 456789" />
+        </div>
+        <div class="form-field">
+          <label>Projekttyp *</label>
+          <select id="f-type">
+            <option value="Website">Website</option>
+            <option value="Chatbot">Chatbot</option>
+            <option value="Beides">Beides</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Startphase</label>
+          <select id="f-phase">
+            <option value="1">1 – Outreach</option>
+            <option value="2">2 – Angebot</option>
+            <option value="3">3 – Auftragsbestätigung</option>
+            <option value="4">4 – Onboarding</option>
+            <option value="5">5 – Umsetzung</option>
+            <option value="6">6 – Abnahme</option>
+            <option value="7">7 – Rechnung</option>
+            <option value="8">8 – Abgeschlossen</option>
+          </select>
+        </div>
+        <div class="form-field full">
+          <label>Notizen</label>
+          <textarea id="f-notes" placeholder="Weitere Informationen..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('newOverlay')">Abbrechen</button>
+      <button class="btn btn-primary" onclick="saveNewClient()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ DETAIL MODAL -->
+<div class="overlay" id="detailOverlay" onclick="overlayClick(event,'detailOverlay')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="d-title">Kunde</div>
+      <button class="modal-close" onclick="closeModal('detailOverlay')">✕</button>
+    </div>
+    <div class="modal-body" id="d-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" onclick="deleteCurrentClient()">Löschen</button>
+      <button class="btn btn-ghost" onclick="closeModal('detailOverlay')">Schließen</button>
+      <button class="btn btn-primary" onclick="saveDetailClient()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Constants ────────────────────────────────────────────────────────────
+const PHASES = [
+  { id: 1, label: 'Outreach' },
+  { id: 2, label: 'Angebot' },
+  { id: 3, label: 'Auftragsbestätigung' },
+  { id: 4, label: 'Onboarding' },
+  { id: 5, label: 'Umsetzung' },
+  { id: 6, label: 'Abnahme' },
+  { id: 7, label: 'Rechnung' },
+  { id: 8, label: 'Abgeschlossen' },
+];
+
+const STORAGE_KEY = 'ns_pipeline_clients';
+const COLLAPSED_KEY = 'ns_pipeline_collapsed';
+
+// ─── Data layer ───────────────────────────────────────────────────────────
+function loadClients() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+  catch { return []; }
+}
+
+function saveClients(clients) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(clients));
+}
+
+function loadCollapsed() {
+  try { return JSON.parse(localStorage.getItem(COLLAPSED_KEY)) || {}; }
+  catch { return {}; }
+}
+
+function saveCollapsed(state) {
+  localStorage.setItem(COLLAPSED_KEY, JSON.stringify(state));
+}
+
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+function daysSince(iso) {
+  const ms = Date.now() - new Date(iso).getTime();
+  return Math.floor(ms / 86400000);
+}
+
+// ─── Rendering ────────────────────────────────────────────────────────────
+function tagClass(type) {
+  if (type === 'Website') return 'tag-website';
+  if (type === 'Chatbot') return 'tag-chatbot';
+  return 'tag-beides';
+}
+
+function renderPipeline() {
+  const clients = loadClients();
+  const collapsed = loadCollapsed();
+  const container = document.getElementById('pipeline');
+
+  // Update counts
+  document.getElementById('globalCount').textContent =
+    clients.length === 1 ? '1 Kunde' : `${clients.length} Kunden`;
+  const active = clients.filter(c => c.currentPhase < 8).length;
+  document.getElementById('subCount').textContent =
+    clients.length ? `${active} aktiv` : '';
+
+  if (clients.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <rect x="8" y="12" width="32" height="28" rx="3" stroke="#555" stroke-width="1.5"/>
+          <path d="M16 12V9a2 2 0 012-2h12a2 2 0 012 2v3" stroke="#555" stroke-width="1.5"/>
+          <path d="M16 22h16M16 28h10" stroke="#555" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <p>Keine Kunden vorhanden</p>
+        <small>Klicke auf „Neuer Kunde" um loszulegen.</small>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = PHASES.map(phase => {
+    const group = clients.filter(c => c.currentPhase === phase.id);
+    const isCollapsed = collapsed[phase.id];
+    const hasClients = group.length > 0;
+
+    const cards = group.map(client => {
+      const days = daysSince(client.createdAt);
+      const daysLabel = days === 0 ? 'Heute' : days === 1 ? '1 Tag' : `${days} Tage`;
+      return `
+        <div class="client-card" ondblclick="openDetailModal('${client.id}')">
+          <div class="client-info">
+            <div class="client-name">${esc(client.name)}</div>
+            <div class="client-meta">
+              ${client.company ? `<span class="client-company">${esc(client.company)}</span>` : ''}
+              <span class="tag ${tagClass(client.projectType)}">${esc(client.projectType)}</span>
+            </div>
+          </div>
+          <div class="client-actions">
+            <span class="days-badge">${daysLabel}</span>
+            <button class="action-btn" title="Bearbeiten" onclick="openDetailModal('${client.id}')">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <path d="M9 2l2 2-7 7H2v-2L9 2z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button class="action-btn del" title="Löschen" onclick="deleteClient('${client.id}')">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                <path d="M1 1l9 9M10 1L1 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="phase-group${isCollapsed ? ' collapsed' : ''}" id="phase-${phase.id}">
+        <div class="phase-header" onclick="togglePhase(${phase.id})">
+          <div class="phase-num${!hasClients ? ' inactive' : ''}">${phase.id}</div>
+          <div class="phase-name">${phase.label}</div>
+          <div class="phase-badge">${group.length}</div>
+          <svg class="phase-toggle" width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="phase-clients">${cards}</div>
+      </div>`;
+  }).join('');
+}
+
+function togglePhase(id) {
+  const collapsed = loadCollapsed();
+  collapsed[id] = !collapsed[id];
+  saveCollapsed(collapsed);
+  const el = document.getElementById(`phase-${id}`);
+  el.classList.toggle('collapsed', !!collapsed[id]);
+}
+
+function esc(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── New client modal ─────────────────────────────────────────────────────
+function openNewModal() {
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-company').value = '';
+  document.getElementById('f-email').value = '';
+  document.getElementById('f-phone').value = '';
+  document.getElementById('f-type').value = 'Website';
+  document.getElementById('f-phase').value = '1';
+  document.getElementById('f-notes').value = '';
+  openModal('newOverlay');
+  setTimeout(() => document.getElementById('f-name').focus(), 60);
+}
+
+function saveNewClient() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) {
+    document.getElementById('f-name').focus();
+    document.getElementById('f-name').style.borderColor = '#C0392B';
+    setTimeout(() => document.getElementById('f-name').style.borderColor = '', 1200);
+    return;
+  }
+
+  const clients = loadClients();
+  clients.push({
+    id: generateId(),
+    name,
+    company: document.getElementById('f-company').value.trim(),
+    email: document.getElementById('f-email').value.trim(),
+    phone: document.getElementById('f-phone').value.trim(),
+    projectType: document.getElementById('f-type').value,
+    currentPhase: parseInt(document.getElementById('f-phase').value),
+    createdAt: new Date().toISOString(),
+    notes: document.getElementById('f-notes').value.trim(),
+  });
+  saveClients(clients);
+  closeModal('newOverlay');
+  renderPipeline();
+}
+
+// ─── Detail modal ─────────────────────────────────────────────────────────
+let _currentClientId = null;
+
+function openDetailModal(id) {
+  const clients = loadClients();
+  const c = clients.find(x => x.id === id);
+  if (!c) return;
+  _currentClientId = id;
+
+  document.getElementById('d-title').textContent = c.name;
+
+  const phaseOpts = PHASES.map(p =>
+    `<div class="phase-opt${c.currentPhase === p.id ? ' active' : ''}"
+          onclick="selectDetailPhase(${p.id})"
+          id="dphase-${p.id}">
+      <strong>${p.id}</strong><br>${p.label}
+    </div>`
+  ).join('');
+
+  document.getElementById('d-body').innerHTML = `
+    <div class="form-grid">
+      <div class="form-field">
+        <label>Name *</label>
+        <input id="d-name" type="text" value="${esc(c.name)}" />
+      </div>
+      <div class="form-field">
+        <label>Firma</label>
+        <input id="d-company" type="text" value="${esc(c.company)}" />
+      </div>
+      <div class="form-field">
+        <label>E-Mail</label>
+        <input id="d-email" type="email" value="${esc(c.email)}" />
+      </div>
+      <div class="form-field">
+        <label>Telefon</label>
+        <input id="d-phone" type="tel" value="${esc(c.phone)}" />
+      </div>
+      <div class="form-field">
+        <label>Projekttyp</label>
+        <select id="d-type">
+          <option${c.projectType==='Website'?' selected':''}>Website</option>
+          <option${c.projectType==='Chatbot'?' selected':''}>Chatbot</option>
+          <option${c.projectType==='Beides'?' selected':''}>Beides</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Erstellt</label>
+        <input type="text" value="${new Date(c.createdAt).toLocaleDateString('de-DE')}" disabled
+          style="color:var(--text-muted);cursor:default;" />
+      </div>
+      <div class="form-field full">
+        <label>Phase</label>
+        <div class="phase-selector">${phaseOpts}</div>
+        <input type="hidden" id="d-phase" value="${c.currentPhase}" />
+      </div>
+      <div class="form-field full">
+        <label>Notizen</label>
+        <textarea id="d-notes">${esc(c.notes)}</textarea>
+      </div>
+    </div>`;
+
+  openModal('detailOverlay');
+}
+
+function selectDetailPhase(num) {
+  document.getElementById('d-phase').value = num;
+  PHASES.forEach(p => {
+    const el = document.getElementById(`dphase-${p.id}`);
+    if (el) el.classList.toggle('active', p.id === num);
+  });
+}
+
+function saveDetailClient() {
+  const name = document.getElementById('d-name').value.trim();
+  if (!name) {
+    document.getElementById('d-name').focus();
+    document.getElementById('d-name').style.borderColor = '#C0392B';
+    setTimeout(() => document.getElementById('d-name').style.borderColor = '', 1200);
+    return;
+  }
+
+  const clients = loadClients();
+  const idx = clients.findIndex(x => x.id === _currentClientId);
+  if (idx === -1) return;
+
+  clients[idx] = {
+    ...clients[idx],
+    name,
+    company: document.getElementById('d-company').value.trim(),
+    email: document.getElementById('d-email').value.trim(),
+    phone: document.getElementById('d-phone').value.trim(),
+    projectType: document.getElementById('d-type').value,
+    currentPhase: parseInt(document.getElementById('d-phase').value),
+    notes: document.getElementById('d-notes').value.trim(),
+  };
+  saveClients(clients);
+  closeModal('detailOverlay');
+  renderPipeline();
+}
+
+function deleteCurrentClient() {
+  if (!_currentClientId) return;
+  const clients = loadClients();
+  const c = clients.find(x => x.id === _currentClientId);
+  if (!c) return;
+  if (!confirm(`„${c.name}" wirklich löschen?`)) return;
+  saveClients(clients.filter(x => x.id !== _currentClientId));
+  closeModal('detailOverlay');
+  renderPipeline();
+}
+
+function deleteClient(id) {
+  const clients = loadClients();
+  const c = clients.find(x => x.id === id);
+  if (!c) return;
+  if (!confirm(`„${c.name}" wirklich löschen?`)) return;
+  saveClients(clients.filter(x => x.id !== id));
+  renderPipeline();
+}
+
+// ─── Modal helpers ────────────────────────────────────────────────────────
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function overlayClick(e, id) {
+  if (e.target === document.getElementById(id)) closeModal(id);
+}
+
+// ─── Keyboard shortcuts ───────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeModal('newOverlay');
+    closeModal('detailOverlay');
+  }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+    if (document.getElementById('newOverlay').classList.contains('open')) saveNewClient();
+    if (document.getElementById('detailOverlay').classList.contains('open')) saveDetailClient();
+  }
+});
+
+// ─── Boot ─────────────────────────────────────────────────────────────────
+renderPipeline();
+</script>
+</body>
+</html>
