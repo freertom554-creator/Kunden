@@ -189,7 +189,7 @@
       padding: 13px 16px;
       border-top: 1px solid var(--border);
       transition: background 0.1s;
-      cursor: default;
+      cursor: pointer;
     }
     .client-card:hover { background: var(--surface); }
     .client-info { min-width: 0; }
@@ -418,6 +418,108 @@
       overflow-y: auto;
     }
 
+    /* ─── Detail view ────────────────────────────────────────── */
+    #detailView { display: none; }
+
+    .dv-inner {
+      padding: 28px 32px 56px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .dv-topbar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .dv-topbar-name {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dv-cols {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .dv-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .dv-card-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+    }
+
+    .dv-save-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .dv-save-msg {
+      font-size: 12px;
+      color: #3aaa72;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .dv-save-msg.visible { opacity: 1; }
+
+    /* ─── Phase timeline ──────────────────────────────────────── */
+    .tl-list { display: flex; flex-direction: column; gap: 2px; }
+
+    .tl-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 10px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.1s;
+    }
+    .tl-item:hover { background: var(--surface2); }
+    .tl-item.tl-current { background: rgba(192,57,43,0.09); }
+
+    .tl-dot {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .tl-dot-done   { background: #0d2016; color: #3aaa72; border: 1.5px solid #1e4a2e; }
+    .tl-dot-active { background: var(--accent); color: #fff; }
+    .tl-dot-future { background: var(--border); color: var(--text-dim); }
+
+    .tl-label { font-size: 13px; }
+    .tl-label-done   { color: var(--text-muted); }
+    .tl-label-active { color: var(--text); font-weight: 600; }
+    .tl-label-future { color: var(--text-dim); }
+
     /* ─── Scrollbar ───────────────────────────────────────────── */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -467,7 +569,7 @@
 </header>
 
 <!-- ═══════════════════════════════════════════════════════ MAIN -->
-<main>
+<main id="pipelineMain">
   <div class="toolbar">
     <div class="toolbar-title">
       Alle Phasen
@@ -536,18 +638,23 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════ DETAIL MODAL -->
-<div class="overlay" id="detailOverlay" onclick="overlayClick(event,'detailOverlay')">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title" id="d-title">Kunde</div>
-      <button class="modal-close" onclick="closeModal('detailOverlay')">✕</button>
+<!-- ══════════════════════════════════════════════ DETAIL VIEW -->
+<div id="detailView">
+  <div class="dv-inner">
+    <div class="dv-topbar">
+      <button class="btn btn-ghost" onclick="showPipeline()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M9 2L3 7l6 5" stroke="currentColor" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Pipeline
+      </button>
+      <div class="dv-topbar-name" id="dv-topbar-name"></div>
+      <button class="btn btn-danger" onclick="deleteClientFromDV()">Löschen</button>
     </div>
-    <div class="modal-body" id="d-body"></div>
-    <div class="modal-footer">
-      <button class="btn btn-danger" onclick="deleteCurrentClient()">Löschen</button>
-      <button class="btn btn-ghost" onclick="closeModal('detailOverlay')">Schließen</button>
-      <button class="btn btn-primary" onclick="saveDetailClient()">Speichern</button>
+    <div class="dv-cols">
+      <div class="dv-card" id="dv-info-col"></div>
+      <div class="dv-card" id="dv-timeline-col"></div>
     </div>
   </div>
 </div>
@@ -1296,7 +1403,7 @@ function renderPipeline() {
         ? `<span class="days-badge" title="${sentCount}/${docCount} Dokumente gesendet">${sentCount}/${docCount} Dok.</span>`
         : '';
       return `
-        <div class="client-card" ondblclick="openDetailModal('${client.id}')">
+        <div class="client-card" onclick="showDetailView('${client.id}')">
           <div class="client-info">
             <div class="client-name">${esc(client.name)}</div>
             <div class="client-meta">
@@ -1307,12 +1414,8 @@ function renderPipeline() {
           <div class="client-actions">
             ${docBadge}
             <span class="days-badge">${daysLabel}</span>
-            <button class="action-btn" title="Bearbeiten" onclick="openDetailModal('${client.id}')">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <path d="M9 2l2 2-7 7H2v-2L9 2z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-              </svg>
-            </button>
-            <button class="action-btn del" title="Löschen" onclick="deleteClient('${client.id}')">
+            <button class="action-btn del" title="Löschen"
+                    onclick="event.stopPropagation(); deleteClient('${client.id}')">
               <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
                 <path d="M1 1l9 9M10 1L1 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
               </svg>
@@ -1379,46 +1482,59 @@ function saveNewClient() {
   renderPipeline();
 }
 
-// ─── Detail modal ─────────────────────────────────────────────────────────
-let _currentClientId = null;
+// ─── Detail view ──────────────────────────────────────────────────────────
+let _dvClientId = null;
 
-function openDetailModal(id) {
+function showDetailView(id) {
   const clients = loadClients();
-  const c = clients.find(x => x.id === id);
-  if (!c) return;
-  _currentClientId = id;
+  if (!clients.find(x => x.id === id)) return;
+  _dvClientId = id;
+  renderDetailView();
+  document.getElementById('pipelineMain').style.display = 'none';
+  document.getElementById('detailView').style.display   = 'block';
+  window.scrollTo(0, 0);
+}
 
-  document.getElementById('d-title').textContent = c.name;
+function showPipeline() {
+  document.getElementById('detailView').style.display   = 'none';
+  document.getElementById('pipelineMain').style.display = 'block';
+  renderPipeline();
+}
 
-  const phaseOpts = PHASES.map(p =>
-    `<div class="phase-opt${c.currentPhase === p.id ? ' active' : ''}"
-          onclick="selectDetailPhase(${p.id})"
-          id="dphase-${p.id}">
-      <strong>${p.id}</strong><br>${p.label}
-    </div>`
-  ).join('');
+function renderDetailView() {
+  const clients = loadClients();
+  const c = clients.find(x => x.id === _dvClientId);
+  if (!c) { showPipeline(); return; }
 
-  document.getElementById('d-body').innerHTML = `
+  document.getElementById('dv-topbar-name').textContent =
+    c.name + (c.company ? ` · ${c.company}` : '');
+  document.getElementById('dv-info-col').innerHTML     = buildDVInfoForm(c);
+  document.getElementById('dv-timeline-col').innerHTML = buildDVTimeline(c);
+}
+
+function buildDVInfoForm(c) {
+  return `
+    <div class="dv-card-title">Kundeninformationen</div>
     <div class="form-grid">
       <div class="form-field">
         <label>Name *</label>
-        <input id="d-name" type="text" value="${esc(c.name)}" />
+        <input id="dv-name" type="text" value="${esc(c.name)}" />
       </div>
       <div class="form-field">
         <label>Firma</label>
-        <input id="d-company" type="text" value="${esc(c.company)}" />
+        <input id="dv-company" type="text" value="${esc(c.company)}" />
       </div>
       <div class="form-field">
         <label>E-Mail</label>
-        <input id="d-email" type="email" value="${esc(c.email)}" />
+        <input id="dv-email" type="email" value="${esc(c.email)}" />
       </div>
       <div class="form-field">
         <label>Telefon</label>
-        <input id="d-phone" type="tel" value="${esc(c.phone)}" />
+        <input id="dv-phone" type="tel" value="${esc(c.phone)}" />
       </div>
       <div class="form-field">
         <label>Projekttyp</label>
-        <select id="d-type">
+        <select id="dv-type">
           <option${c.projectType==='Website'?' selected':''}>Website</option>
           <option${c.projectType==='Chatbot'?' selected':''}>Chatbot</option>
           <option${c.projectType==='Beides'?' selected':''}>Beides</option>
@@ -1426,63 +1542,82 @@ function openDetailModal(id) {
       </div>
       <div class="form-field">
         <label>Erstellt</label>
-        <input type="text" value="${new Date(c.createdAt).toLocaleDateString('de-DE')}" disabled
-          style="color:var(--text-muted);cursor:default;" />
-      </div>
-      <div class="form-field full">
-        <label>Phase</label>
-        <div class="phase-selector">${phaseOpts}</div>
-        <input type="hidden" id="d-phase" value="${c.currentPhase}" />
+        <input type="text" value="${new Date(c.createdAt).toLocaleDateString('de-DE')}"
+          disabled style="color:var(--text-muted);cursor:default;" />
       </div>
       <div class="form-field full">
         <label>Notizen</label>
-        <textarea id="d-notes">${esc(c.notes)}</textarea>
+        <textarea id="dv-notes" rows="5">${esc(c.notes)}</textarea>
       </div>
     </div>
-    ${buildDocsSectionHTML(c)}`;
-
-  openModal('detailOverlay');
+    <div class="dv-save-row">
+      <span class="dv-save-msg" id="dv-save-msg"></span>
+      <button class="btn btn-primary" onclick="saveDVClient()">Speichern</button>
+    </div>`;
 }
 
-function selectDetailPhase(num) {
-  document.getElementById('d-phase').value = num;
-  PHASES.forEach(p => {
-    const el = document.getElementById(`dphase-${p.id}`);
-    if (el) el.classList.toggle('active', p.id === num);
-  });
+function buildDVTimeline(c) {
+  const items = PHASES.map(p => {
+    const state = p.id < c.currentPhase ? 'done'
+                : p.id === c.currentPhase ? 'active'
+                : 'future';
+    const dotInner = state === 'done' ? '✓' : p.id;
+    return `
+      <div class="tl-item${state === 'active' ? ' tl-current' : ''}"
+           onclick="setDVPhase(${p.id})" title="Phase ${p.id} setzen">
+        <div class="tl-dot tl-dot-${state}">${dotInner}</div>
+        <div class="tl-label tl-label-${state}">${esc(p.label)}</div>
+      </div>`;
+  }).join('');
+  return `
+    <div class="dv-card-title">Phasenverlauf</div>
+    <div class="tl-list">${items}</div>`;
 }
 
-function saveDetailClient() {
-  const name = document.getElementById('d-name').value.trim();
-  if (!name) { flashInvalid('d-name'); return; }
+function saveDVClient() {
+  const name = document.getElementById('dv-name')?.value.trim();
+  if (!name) { flashInvalid('dv-name'); return; }
 
   const clients = loadClients();
-  const idx = clients.findIndex(x => x.id === _currentClientId);
+  const idx = clients.findIndex(x => x.id === _dvClientId);
   if (idx === -1) return;
 
   clients[idx] = {
     ...clients[idx],
     name,
-    company:      document.getElementById('d-company').value.trim(),
-    email:        document.getElementById('d-email').value.trim(),
-    phone:        document.getElementById('d-phone').value.trim(),
-    projectType:  document.getElementById('d-type').value,
-    currentPhase: parseInt(document.getElementById('d-phase').value),
-    notes:        document.getElementById('d-notes').value.trim(),
+    company:     document.getElementById('dv-company').value.trim(),
+    email:       document.getElementById('dv-email').value.trim(),
+    phone:       document.getElementById('dv-phone').value.trim(),
+    projectType: document.getElementById('dv-type').value,
+    notes:       document.getElementById('dv-notes').value.trim(),
   };
   saveClients(clients);
-  closeModal('detailOverlay');
-  renderPipeline();
+
+  const c = clients[idx];
+  document.getElementById('dv-topbar-name').textContent =
+    c.name + (c.company ? ` · ${c.company}` : '');
+
+  const msg = document.getElementById('dv-save-msg');
+  msg.textContent = '✓ Gespeichert';
+  msg.classList.add('visible');
+  setTimeout(() => msg.classList.remove('visible'), 2200);
 }
 
-function deleteCurrentClient() {
-  if (!_currentClientId) return;
+function setDVPhase(phaseId) {
   const clients = loadClients();
-  const c = clients.find(x => x.id === _currentClientId);
+  const idx = clients.findIndex(x => x.id === _dvClientId);
+  if (idx === -1 || clients[idx].currentPhase === phaseId) return;
+  clients[idx].currentPhase = phaseId;
+  saveClients(clients);
+  renderDetailView();
+}
+
+function deleteClientFromDV() {
+  const clients = loadClients();
+  const c = clients.find(x => x.id === _dvClientId);
   if (!c || !confirm(`„${c.name}" wirklich löschen?`)) return;
-  saveClients(clients.filter(x => x.id !== _currentClientId));
-  closeModal('detailOverlay');
-  renderPipeline();
+  saveClients(clients.filter(x => x.id !== _dvClientId));
+  showPipeline();
 }
 
 function deleteClient(id) {
@@ -1518,11 +1653,12 @@ function flashInvalid(id) {
 // ─── Keyboard shortcuts ───────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    ['docOverlay','detailOverlay','newOverlay'].forEach(id => closeModal(id));
+    ['docOverlay', 'newOverlay'].forEach(id => closeModal(id));
+    if (document.getElementById('detailView').style.display !== 'none') showPipeline();
   }
   if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
-    if (document.getElementById('newOverlay').classList.contains('open'))    saveNewClient();
-    if (document.getElementById('detailOverlay').classList.contains('open')) saveDetailClient();
+    if (document.getElementById('newOverlay').classList.contains('open')) saveNewClient();
+    if (document.getElementById('detailView').style.display !== 'none')  saveDVClient();
   }
 });
 
