@@ -1073,6 +1073,104 @@
 
     .st-empty { text-align: center; padding: 28px 0; color: #555; font-size: 13px; }
 
+    /* tab switcher */
+    .st-tabs {
+      display: flex; gap: 4px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 9px; padding: 3px;
+    }
+    .st-tab {
+      padding: 6px 20px; border-radius: 7px; border: none;
+      font-size: 12.5px; font-weight: 600; cursor: pointer;
+      color: var(--muted); background: transparent;
+      transition: background 0.15s, color 0.15s;
+    }
+    .st-tab--active {
+      background: linear-gradient(135deg, var(--accent) 0%, #5040d0 100%);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(124,106,247,0.3);
+    }
+
+    /* pipeline extra stats */
+    .st-extra-stats {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
+      margin-top: 20px;
+    }
+    .st-extra-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px; padding: 14px 18px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .st-extra-label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 0.06em; }
+    .st-extra-value { font-size: 22px; font-weight: 800; color: #c4baf9; }
+    .st-extra-sub   { font-size: 11px; color: #444; }
+
+    /* finance bar fill (green tint) */
+    .st-bar-fill--fin {
+      height: 100%; border-radius: 6px;
+      background: linear-gradient(90deg, #2d9d5a 0%, #4ab87a 100%);
+    }
+
+    /* finance upload zone */
+    .fin-drop-zone {
+      border: 1.5px dashed rgba(124,106,247,0.35);
+      border-radius: 12px;
+      padding: 32px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: rgba(124,106,247,0.03);
+    }
+    .fin-drop-zone:hover, .fin-drop--active {
+      border-color: rgba(124,106,247,0.7);
+      background: rgba(124,106,247,0.07);
+    }
+    .fin-drop-icon { color: #555; margin-bottom: 10px; }
+    .fin-drop-text { font-size: 13px; color: var(--muted); line-height: 1.7; }
+    .fin-drop-text label { color: #9b8ff9; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+    .fin-drop-text input[type="file"] { display: none; }
+
+    /* finance table */
+    .fin-tbl-wrap {
+      background: var(--surface);
+      border: 1px solid rgba(124,106,247,0.12);
+      border-radius: 10px; overflow: hidden;
+    }
+    .fin-table { width: 100%; border-collapse: collapse; }
+    .fin-table thead th {
+      font-size: 11px; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.07em;
+      padding: 11px 14px; text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .fin-table tbody tr {
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.12s;
+    }
+    .fin-table tbody tr:last-child { border-bottom: none; }
+    .fin-table tbody tr:hover { background: rgba(124,106,247,0.05); }
+    .fin-table td { padding: 10px 14px; font-size: 12.5px; color: var(--text); vertical-align: middle; }
+    .fin-td-file { color: var(--muted); font-size: 12px; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .fin-td-brutto { color: #4ab87a; font-weight: 600; }
+
+    .fin-amt-wrap { display: flex; align-items: center; gap: 4px; }
+    .fin-amt-input {
+      width: 90px; padding: 5px 8px; font-size: 12.5px;
+      background: #0a0a14; border: 1px solid #2a2a3a;
+      border-radius: 6px; color: var(--text); text-align: right;
+      outline: none; transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .fin-amt-input:focus { border-color: rgba(124,106,247,0.6); box-shadow: 0 0 0 2px rgba(124,106,247,0.12); }
+    .fin-amt-sym { font-size: 12px; color: #555; }
+
+    .fin-del-btn {
+      background: none; border: none; cursor: pointer; color: #555;
+      padding: 4px 6px; border-radius: 5px; transition: color 0.15s, background 0.15s;
+    }
+    .fin-del-btn:hover { color: #e04040; background: rgba(224,64,64,0.1); }
+
     /* ─── Print ───────────────────────────────────────────────── */
     @media print {
       @page { size: A4; margin: 15mm 18mm; }
@@ -1423,6 +1521,10 @@
 <div id="statsScreen" style="display:none">
   <div class="st-hdr">
     <span class="st-hdr-title">NextStructure &nbsp;·&nbsp; Statistiken</span>
+    <div class="st-tabs">
+      <button class="st-tab st-tab--active" id="tab-pipeline" onclick="switchStatsTab('pipeline')">Pipeline</button>
+      <button class="st-tab" id="tab-finanzen" onclick="switchStatsTab('finanzen')">Finanzen</button>
+    </div>
     <button class="st-back-btn" onclick="showHub()">
       <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
         <path d="M11 6.5H2M6 2.5L2 6.5l4 4" stroke="currentColor" stroke-width="1.6"
@@ -3419,19 +3521,32 @@ function openLanding() {
   initLanding();
 }
 
+// ─── Stats tab state ──────────────────────────────────────────────────────
+let _statsTab = 'pipeline';
+
 function openStats() {
   document.getElementById('hubScreen').style.display    = 'none';
   document.getElementById('landingScreen').style.display = 'none';
   document.getElementById('pipelineMain').style.display  = 'none';
   document.getElementById('statsScreen').style.display   = 'flex';
-  renderStats();
+  switchStatsTab(_statsTab);
 }
 
-function renderStats() {
+function switchStatsTab(tab) {
+  _statsTab = tab;
+  ['pipeline','finanzen'].forEach(t => {
+    document.getElementById('tab-' + t).classList.toggle('st-tab--active', t === tab);
+  });
+  if (tab === 'pipeline') renderPipelineTab();
+  else renderFinanceTab();
+}
+
+// ─── Pipeline tab ─────────────────────────────────────────────────────────
+function renderPipelineTab() {
   const clients = loadClients();
   const total   = clients.length;
 
-  // ── Section 1: Phase bars ─────────────────────────────────
+  // Phase bars
   const phaseCounts = PHASES.map(p => ({
     label: p.label,
     count: clients.filter(c => c.currentPhase === p.id).length,
@@ -3446,7 +3561,23 @@ function renderStats() {
       <div class="st-bar-count">${p.count}</div>
     </div>`).join('');
 
-  // ── Section 2: Status ──────────────────────────────────────
+  // Conversion + Neu pro Monat
+  const done       = clients.filter(c => c.status === 'Abgeschlossen').length;
+  const convPct    = total ? ((done / total) * 100).toFixed(1) : '0.0';
+  const now        = new Date();
+  const neuMonat   = clients.filter(c => {
+    const d = new Date(c.createdAt);
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+  }).length;
+  const monName    = now.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
+
+  const totalHtml = `
+    <div class="st-kpi" style="background:linear-gradient(135deg,rgba(124,106,247,0.12) 0%,rgba(80,64,208,0.06) 100%);border-color:rgba(124,106,247,0.28)">
+      <div class="st-kpi-label">Kunden gesamt</div>
+      <div class="st-kpi-value" style="color:#c4baf9">${total}</div>
+    </div>`;
+
+  // Status cards
   const statuses = [
     { label: 'In Bearbeitung',        color: '#7c6af7', key: 'In Bearbeitung' },
     { label: 'Warten auf Rückmeldung', color: '#c9a830', key: 'Warten auf Rückmeldung' },
@@ -3463,7 +3594,7 @@ function renderStats() {
       </div>`;
   }).join('');
 
-  // ── Section 3: Projekttypen ────────────────────────────────
+  // Projekttypen cards
   const types = ['Website', 'Chatbot', 'Beides'];
   const typeHtml = types.map(t => {
     const count = clients.filter(c => c.projectType === t).length;
@@ -3476,7 +3607,7 @@ function renderStats() {
       </div>`;
   }).join('');
 
-  // ── Section 4: Zeitlinie ───────────────────────────────────
+  // Zeitlinie
   const recent = [...clients]
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 5);
@@ -3497,17 +3628,23 @@ function renderStats() {
           </div>`;
       }).join('');
 
-  const totalHtml = `
-    <div class="st-kpi" style="background:linear-gradient(135deg,rgba(124,106,247,0.12) 0%,rgba(80,64,208,0.06) 100%);border-color:rgba(124,106,247,0.28)">
-      <div class="st-kpi-label">Kunden gesamt</div>
-      <div class="st-kpi-value" style="color:#c4baf9">${total}</div>
-    </div>`;
-
   document.getElementById('st-body').innerHTML = `
     <div>
       <div class="st-section-title">Pipeline-Übersicht</div>
       ${totalHtml}
       <div style="margin-top:20px" class="st-bars">${barsHtml}</div>
+      <div class="st-extra-stats">
+        <div class="st-extra-card">
+          <div class="st-extra-label">Conversion Outreach → Abgeschlossen</div>
+          <div class="st-extra-value">${convPct} %</div>
+          <div class="st-extra-sub">${done} von ${total} Kunden abgeschlossen</div>
+        </div>
+        <div class="st-extra-card">
+          <div class="st-extra-label">Neu im ${monName}</div>
+          <div class="st-extra-value">${neuMonat}</div>
+          <div class="st-extra-sub">neue Kunden diesen Monat</div>
+        </div>
+      </div>
     </div>
 
     <div>
@@ -3524,6 +3661,199 @@ function renderStats() {
       <div class="st-section-title">Zeitlinie — letzte 5 Kunden</div>
       <div class="st-timeline">${tlHtml}</div>
     </div>`;
+}
+
+// ─── Finance tab ──────────────────────────────────────────────────────────
+const INV_KEY = 'ns_invoices';
+
+function loadInvoices() {
+  try { return JSON.parse(localStorage.getItem(INV_KEY)) || []; }
+  catch { return []; }
+}
+
+function saveInvoices(invs) {
+  try { localStorage.setItem(INV_KEY, JSON.stringify(invs)); }
+  catch { alert('Speicher voll — PDF zu groß für localStorage.'); }
+}
+
+function handleInvoiceFiles(files) {
+  const invs = loadInvoices();
+  let pending = files.length;
+  if (!pending) return;
+  Array.from(files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      invs.push({
+        id:       Date.now().toString(36) + Math.random().toString(36).slice(2),
+        filename: file.name,
+        date:     new Date().toISOString(),
+        amount:   0,
+        data:     e.target.result,
+      });
+      if (--pending === 0) { saveInvoices(invs); renderFinanceTab(); }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function deleteInvoice(id) {
+  saveInvoices(loadInvoices().filter(i => i.id !== id));
+  renderFinanceTab();
+}
+
+function updateInvoiceAmount(id, val) {
+  const invs = loadInvoices();
+  const inv  = invs.find(i => i.id === id);
+  if (!inv) return;
+  inv.amount = parseFloat(String(val).replace(',', '.')) || 0;
+  saveInvoices(invs);
+  refreshFinanceSummary(invs);
+}
+
+function fmtEur(n) {
+  return n.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function financeSummaryHtml(invs) {
+  const count       = invs.length;
+  const nettoTotal  = invs.reduce((s, i) => s + (i.amount || 0), 0);
+  const bruttoTotal = nettoTotal * 1.19;
+  const avg         = count ? nettoTotal / count : 0;
+  const cards = [
+    { label: 'Gesamtumsatz netto',   value: fmtEur(nettoTotal)  + ' €', color: '#c4baf9' },
+    { label: 'Gesamtumsatz brutto',  value: fmtEur(bruttoTotal) + ' €', color: '#4ab87a' },
+    { label: 'Anzahl Rechnungen',    value: count,                        color: '#fff'    },
+    { label: 'Ø pro Rechnung',       value: fmtEur(avg)         + ' €', color: '#c9a830' },
+  ];
+  return `<div class="st-cards-3" style="grid-template-columns:repeat(2,1fr)">` +
+    cards.map(c => `
+      <div class="st-kpi">
+        <div class="st-kpi-label">${c.label}</div>
+        <div class="st-kpi-value" style="color:${c.color};font-size:22px">${c.value}</div>
+      </div>`).join('') +
+  `</div>`;
+}
+
+function financeMonthChartHtml(invs) {
+  if (!invs.length) return '';
+  const byMonth = {};
+  invs.forEach(inv => {
+    const d   = new Date(inv.date);
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const lbl = d.toLocaleDateString('de-DE', { month: 'short', year: '2-digit' });
+    if (!byMonth[key]) byMonth[key] = { label: lbl, total: 0 };
+    byMonth[key].total += inv.amount || 0;
+  });
+  const months = Object.keys(byMonth).sort();
+  const maxVal = Math.max(...months.map(k => byMonth[k].total), 1);
+  const bars = months.map(k => {
+    const m = byMonth[k];
+    return `
+      <div class="st-bar-row">
+        <div class="st-bar-label">${m.label}</div>
+        <div class="st-bar-track">
+          <div class="st-bar-fill--fin" style="width:${(m.total / maxVal * 100).toFixed(1)}%"></div>
+        </div>
+        <div class="st-bar-count">${fmtEur(m.total)} €</div>
+      </div>`;
+  }).join('');
+  return `
+    <div>
+      <div class="st-section-title">Umsatz pro Monat (netto)</div>
+      <div class="st-bars">${bars}</div>
+    </div>`;
+}
+
+function refreshFinanceSummary(invs) {
+  const el = document.getElementById('fin-summary');
+  if (el) el.innerHTML = financeSummaryHtml(invs);
+  const mc = document.getElementById('fin-month-chart');
+  if (mc) mc.innerHTML = financeMonthChartHtml(invs);
+}
+
+function renderFinanceTab() {
+  const invs = loadInvoices();
+
+  const tableRows = invs.length === 0
+    ? `<tr><td colspan="5" style="text-align:center;color:#555;padding:28px">Noch keine Rechnungen hochgeladen.</td></tr>`
+    : [...invs].sort((a, b) => new Date(b.date) - new Date(a.date)).map(inv => {
+        const brutto  = ((inv.amount || 0) * 1.19);
+        const dateStr = new Date(inv.date).toLocaleDateString('de-DE');
+        return `
+          <tr>
+            <td class="fin-td-file" title="${esc(inv.filename)}">${esc(inv.filename)}</td>
+            <td style="color:var(--muted)">${dateStr}</td>
+            <td>
+              <div class="fin-amt-wrap">
+                <input class="fin-amt-input" type="number" min="0" step="0.01"
+                       value="${inv.amount || ''}"
+                       placeholder="0,00"
+                       oninput="updateInvoiceAmount('${inv.id}', this.value)" />
+                <span class="fin-amt-sym">€</span>
+              </div>
+            </td>
+            <td class="fin-td-brutto">${fmtEur(brutto)} €</td>
+            <td>
+              <button class="fin-del-btn" onclick="deleteInvoice('${inv.id}')" title="Löschen">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                  <path d="M1 1l9 9M10 1L1 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </td>
+          </tr>`;
+      }).join('');
+
+  document.getElementById('st-body').innerHTML = `
+    <div id="fin-summary">${financeSummaryHtml(invs)}</div>
+
+    <div>
+      <div class="st-section-title">Rechnung hochladen</div>
+      <div class="fin-drop-zone" id="fin-drop-zone">
+        <div class="fin-drop-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect x="4" y="6" width="24" height="20" rx="3" stroke="#555" stroke-width="1.5"/>
+            <path d="M16 20v-8M12 15l4-4 4 4" stroke="#7c6af7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10 26h12" stroke="#555" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="fin-drop-text">
+          PDF hier ablegen oder
+          <label>auswählen
+            <input type="file" accept=".pdf" multiple onchange="handleInvoiceFiles(this.files)" />
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="st-section-title">Rechnungen</div>
+      <div class="fin-tbl-wrap">
+        <table class="fin-table">
+          <thead>
+            <tr>
+              <th>Dateiname</th>
+              <th>Datum</th>
+              <th>Betrag netto</th>
+              <th>Betrag brutto</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>${tableRows}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="fin-month-chart">${financeMonthChartHtml(invs)}</div>`;
+
+  // attach drag-and-drop
+  const zone = document.getElementById('fin-drop-zone');
+  zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('fin-drop--active'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('fin-drop--active'));
+  zone.addEventListener('drop',      e => {
+    e.preventDefault();
+    zone.classList.remove('fin-drop--active');
+    handleInvoiceFiles(e.dataTransfer.files);
+  });
 }
 
 // ─── Boot ─────────────────────────────────────────────────────────────────
