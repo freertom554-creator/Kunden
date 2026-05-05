@@ -940,19 +940,67 @@
 
     /* ─── Print ───────────────────────────────────────────────── */
     @media print {
-      @page { size: A4; margin: 0; }
-      html, body { background: white !important; margin: 0 !important; padding: 0 !important; }
+      @page { size: A4; margin: 15mm 18mm; }
+
+      html, body {
+        background: white !important;
+        color: black !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* Hide everything except the print container */
       body > *:not(#printRoot) { display: none !important; }
       .dp-bar  { display: none !important; }
       .dp-hint { display: none !important; }
+
       #printRoot {
         display: block !important;
-        background: white;
-        width: 100%;
-        margin: 0;
-        padding: 0;
+        background: white !important;
+        color: black !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
-      .ns-doc-body .pho { border-bottom: none !important; background: none !important; }
+
+      /* Reset all children to black text on transparent background */
+      #printRoot * {
+        color: black !important;
+        background: transparent !important;
+        visibility: visible !important;
+      }
+
+      /* Restore intentional coloured blocks */
+      #printRoot .ns-hdr    { background: #000 !important; color: #fff !important; }
+      #printRoot .ns-hdr *  { background: transparent !important; color: #fff !important; }
+      #printRoot .ns-ftr    { background: #000 !important; color: #666 !important; }
+      #printRoot .ns-ftr *  { background: transparent !important; color: #666 !important; }
+      #printRoot .ns-redline { background: #C0392B !important; }
+
+      /* Explicit display for content elements */
+      #printRoot .ns-doc-body { display: block !important; }
+      #printRoot p   { display: block !important; color: black !important; }
+      #printRoot ul,
+      #printRoot ol  { display: block !important; color: black !important; }
+      #printRoot li  { display: list-item !important; color: black !important; }
+      #printRoot table   { display: table !important; width: 100% !important; }
+      #printRoot thead   { display: table-header-group !important; }
+      #printRoot tbody   { display: table-row-group !important; }
+      #printRoot tr      { display: table-row !important; }
+      #printRoot td,
+      #printRoot th      { display: table-cell !important; color: black !important; }
+      #printRoot .tr-total td { background: #fafafa !important; color: black !important; }
+
+      /* Orange placeholder: remove deco, keep text black */
+      #printRoot .pho {
+        border-bottom: none !important;
+        background: none !important;
+        color: black !important;
+      }
     }
   </style>
 </head>
