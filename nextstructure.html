@@ -964,6 +964,115 @@
     .ls-cta { margin-top: 4px; }
     .ls-cta .btn { font-size: 15px; padding: 12px 36px; letter-spacing: 0.01em; }
 
+    /* ─── Stats screen ───────────────────────────────────────── */
+    #statsScreen {
+      position: fixed; inset: 0; z-index: 600;
+      display: flex; flex-direction: column;
+      background: var(--bg);
+      background-image: radial-gradient(ellipse 80% 40% at 50% 0%,
+        rgba(80,55,200,0.15) 0%, transparent 60%);
+      overflow-y: auto;
+    }
+
+    .st-hdr {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 32px;
+      background: rgba(13,13,13,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(124,106,247,0.12);
+      flex-shrink: 0;
+    }
+
+    .st-hdr-title {
+      font-size: 14px; font-weight: 700; letter-spacing: 0.04em;
+      color: var(--text);
+    }
+
+    .st-back-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 14px; border-radius: 7px; border: 1px solid rgba(124,106,247,0.25);
+      background: rgba(124,106,247,0.1); color: #c4baf9;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .st-back-btn:hover { background: rgba(124,106,247,0.18); border-color: rgba(124,106,247,0.45); }
+
+    .st-body {
+      flex: 1; max-width: 900px; width: 100%; margin: 0 auto;
+      padding: 36px 24px 56px;
+      display: flex; flex-direction: column; gap: 40px;
+    }
+
+    .st-section-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #6060a0;
+      margin-bottom: 16px;
+    }
+
+    /* bar chart */
+    .st-bars { display: flex; flex-direction: column; gap: 10px; }
+
+    .st-bar-row {
+      display: grid;
+      grid-template-columns: 130px 1fr 32px;
+      align-items: center; gap: 12px;
+    }
+
+    .st-bar-label { font-size: 12.5px; color: var(--muted); text-align: right; white-space: nowrap; }
+
+    .st-bar-track {
+      height: 10px; background: rgba(255,255,255,0.05);
+      border-radius: 6px; overflow: hidden;
+    }
+
+    .st-bar-fill {
+      height: 100%; border-radius: 6px;
+      background: linear-gradient(90deg, var(--accent) 0%, #9b8ff9 100%);
+      transition: width 0.4s ease;
+    }
+
+    .st-bar-count { font-size: 12px; font-weight: 700; color: var(--text); }
+
+    /* status / type cards */
+    .st-cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    @media (max-width: 600px) { .st-cards-3 { grid-template-columns: 1fr; } }
+
+    .st-kpi {
+      background: linear-gradient(155deg, #18152a 0%, #111118 60%);
+      border: 1px solid rgba(124,106,247,0.14);
+      border-radius: 12px; padding: 20px 22px;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+
+    .st-kpi-label { font-size: 11.5px; color: var(--muted); }
+
+    .st-kpi-value { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; color: #fff; }
+
+    .st-kpi-pct { font-size: 12px; color: #555; }
+
+    /* timeline */
+    .st-timeline { display: flex; flex-direction: column; gap: 0; }
+
+    .st-tl-row {
+      display: grid;
+      grid-template-columns: 1fr 120px 140px 110px;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      gap: 12px;
+      transition: background 0.15s;
+    }
+    .st-tl-row:first-child { border-top: 1px solid rgba(255,255,255,0.04); }
+    .st-tl-row:hover { background: rgba(124,106,247,0.05); }
+
+    .st-tl-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .st-tl-company { font-size: 12px; color: var(--muted); }
+    .st-tl-phase { font-size: 12px; color: #9b8ff9; }
+    .st-tl-date { font-size: 12px; color: #555; text-align: right; }
+
+    .st-empty { text-align: center; padding: 28px 0; color: #555; font-size: 13px; }
+
     /* ─── Print ───────────────────────────────────────────────── */
     @media print {
       @page { size: A4; margin: 15mm 18mm; }
@@ -1284,24 +1393,45 @@
         </div>
       </div>
 
-      <!-- Card 3: Statistiken (Coming Soon) -->
-      <div class="card card--disabled">
+      <!-- Card 3: Statistiken -->
+      <div class="card">
         <div class="card-icon">
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-            <path d="M3 17V10M8 17V7M13 17v-5M18 17V4" stroke="#888" stroke-width="1.5"
+            <path d="M3 17V10M8 17V7M13 17v-5M18 17V4" stroke="#9b8ff9" stroke-width="1.5"
                   stroke-linecap="round"/>
           </svg>
         </div>
         <div class="card-body">
           <div class="card-title">Statistiken</div>
           <div class="card-desc">Pipeline-Übersicht und Conversion-Analyse</div>
-          <span class="badge-soon">Coming Soon</span>
         </div>
+        <button class="card-btn" onclick="openStats()">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M2 6.5h9M7 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.6"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Öffnen
+        </button>
       </div>
 
     </div>
   </div>
   <div class="hub-footer">NextStructure Solutions &nbsp;·&nbsp; Quickborn</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ STATS -->
+<div id="statsScreen" style="display:none">
+  <div class="st-hdr">
+    <span class="st-hdr-title">NextStructure &nbsp;·&nbsp; Statistiken</span>
+    <button class="st-back-btn" onclick="showHub()">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <path d="M11 6.5H2M6 2.5L2 6.5l4 4" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Hub
+    </button>
+  </div>
+  <div class="st-body" id="st-body"></div>
 </div>
 
 <!-- ══════════════════════════════════════════════════ LANDING -->
@@ -3272,9 +3402,10 @@ function enterDashboard(filter) {
 
 // ─── Hub / Landing navigation ─────────────────────────────────────────────
 function showHub() {
-  document.getElementById('hubScreen').style.display = 'flex';
+  document.getElementById('hubScreen').style.display    = 'flex';
+  document.getElementById('statsScreen').style.display  = 'none';
   document.getElementById('landingScreen').style.display = 'none';
-  document.getElementById('pipelineMain').style.display = 'none';
+  document.getElementById('pipelineMain').style.display  = 'none';
   document.getElementById('hub-greeting').textContent = getGreeting();
   const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
   document.getElementById('hub-quote-text').textContent   = `„${q.text}"`;
@@ -3282,9 +3413,117 @@ function showHub() {
 }
 
 function openLanding() {
-  document.getElementById('hubScreen').style.display = 'none';
+  document.getElementById('hubScreen').style.display    = 'none';
+  document.getElementById('statsScreen').style.display  = 'none';
   document.getElementById('landingScreen').style.display = 'flex';
   initLanding();
+}
+
+function openStats() {
+  document.getElementById('hubScreen').style.display    = 'none';
+  document.getElementById('landingScreen').style.display = 'none';
+  document.getElementById('pipelineMain').style.display  = 'none';
+  document.getElementById('statsScreen').style.display   = 'flex';
+  renderStats();
+}
+
+function renderStats() {
+  const clients = loadClients();
+  const total   = clients.length;
+
+  // ── Section 1: Phase bars ─────────────────────────────────
+  const phaseCounts = PHASES.map(p => ({
+    label: p.label,
+    count: clients.filter(c => c.currentPhase === p.id).length,
+  }));
+  const maxPhase = Math.max(...phaseCounts.map(p => p.count), 1);
+  const barsHtml = phaseCounts.map(p => `
+    <div class="st-bar-row">
+      <div class="st-bar-label">${esc(p.label)}</div>
+      <div class="st-bar-track">
+        <div class="st-bar-fill" style="width:${(p.count / maxPhase * 100).toFixed(1)}%"></div>
+      </div>
+      <div class="st-bar-count">${p.count}</div>
+    </div>`).join('');
+
+  // ── Section 2: Status ──────────────────────────────────────
+  const statuses = [
+    { label: 'In Bearbeitung',        color: '#7c6af7', key: 'In Bearbeitung' },
+    { label: 'Warten auf Rückmeldung', color: '#c9a830', key: 'Warten auf Rückmeldung' },
+    { label: 'Abgeschlossen',          color: '#3aaa72', key: 'Abgeschlossen' },
+  ];
+  const statusHtml = statuses.map(s => {
+    const count = clients.filter(c => (c.status || 'In Bearbeitung') === s.key).length;
+    const pct   = total ? ((count / total) * 100).toFixed(0) : 0;
+    return `
+      <div class="st-kpi">
+        <div class="st-kpi-label">${esc(s.label)}</div>
+        <div class="st-kpi-value" style="color:${s.color}">${count}</div>
+        <div class="st-kpi-pct">${pct} % der Kunden</div>
+      </div>`;
+  }).join('');
+
+  // ── Section 3: Projekttypen ────────────────────────────────
+  const types = ['Website', 'Chatbot', 'Beides'];
+  const typeHtml = types.map(t => {
+    const count = clients.filter(c => c.projectType === t).length;
+    const pct   = total ? ((count / total) * 100).toFixed(0) : 0;
+    return `
+      <div class="st-kpi">
+        <div class="st-kpi-label">${t}</div>
+        <div class="st-kpi-value">${count}</div>
+        <div class="st-kpi-pct">${pct} % der Kunden</div>
+      </div>`;
+  }).join('');
+
+  // ── Section 4: Zeitlinie ───────────────────────────────────
+  const recent = [...clients]
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 5);
+  const tlHtml = recent.length === 0
+    ? `<div class="st-empty">Noch keine Kunden vorhanden.</div>`
+    : recent.map(c => {
+        const phase   = PHASES.find(p => p.id === c.currentPhase)?.label || '–';
+        const dateStr = new Date(c.createdAt).toLocaleDateString('de-DE');
+        return `
+          <div class="st-tl-row">
+            <div>
+              <div class="st-tl-name">${esc(c.name)}</div>
+              ${c.company ? `<div class="st-tl-company">${esc(c.company)}</div>` : ''}
+            </div>
+            <div class="st-tl-phase">${esc(phase)}</div>
+            <div></div>
+            <div class="st-tl-date">${dateStr}</div>
+          </div>`;
+      }).join('');
+
+  const totalHtml = `
+    <div class="st-kpi" style="background:linear-gradient(135deg,rgba(124,106,247,0.12) 0%,rgba(80,64,208,0.06) 100%);border-color:rgba(124,106,247,0.28)">
+      <div class="st-kpi-label">Kunden gesamt</div>
+      <div class="st-kpi-value" style="color:#c4baf9">${total}</div>
+    </div>`;
+
+  document.getElementById('st-body').innerHTML = `
+    <div>
+      <div class="st-section-title">Pipeline-Übersicht</div>
+      ${totalHtml}
+      <div style="margin-top:20px" class="st-bars">${barsHtml}</div>
+    </div>
+
+    <div>
+      <div class="st-section-title">Status-Verteilung</div>
+      <div class="st-cards-3">${statusHtml}</div>
+    </div>
+
+    <div>
+      <div class="st-section-title">Projekttypen</div>
+      <div class="st-cards-3">${typeHtml}</div>
+    </div>
+
+    <div>
+      <div class="st-section-title">Zeitlinie — letzte 5 Kunden</div>
+      <div class="st-timeline">${tlHtml}</div>
+    </div>`;
 }
 
 // ─── Boot ─────────────────────────────────────────────────────────────────
