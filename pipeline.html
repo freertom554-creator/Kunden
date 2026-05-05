@@ -24,6 +24,8 @@
     html, body {
       height: 100%;
       background: var(--bg);
+      background-image: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(80,55,200,0.18) 0%, transparent 65%);
+      background-attachment: fixed;
       color: var(--text);
       font-family: var(--font);
       font-size: 14px;
@@ -40,9 +42,12 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 32px;
-      height: 58px;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
+      height: 60px;
+      background: rgba(13,13,13,0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(124,106,247,0.22);
+      box-shadow: 0 1px 0 rgba(124,106,247,0.06), 0 8px 32px rgba(0,0,0,0.45);
     }
 
     .logo {
@@ -55,21 +60,30 @@
     }
 
     .logo-mark {
-      width: 26px;
-      height: 26px;
-      background: var(--accent);
-      border-radius: 4px;
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #7c6af7 0%, #5040d0 100%);
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
       color: #fff;
       flex-shrink: 0;
+      box-shadow: 0 0 14px rgba(124,106,247,0.5), 0 2px 6px rgba(0,0,0,0.4);
+      letter-spacing: 0;
     }
 
     .logo-sep { color: var(--text-dim); font-weight: 300; margin: 0 4px; }
-    .logo-sub { color: var(--text-muted); font-weight: 400; }
+    .logo-sub {
+      background: linear-gradient(90deg, #9b8ff9 0%, #c4baf9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
 
     .header-right { display: flex; align-items: center; gap: 12px; }
 
@@ -91,8 +105,16 @@
       white-space: nowrap;
     }
 
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-primary:hover { background: var(--accent-h); }
+    .btn-primary {
+      background: linear-gradient(135deg, #7c6af7 0%, #5040d0 100%);
+      color: #fff;
+      box-shadow: 0 0 16px rgba(124,106,247,0.28), 0 2px 4px rgba(0,0,0,0.3);
+      transition: background 0.15s, box-shadow 0.2s, opacity 0.15s;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #9b8ff9 0%, #7c6af7 100%);
+      box-shadow: 0 0 24px rgba(124,106,247,0.45), 0 2px 8px rgba(0,0,0,0.3);
+    }
 
     .btn-ghost {
       background: transparent;
@@ -132,38 +154,58 @@
     .stat-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
+      gap: 14px;
+      margin-bottom: 22px;
     }
 
     .stat-card {
-      background: var(--surface);
+      background: linear-gradient(155deg, #18152a 0%, #141414 60%);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px 20px;
+      border-radius: 10px;
+      padding: 20px 24px 18px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      border-radius: 10px 10px 0 0;
+    }
+    .stat-card:nth-child(1)::before { background: linear-gradient(90deg, #444, #666); }
+    .stat-card:nth-child(2)::before { background: linear-gradient(90deg, #7c6af7, #a89df9); }
+    .stat-card:nth-child(3)::before { background: linear-gradient(90deg, #b8921a, #e8c840); }
+    .stat-card:nth-child(4)::before { background: linear-gradient(90deg, #1e8a4a, #3aaa72); }
+    .stat-card:hover {
+      border-color: rgba(124,106,247,0.28);
+      box-shadow: 0 4px 28px rgba(124,106,247,0.1);
     }
 
     .stat-card-label {
       font-size: 11px;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 8px;
+      letter-spacing: 0.07em;
+      margin-bottom: 10px;
     }
 
     .stat-card-value {
-      font-size: 30px;
-      font-weight: 700;
+      font-size: 36px;
+      font-weight: 800;
       line-height: 1;
+      letter-spacing: -0.02em;
     }
 
     /* ─── Client table ───────────────────────────────────────── */
     .tbl-wrap {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border: 1px solid rgba(124,106,247,0.12);
+      border-radius: 10px;
       overflow: hidden;
+      box-shadow: 0 2px 24px rgba(0,0,0,0.25);
     }
 
     .client-table {
@@ -173,32 +215,36 @@
 
     .client-table thead th {
       font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
+      font-weight: 700;
+      color: var(--text-dim);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 12px 16px;
+      letter-spacing: 0.07em;
+      padding: 13px 18px;
       text-align: left;
-      background: var(--surface);
+      background: rgba(20,20,20,0.95);
       border-bottom: 1px solid var(--border);
       white-space: nowrap;
     }
 
     .client-table tbody tr {
-      border-bottom: 1px solid var(--border);
-      transition: background 0.1s;
+      border-bottom: 1px solid rgba(37,37,37,0.7);
+      transition: background 0.15s, box-shadow 0.15s;
       cursor: pointer;
+      position: relative;
     }
     .client-table tbody tr:last-child { border-bottom: none; }
-    .client-table tbody tr:hover { background: var(--surface2); }
+    .client-table tbody tr:hover {
+      background: rgba(124,106,247,0.055);
+      box-shadow: inset 3px 0 0 rgba(124,106,247,0.55);
+    }
 
     .client-table td {
-      padding: 13px 16px;
+      padding: 16px 18px;
       vertical-align: middle;
       font-size: 13px;
     }
 
-    .td-name  { font-weight: 600; }
+    .td-name  { font-weight: 600; letter-spacing: 0.01em; }
     .td-firma { color: var(--text-muted); }
     .td-date  { color: var(--text-dim); font-size: 12px; white-space: nowrap; }
 
@@ -266,7 +312,8 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.72);
+      background: rgba(5,3,18,0.82);
+      backdrop-filter: blur(4px);
       z-index: 200;
       align-items: center;
       justify-content: center;
@@ -275,14 +322,14 @@
     .overlay.open { display: flex; }
 
     .modal {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      background: linear-gradient(155deg, #17132a 0%, #141414 55%);
+      border: 1px solid rgba(124,106,247,0.18);
+      border-radius: 14px;
       width: 100%;
       max-width: 520px;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 48px rgba(124,106,247,0.08);
     }
     .modal-xl { max-width: 740px; }
 
@@ -293,11 +340,11 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px 24px 16px;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
+      padding: 22px 24px 18px;
+      background: linear-gradient(135deg, #17132a 0%, #141414 60%);
+      border-bottom: 1px solid rgba(124,106,247,0.12);
     }
-    .modal-title { font-size: 16px; font-weight: 600; }
+    .modal-title { font-size: 16px; font-weight: 700; letter-spacing: 0.01em; }
 
     .modal-close {
       width: 30px;
@@ -331,19 +378,22 @@
     }
 
     input, select, textarea {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      background: #0a0a14;
+      border: 1px solid #2a2a3a;
+      border-radius: 8px;
       color: var(--text);
       font-family: var(--font);
       font-size: 13px;
-      padding: 9px 12px;
+      padding: 10px 13px;
       width: 100%;
-      transition: border-color 0.15s;
+      transition: border-color 0.18s, box-shadow 0.18s;
       outline: none;
       appearance: none;
     }
-    input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(124,106,247,0.7);
+      box-shadow: 0 0 0 3px rgba(124,106,247,0.13);
+    }
 
     select {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
@@ -362,8 +412,8 @@
       justify-content: flex-end;
       gap: 10px;
       padding: 16px 24px 20px;
-      background: var(--surface);
-      border-top: 1px solid var(--border);
+      background: linear-gradient(0deg, #141414 70%, transparent);
+      border-top: 1px solid rgba(124,106,247,0.1);
     }
 
     /* ─── Phase selector in detail modal ─────────────────────── */
@@ -489,18 +539,19 @@
     }
 
     .dv-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      background: linear-gradient(155deg, #17132a 0%, #141414 55%);
+      border: 1px solid rgba(124,106,247,0.13);
+      border-radius: 10px;
       padding: 24px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.2);
     }
 
     .dv-card-title {
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.07em;
       margin-bottom: 20px;
     }
 
@@ -560,18 +611,19 @@
     /* ─── Detail view – document section ─────────────────────── */
     .dv-docs {
       margin-top: 20px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      background: linear-gradient(155deg, #17132a 0%, #141414 55%);
+      border: 1px solid rgba(124,106,247,0.13);
+      border-radius: 10px;
       padding: 24px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.2);
     }
 
     .dv-docs-title {
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.07em;
       margin-bottom: 16px;
     }
 
@@ -580,13 +632,13 @@
       align-items: center;
       gap: 12px;
       padding: 11px 14px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border: 1px solid #2a2a3a;
+      border-radius: 8px;
       margin-bottom: 8px;
-      transition: border-color 0.12s;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
     .dv-doc-row:last-child { margin-bottom: 0; }
-    .dv-doc-row:hover { border-color: #333; }
+    .dv-doc-row:hover { border-color: rgba(124,106,247,0.3); box-shadow: 0 0 0 1px rgba(124,106,247,0.1); }
 
     .dv-doc-icon {
       width: 30px;
@@ -641,17 +693,19 @@
       align-items: center;
       gap: 12px;
       padding: 10px 20px;
-      background: #000;
-      border-bottom: 1px solid #222;
+      background: rgba(13,13,13,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(124,106,247,0.18);
       flex-shrink: 0;
-      min-height: 52px;
+      min-height: 56px;
     }
 
     .dp-bar-title {
       flex: 1;
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 700;
       color: #fff;
+      letter-spacing: 0.01em;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -662,8 +716,8 @@
     /* ─── Scrollbar ───────────────────────────────────────────── */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: #333; }
+    ::-webkit-scrollbar-thumb { background: rgba(124,106,247,0.25); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(124,106,247,0.45); }
 
     /* ─── Print ───────────────────────────────────────────────── */
     @media print {
