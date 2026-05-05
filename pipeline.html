@@ -682,9 +682,11 @@
       display: none;
       position: fixed;
       inset: 0;
-      z-index: 400;
+      z-index: 999;
       flex-direction: column;
-      background: #111;
+      background: rgba(5,3,18,0.92);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
     }
     #docPreviewOverlay.open { display: flex; }
 
@@ -693,7 +695,7 @@
       align-items: center;
       gap: 12px;
       padding: 10px 20px;
-      background: rgba(13,13,13,0.95);
+      background: rgba(8,6,20,0.98);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(124,106,247,0.18);
       flex-shrink: 0;
@@ -711,7 +713,68 @@
       text-overflow: ellipsis;
     }
 
-    #docFrame { flex: 1; border: none; background: #e8e8e8; }
+    .dp-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 32px 24px 64px;
+      background: #15121f;
+    }
+
+    /* ─── White-paper document box ──────────────────────────── */
+    .dp-doc-content {
+      background: #fff;
+      max-width: 780px;
+      margin: 0 auto;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 10.5pt;
+      color: #333;
+      line-height: 1.7;
+      box-shadow: 0 12px 60px rgba(0,0,0,0.55);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .ns-hdr { background: #000; color: #fff; padding: 14px 40px;
+              display: flex; align-items: center; justify-content: space-between; }
+    .ns-hdr-brand { font-size: 12pt; letter-spacing: 0.1em; }
+    .ns-hdr-brand b { font-weight: 900; }
+    .ns-hdr-loc { font-size: 8.5pt; color: #aaa; letter-spacing: 0.04em; }
+    .ns-redline { height: 3px; background: #C0392B; }
+    .ns-doc-body { padding: 36px 40px 48px; }
+    .ns-doc-label { font-size: 7.5pt; color: #aaa; letter-spacing: 0.22em;
+                    text-transform: uppercase; margin-bottom: 3px; }
+    .ns-doc-title { font-size: 22pt; font-weight: 700; color: #000;
+                    margin-bottom: 4px; line-height: 1.15; }
+    .ns-doc-date  { font-size: 8.5pt; color: #999; margin-bottom: 24px; }
+    .ns-rcpt      { margin-bottom: 22px; line-height: 1.75; font-size: 10pt; }
+    .ns-rcpt-lbl  { font-size: 7.5pt; color: #999; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 2px; }
+    .ns-doc-body p { margin-bottom: 10px; }
+    .ns-doc-body h2 { font-size: 8pt; font-weight: 700; text-transform: uppercase;
+                      letter-spacing: 0.09em; color: #555; margin: 22px 0 8px;
+                      padding-bottom: 5px; border-bottom: 1.5px solid #eee; }
+    .ns-doc-body ul, .ns-doc-body ol { padding-left: 20px; margin-bottom: 12px; }
+    .ns-doc-body li { margin-bottom: 4px; line-height: 1.65; }
+    .ns-doc-body table { width: 100%; border-collapse: collapse; margin: 10px 0 14px; font-size: 9.5pt; }
+    .ns-doc-body th { font-size: 7.5pt; font-weight: 700; text-transform: uppercase;
+                      letter-spacing: 0.05em; color: #777; padding: 7px 10px;
+                      border-bottom: 2px solid #e0e0e0; text-align: left; }
+    .ns-doc-body td { padding: 7px 10px; border-bottom: 1px solid #f2f2f2; vertical-align: top; }
+    .ns-doc-body .tr-total td { font-weight: 700; border-top: 2px solid #e0e0e0;
+                                 border-bottom: none; background: #fafafa; }
+    .ns-doc-body .td-r { text-align: right; }
+    .ns-doc-body .ph  { color: #bbb; }
+    .ns-chk     { display: flex; gap: 10px; padding: 5px 0;
+                  border-bottom: 1px solid #f5f5f5; align-items: flex-start; }
+    .ns-chk-box { width: 13px; height: 13px; border: 1.5px solid #ccc;
+                  border-radius: 2px; flex-shrink: 0; margin-top: 2px; }
+    .ns-sig { margin-top: 36px; padding-top: 18px; border-top: 1px solid #e8e8e8;
+              line-height: 1.85; font-size: 10pt; }
+    .ns-sig-mu  { color: #888; font-size: 9pt; }
+    .ns-sig2    { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 36px; }
+    .ns-sig2-col { border-top: 1px solid #ccc; padding-top: 7px;
+                   color: #999; font-size: 8.5pt; line-height: 1.6; }
+    .ns-ftr { background: #000; color: #666; text-align: center; padding: 9px 24px;
+              font-size: 7pt; letter-spacing: 0.04em; }
 
     /* ─── Scrollbar ───────────────────────────────────────────── */
     ::-webkit-scrollbar { width: 6px; }
@@ -851,7 +914,16 @@
 
     /* ─── Print ───────────────────────────────────────────────── */
     @media print {
-      body > *:not(#printRoot) { display: none !important; }
+      body > *:not(#docPreviewOverlay):not(#printRoot) { display: none !important; }
+      .dp-bar { display: none !important; }
+      #docPreviewOverlay {
+        position: static !important;
+        background: white !important;
+        backdrop-filter: none !important;
+        display: block !important;
+      }
+      .dp-scroll { overflow: visible !important; padding: 0 !important; background: white !important; }
+      .dp-doc-content { box-shadow: none !important; max-width: none !important; border-radius: 0 !important; }
       #printRoot {
         display: block !important;
         position: static !important;
@@ -863,11 +935,8 @@
         line-height: 1.75;
         max-width: none;
       }
-      #printRoot pre {
-        font-family: Helvetica, Arial, sans-serif;
-        font-size: 11pt;
-        white-space: pre-wrap;
-      }
+      #printRoot pre { font-family: Helvetica, Arial, sans-serif; font-size: 11pt; white-space: pre-wrap; }
+      @page { size: A4; margin: 15mm 20mm; }
     }
   </style>
 </head>
@@ -915,7 +984,7 @@
     </div>
     <div class="ls-kacheln" id="ls-kacheln"></div>
     <div class="ls-cta">
-      <button class="btn btn-primary" onclick="enterDashboard('')">Pipeline öffnen →</button>
+      <button class="btn btn-primary" onclick="enterDashboard('')">Kundendatenbank öffnen →</button>
     </div>
   </div>
 </div>
@@ -1029,17 +1098,19 @@
     <div class="dp-bar-title" id="dp-bar-title"></div>
     <button class="btn btn-ghost" id="dp-sent-btn" style="font-size:12px;"
             onclick="markDocSentFromModal()">Als Gesendet markieren</button>
-    <button class="btn btn-primary" style="font-size:12px;" onclick="printDocModal()">
+    <button class="btn btn-primary" style="font-size:12px;" onclick="window.print()">
       <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
         <rect x="2" y="4.5" width="9" height="6" rx="1" stroke="currentColor" stroke-width="1.2"/>
         <path d="M4.5 4.5V2.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5v2" stroke="currentColor" stroke-width="1.2"/>
         <path d="M4.5 8.5h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
         <circle cx="10" cy="6.5" r=".7" fill="currentColor"/>
       </svg>
-      Drucken / Als PDF speichern
+      Drucken / PDF
     </button>
   </div>
-  <iframe id="docFrame" title="Dokument Vorschau"></iframe>
+  <div class="dp-scroll">
+    <div class="dp-doc-content" id="dp-doc-content"></div>
+  </div>
 </div>
 
 <!-- ════════════════════════════════════════════ DOCUMENT MODAL -->
@@ -2140,7 +2211,7 @@ function openDocModal(docName, clientId) {
   _dpClientId = clientId;
   _dpDocName  = docName;
   document.getElementById('dp-bar-title').textContent = docName;
-  document.getElementById('docFrame').srcdoc = generateDocHTML(docName, c);
+  document.getElementById('dp-doc-content').innerHTML = generateDocInner(docName, c);
   updateDPSentBtn(c, docName);
   document.getElementById('docPreviewOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -2183,268 +2254,346 @@ function markDocSentFromModal() {
   if (!clients[idx].sentDocs) clients[idx].sentDocs = {};
   clients[idx].sentDocs[_dpDocName] = new Date().toISOString();
   saveClients(clients);
-  updateDPSentBtn(clients[idx], _dpDocName);
+  closeDocPreview();
 }
 
-function printDocModal() {
-  document.getElementById('docFrame').contentWindow.print();
-}
-
-// ─── Document HTML generator ──────────────────────────────────────────────
-function generateDocHTML(docName, client) {
+// ─── Document content generator ───────────────────────────────────────────
+function generateDocInner(docName, client) {
   const today = new Date().toLocaleDateString('de-DE');
   const firm  = client.company || client.name || '–';
+  function h(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-  function h(s) {
-    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
+  function rcpt() { return `
+    <div class="ns-rcpt">
+      <div class="ns-rcpt-lbl">An</div>
+      <div><strong>${h(client.name)}</strong></div>
+      ${client.company ? `<div>${h(client.company)}</div>` : ''}
+      <div class="ph">[Straße und Hausnummer]</div>
+      <div class="ph">[PLZ Ort]</div>
+    </div>`; }
 
-  function rcpt() {
-    return `
-      <div class="rcpt">
-        <div class="rl">An</div>
-        <div>${h(client.name)}</div>
-        ${client.company ? `<div>${h(client.company)}</div>` : ''}
-        <div class="ph">[Straße und Hausnummer]</div>
-        <div class="ph">[PLZ Ort]</div>
-      </div>`;
-  }
+  function chk(t) { return `<div class="ns-chk"><div class="ns-chk-box"></div><div>${t}</div></div>`; }
 
-  function priceTable(rows) {
-    return `
-      <table>
-        <thead><tr><th style="width:36px">Pos.</th><th>Leistung</th>
-          <th class="ar" style="width:110px">Preis netto</th></tr></thead>
-        <tbody>
-          ${rows.map((r,i) => `<tr><td>${i+1}</td><td>${r}</td>
-            <td class="ar ph">[XXX,XX&nbsp;€]</td></tr>`).join('')}
-          <tr class="ttl"><td colspan="2"><strong>Gesamt netto</strong></td>
-            <td class="ar ph">[XXX,XX&nbsp;€]</td></tr>
-          <tr><td colspan="2">zzgl. 19&nbsp;% MwSt.</td>
-            <td class="ar ph">[XXX,XX&nbsp;€]</td></tr>
-          <tr class="ttl"><td colspan="2"><strong>Gesamt brutto</strong></td>
-            <td class="ar ph">[XXX,XX&nbsp;€]</td></tr>
-        </tbody>
-      </table>`;
-  }
+  function sig() { return `
+    <div class="ns-sig">
+      <p>Herzliche Grüße</p>
+      <p style="margin-top:6px"><strong>Tom Freer</strong></p>
+      <p class="ns-sig-mu">NextStructure Solutions · Quickborn</p>
+      <p class="ns-sig-mu">kontakt@nextstructure-solutions.com</p>
+      <p class="ns-sig-mu">nextstructure-solutions.com</p>
+    </div>`; }
 
-  function chk(text) {
-    return `<div class="cr"><div class="cb"></div><div>${text}</div></div>`;
-  }
+  function sig2() { return `
+    <div class="ns-sig2">
+      <div class="ns-sig2-col">Auftraggeber (${h(firm)})<br>Ort, Datum &amp; Unterschrift</div>
+      <div class="ns-sig2-col">Auftragnehmer (NextStructure Solutions)<br>Ort, Datum &amp; Unterschrift</div>
+    </div>`; }
 
-  function sigBlock() {
-    return `
-      <div class="sig">
-        <p>Herzliche Grüße</p><br>
-        <p><strong>Tom Freer</strong></p>
-        <p class="mu">NextStructure Solutions · Quickborn</p>
-        <p>kontakt@nextstructure-solutions.com</p>
-        <p>nextstructure-solutions.com</p>
-      </div>`;
-  }
-
-  function sigLine2() {
-    return `
-      <div style="margin-top:40px;display:grid;grid-template-columns:1fr 1fr;gap:32px;">
-        <div style="border-top:1px solid #ccc;padding-top:8px;color:#999;font-size:9pt;">
-          Auftraggeber (${h(firm)})<br>Ort, Datum &amp; Unterschrift</div>
-        <div style="border-top:1px solid #ccc;padding-top:8px;color:#999;font-size:9pt;">
-          Auftragnehmer (NextStructure)<br>Ort, Datum &amp; Unterschrift</div>
-      </div>`;
-  }
+  function priceTable(rows) { return `
+    <table>
+      <thead><tr><th style="width:34px">Pos.</th><th>Leistung</th>
+        <th class="td-r" style="width:130px">Betrag netto</th></tr></thead>
+      <tbody>
+        ${rows.map((r,i)=>`<tr><td>${i+1}</td><td>${r}</td><td class="td-r ph">[Betrag eintragen]</td></tr>`).join('')}
+        <tr class="tr-total"><td colspan="2"><strong>Gesamt netto</strong></td><td class="td-r ph">[Betrag eintragen]</td></tr>
+        <tr><td colspan="2">zzgl. 19&nbsp;% MwSt.</td><td class="td-r ph">[Betrag eintragen]</td></tr>
+        <tr class="tr-total"><td colspan="2"><strong>Gesamt brutto</strong></td><td class="td-r ph">[Betrag eintragen]</td></tr>
+      </tbody>
+    </table>`; }
 
   const DOCS = {
-    'Angebot Website': { label:'Angebot', title:'Website-Entwicklung', body: () => `
+    'Angebot Website': { label:'Angebot', title:'Website-Entwicklung', body: ()=>`
       ${rcpt()}
       <p>Sehr geehrte/r ${h(client.name)},</p>
       <p>vielen Dank für Ihr Interesse. Wir freuen uns, Ihnen unser Angebot für die Entwicklung Ihrer professionellen Website zu unterbreiten.</p>
       <h2>Leistungsumfang</h2>
       <ul>
-        <li>Konzeption, Sitemap-Planung und Wireframing</li>
-        <li>Individuelles responsives Design (Desktop · Tablet · Mobile)</li>
-        <li>Entwicklung auf Basis eines modernen CMS (z.B. WordPress)</li>
+        <li>Individuelles responsives Design (Desktop, Tablet, Mobile)</li>
+        <li>Bis zu 5 Seiten (Start, Über uns, Leistungen, Kontakt + 1 weitere)</li>
         <li>Kontaktformular mit DSGVO-konformer Datenverarbeitung</li>
-        <li>SEO-Grundoptimierung: Meta-Tags, Alt-Texte, Ladezeit, Struktur</li>
-        <li>Cookie-Banner und DSGVO-konforme Datenschutzseite</li>
-        <li>Übergabe, Dokumentation und persönliche Einweisung</li>
-      </ul>
-      <h2>Technische Umsetzung</h2>
-      <ul>
-        <li><strong>Plattform:</strong> WordPress oder individuelle Lösung nach Absprache</li>
-        <li><strong>Hosting:</strong> Bereitstellung durch Auftraggeber oder Einrichtung durch NextStructure</li>
-        <li><strong>Performance:</strong> Bildkomprimierung, Caching, Lazy Loading, SSL/HTTPS</li>
-        <li><strong>Breakpoints:</strong> 1440 px · 768 px · 375 px</li>
+        <li>SSL-Zertifikat &amp; HTTPS-Verschlüsselung</li>
+        <li>SEO-Grundoptimierung (Meta-Tags, Alt-Texte, Ladezeit)</li>
+        <li>Cookie-Banner &amp; DSGVO-konforme Datenschutzseite</li>
+        <li>Vollständig responsiv – optimiert für alle Endgeräte</li>
+        <li>Persönliche Einweisung &amp; Übergabe inkl. Dokumentation</li>
       </ul>
       <h2>Preisübersicht</h2>
-      ${priceTable(['Konzeption &amp; Design','Entwicklung &amp; Programmierung','SEO-Grundoptimierung','Einweisung &amp; Übergabe'])}
+      ${priceTable(['Design &amp; Konzeption','Entwicklung &amp; Programmierung','SEO-Grundoptimierung &amp; DSGVO-Setup','Projektbegleitung, Einweisung &amp; Übergabe'])}
       <h2>Projektablauf</h2>
       <ol>
-        <li><strong>Kick-off</strong> – Abstimmung der Anforderungen und Bereitstellung der Inhalte</li>
-        <li><strong>Design</strong> – Wireframes und Designentwürfe, Freigabe durch den Auftraggeber</li>
-        <li><strong>Entwicklung</strong> – Umsetzung des freigegebenen Designs</li>
-        <li><strong>Test &amp; Abnahme</strong> – Qualitätssicherung und formelle Abnahme</li>
-        <li><strong>Launch</strong> – Veröffentlichung der Website</li>
+        <li><strong>Kick-off</strong> – Anforderungsanalyse und Zieldefinition</li>
+        <li><strong>Konzept</strong> – Sitemap und Struktur abstimmen</li>
+        <li><strong>Design</strong> – Wireframes und visuelle Entwürfe zur Freigabe</li>
+        <li><strong>Entwicklung</strong> – Umsetzung nach freigegebenem Design</li>
+        <li><strong>Content</strong> – Integration Ihrer Inhalte und Medien</li>
+        <li><strong>Test</strong> – Qualitätssicherung auf allen Endgeräten</li>
+        <li><strong>Launch &amp; Übergabe</strong> – Veröffentlichung und Einweisung</li>
       </ol>
-      <p>Geschätzte Projektdauer: <strong>4–6 Wochen</strong> nach Auftragserteilung.</p>
       <h2>Zahlungsbedingungen</h2>
-      <ul>
-        <li>50&nbsp;% bei Auftragserteilung · 50&nbsp;% nach Abnahme</li>
-        <li>Zahlungsziel: 14 Tage nach Rechnungsstellung</li>
-        <li>Angebotsgültigkeit: 30 Tage ab ${today}</li>
-      </ul>` },
+      <p>50&nbsp;% bei Auftragserteilung · 50&nbsp;% nach Abnahme und Livegang<br>Zahlungsziel: 14 Tage · Angebotsgültigkeit: 30 Tage ab ${today}</p>
+      ${sig2()}` },
 
-    'Angebot Chatbot': { label:'Angebot', title:'KI-Chatbot-Entwicklung', body: () => `
+    'Angebot Chatbot': { label:'Angebot', title:'KI-Chatbot-Entwicklung', body: ()=>`
       ${rcpt()}
       <p>Sehr geehrte/r ${h(client.name)},</p>
       <p>vielen Dank für Ihr Interesse. Wir freuen uns, Ihnen unser Angebot für die Entwicklung eines KI-Chatbots für ${h(firm)} zu unterbreiten.</p>
       <h2>Leistungsumfang</h2>
       <ul>
-        <li>Anforderungsanalyse und Konzeption der Gesprächsflüsse</li>
         <li>Entwicklung des Chatbots auf Basis der Landbot-Plattform</li>
-        <li>Einrichtung eines FAQ-Moduls für häufige Kundenanfragen</li>
-        <li>Integration eines Reservierungs- und Terminbuchungssystems</li>
-        <li>Automatische Datenspeicherung eingehender Anfragen in Google Sheets</li>
-        <li>Design-Anpassung nach Corporate Identity (Farben, Logo, Tonalität)</li>
-        <li>Integration in Website oder gewünschte Plattform</li>
-        <li>Testphase, Übergabe und Einweisung</li>
-      </ul>
-      <h2>Funktionen im Detail</h2>
-      <ul>
-        <li><strong>FAQ-Modul:</strong> Automatische Beantwortung häufiger Fragen zu Produkten und Dienstleistungen</li>
-        <li><strong>Reservierungsmodul:</strong> Buchungsanfragen mit Datum, Uhrzeit und Kontaktdaten</li>
-        <li><strong>Google Sheets:</strong> Eingehende Anfragen in Echtzeit in Tabelle übertragen</li>
-        <li><strong>Eskalation:</strong> Weiterleitung an Mitarbeiter bei komplexen Anfragen</li>
+        <li>FAQ-Modul: automatische Beantwortung häufiger Kundenanfragen</li>
+        <li>Reservierungssystem: Buchungsanfragen mit Datum, Uhrzeit und Kontaktdaten</li>
+        <li>Google-Sheets-Anbindung für Echtzeit-Erfassung eingehender Anfragen</li>
+        <li>Design-Anpassung nach Ihrer Corporate Identity (Farben, Logo, Tonalität)</li>
+        <li>Integration in Ihre Website oder gewünschte Plattform</li>
+        <li>AVV gemäß Art.&nbsp;28 DSGVO, Einweisung &amp; Übergabe</li>
       </ul>
       <h2>Preisübersicht</h2>
-      ${priceTable(['Konzeption &amp; Anforderungsanalyse','Chatbot-Entwicklung (Landbot)','Google Sheets Automatisierung','Design-Anpassung &amp; Integration','Testphase, Übergabe &amp; Einweisung'])}
+      ${priceTable(['Konzeption, Aufbau &amp; Konfiguration (Landbot)','Google-Sheets-Automatisierung &amp; Systemintegration','Design-Anpassung, Einweisung &amp; Übergabe'])}
       <h2>Zahlungsbedingungen</h2>
-      <ul>
-        <li>50&nbsp;% bei Auftragserteilung · 50&nbsp;% nach Abnahme</li>
-        <li>Zahlungsziel: 14 Tage nach Rechnungsstellung</li>
-        <li>Angebotsgültigkeit: 30 Tage ab ${today}</li>
-      </ul>` },
+      <p>50&nbsp;% bei Auftragserteilung · 50&nbsp;% nach Abnahme<br>Zahlungsziel: 14 Tage · Angebotsgültigkeit: 30 Tage ab ${today}</p>
+      ${sig2()}` },
 
-    'Leistungsbeschreibung Website': { label:'Leistungsbeschreibung', title:'Website-Entwicklung', body: () => `
+    'Leistungsbeschreibung Website': { label:'Leistungsbeschreibung', title:'Website-Entwicklung', body: ()=>`
       ${rcpt()}
-      <h2>1. Projektumfang</h2>
-      <p>Entwicklung einer professionellen Website für ${h(firm)}.</p>
-      <h2>2. Designphase</h2>
+      <h2>Leistungsgegenstand</h2>
+      <p>Konzeption, Design und Entwicklung einer professionellen Website für ${h(firm)}.</p>
+      <h2>Design &amp; Gestaltung</h2>
       <ul>
-        <li>Erstellung von Wireframes und Designentwürfen</li>
-        <li>Freigabe durch den Auftraggeber vor Entwicklungsstart</li>
-        <li>Bis zu 2 Überarbeitungsrunden inklusive</li>
+        <li>Individuelles responsives Design auf Basis Ihrer Corporate Identity</li>
+        <li>Bis zu 2 Designentwürfe, bis zu 2 Überarbeitungsrunden inklusive</li>
+        <li>Optimiert für Desktop (1440&nbsp;px), Tablet (768&nbsp;px) und Mobile (375&nbsp;px)</li>
       </ul>
-      <h2>3. Entwicklung</h2>
+      <h2>Seitenumfang &amp; Funktionen</h2>
       <ul>
-        <li>Plattform: WordPress oder individuelle Lösung nach Absprache</li>
-        <li>Responsives Design für alle gängigen Endgeräte</li>
-        <li>Performance-optimierter Quellcode, SSL/HTTPS inklusive</li>
+        <li>Bis zu 5 Seiten inkl. Start, Über uns, Leistungen, Kontakt</li>
+        <li>Kontaktformular mit automatischer E-Mail-Benachrichtigung</li>
+        <li>Cookie-Banner, Impressum &amp; Datenschutzerklärung (DSGVO-konform)</li>
+        <li>SSL-Zertifikat, Ladezeit-Optimierung, Bildkomprimierung</li>
       </ul>
-      <h2>4. Inhalte</h2>
+      <h2>Technisches</h2>
       <ul>
-        <li>Texte und Medien werden vom Auftraggeber bereitgestellt</li>
-        <li>Integration von bereitgestelltem Material inklusive</li>
+        <li>Plattform: WordPress oder statische Lösung (nach Absprache)</li>
+        <li>Hosting: wird vom Auftraggeber bereitgestellt oder durch NextStructure eingerichtet</li>
+        <li>Browser-Kompatibilität: Chrome, Firefox, Safari, Edge (aktuelle Versionen)</li>
       </ul>
-      <h2>5. Abnahme &amp; Übergabe</h2>
+      <h2>SEO-Grundoptimierung</h2>
       <ul>
-        <li>Testbetrieb auf Staging-System</li>
-        <li>Formelle Abnahme per Abnahmeprotokoll</li>
-        <li>Übergabe von Zugangsdaten und Dokumentation</li>
+        <li>Meta-Titel und Meta-Beschreibungen für alle Seiten</li>
+        <li>Alt-Texte für Bilder, saubere URL-Struktur, robots.txt</li>
+        <li>Google Search Console Grundeinrichtung (optional)</li>
       </ul>
-      <h2>6. Gewährleistung</h2>
-      <p>12 Monate auf alle entwickelten Funktionen ab Abnahme.</p>` },
+      <h2>Projektablauf (4 Phasen)</h2>
+      <ol>
+        <li><strong>Konzept &amp; Design</strong> – Wireframes, Designentwürfe, Freigabe</li>
+        <li><strong>Entwicklung</strong> – Umsetzung, CMS-Einrichtung, Content-Integration</li>
+        <li><strong>Test &amp; Abnahme</strong> – Qualitätssicherung, Abnahmeprotokoll</li>
+        <li><strong>Livegang &amp; Support</strong> – Veröffentlichung, Einweisung, 30 Tage Nachbetreuung</li>
+      </ol>
+      ${sig()}` },
 
-    'Leistungsbeschreibung Chatbot': { label:'Leistungsbeschreibung', title:'KI-Chatbot-Entwicklung', body: () => `
+    'Leistungsbeschreibung Chatbot': { label:'Leistungsbeschreibung', title:'KI-Chatbot-Entwicklung', body: ()=>`
       ${rcpt()}
-      <h2>1. Projektumfang</h2>
-      <p>Entwicklung und Implementierung eines KI-Chatbots für ${h(firm)}.</p>
-      <h2>2. Konzeptionsphase</h2>
+      <h2>Leistungsgegenstand</h2>
+      <p>Entwicklung, Konfiguration und Integration eines KI-gestützten Chatbots für ${h(firm)}.</p>
+      <h2>Funktionsumfang</h2>
       <ul>
-        <li>Erfassung von Use-Cases und Gesprächsflüssen</li>
-        <li>Definition der Wissensbasis (Themen, Tonalität, Grenzen)</li>
-        <li>Freigabe des Konzepts durch den Auftraggeber</li>
+        <li>FAQ-Modul: automatische Beantwortung häufiger Fragen zu Produkten und Dienstleistungen</li>
+        <li>Reservierungsmodul: Buchungsanfragen mit Datum, Uhrzeit und Kontaktdaten</li>
+        <li>Google-Sheets-Anbindung: Echtzeit-Speicherung aller eingehenden Anfragen</li>
+        <li>Eskalations-Logik: automatische Weiterleitung an Mitarbeiter bei komplexen Anfragen</li>
       </ul>
-      <h2>3. Entwicklung &amp; Training</h2>
+      <h2>Plattform &amp; Technologie</h2>
       <ul>
         <li>Plattform: Landbot (No-Code/Low-Code Chatbot-Builder)</li>
-        <li>GPT-gestützte Antwortgenerierung für natürliche Konversationen</li>
-        <li>Training mit bereitgestellten Unternehmensdaten</li>
-        <li>Google Sheets Anbindung für eingehende Anfragen</li>
+        <li>Integration per Embed-Widget in bestehende Website oder als Standalone-Link</li>
+        <li>Design-Anpassung: Farben, Logo, Tonalität nach Corporate Identity</li>
       </ul>
-      <h2>4. Integration &amp; Testphase</h2>
+      <h2>DSGVO &amp; Datenschutz</h2>
       <ul>
-        <li>Einbindung per Widget oder Standalone-Link</li>
+        <li>Datenschutzhinweis im Chat-Einstieg</li>
+        <li>Auftragsverarbeitungsvertrag (AVV) gemäß Art.&nbsp;28 DSGVO wird separat bereitgestellt</li>
+        <li>Keine Speicherung personenbezogener Daten ohne Einwilligung</li>
+      </ul>
+      <h2>Einrichtung &amp; Support</h2>
+      <ul>
+        <li>Vollständige Einrichtung und Konfiguration durch NextStructure</li>
+        <li>Persönliche Einweisung des Teams in Administration und Pflege</li>
+        <li>30 Tage Nachbetreuung nach Livegang inklusive</li>
+      </ul>
+      ${sig()}` },
+
+    'Auftragsbestätigung Website': { label:'Auftragsbestätigung', title:'Website-Entwicklung', body: ()=>`
+      <table style="margin-bottom:20px"><tbody>
+        <tr><td style="width:155px;color:#999;font-size:9pt;padding:5px 0"><strong>Auftraggeber</strong></td>
+            <td style="padding:5px 0">${h(firm)}, vertr. d. ${h(client.name)}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>E-Mail</strong></td>
+            <td style="padding:5px 0">${h(client.email||'–')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Telefon</strong></td>
+            <td style="padding:5px 0">${h(client.phone||'–')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Auftragnehmer</strong></td>
+            <td style="padding:5px 0">NextStructure Solutions, Quickborn</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Datum</strong></td>
+            <td style="padding:5px 0">${today}</td></tr>
+      </tbody></table>
+      <p>Sehr geehrte/r ${h(client.name)}, wir bestätigen hiermit den Eingang Ihres Auftrags und freuen uns auf die Zusammenarbeit mit ${h(firm)}.</p>
+      <h2>Leistungsumfang</h2>
+      <ul>
+        <li>Individuelles responsives Website-Design</li>
+        <li>Entwicklung von bis zu 5 Seiten inkl. Kontaktformular</li>
+        <li>SEO-Grundoptimierung &amp; DSGVO-Setup (Cookie-Banner, Impressum, Datenschutz)</li>
+        <li>SSL-Zertifikat, Ladezeit-Optimierung, Bildkomprimierung</li>
+        <li>Persönliche Einweisung &amp; Übergabe mit Dokumentation</li>
+      </ul>
+      <h2>Preis &amp; Zahlungsplan</h2>
+      <table><thead><tr><th>Fälligkeit</th><th>Betrag</th><th>Beschreibung</th></tr></thead>
+      <tbody>
+        <tr><td>Bei Auftragserteilung</td><td class="ph">[Betrag eintragen]</td><td>50&nbsp;% Anzahlung</td></tr>
+        <tr><td>Nach Abnahme &amp; Livegang</td><td class="ph">[Betrag eintragen]</td><td>50&nbsp;% Restzahlung</td></tr>
+        <tr class="tr-total"><td><strong>Gesamtbetrag brutto</strong></td><td class="ph"><strong>[Betrag eintragen]</strong></td><td>inkl. 19&nbsp;% MwSt.</td></tr>
+      </tbody></table>
+      <h2>Projektstart</h2>
+      <p>Der Projektstart erfolgt nach Eingang der Anzahlung. Wir melden uns innerhalb von 2 Werktagen mit dem Kick-off-Termin.</p>
+      ${sig2()}` },
+
+    'Auftragsbestätigung Chatbot': { label:'Auftragsbestätigung', title:'KI-Chatbot-Entwicklung', body: ()=>`
+      <table style="margin-bottom:20px"><tbody>
+        <tr><td style="width:155px;color:#999;font-size:9pt;padding:5px 0"><strong>Auftraggeber</strong></td>
+            <td style="padding:5px 0">${h(firm)}, vertr. d. ${h(client.name)}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>E-Mail</strong></td>
+            <td style="padding:5px 0">${h(client.email||'–')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Telefon</strong></td>
+            <td style="padding:5px 0">${h(client.phone||'–')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Auftragnehmer</strong></td>
+            <td style="padding:5px 0">NextStructure Solutions, Quickborn</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Datum</strong></td>
+            <td style="padding:5px 0">${today}</td></tr>
+      </tbody></table>
+      <p>Sehr geehrte/r ${h(client.name)}, wir bestätigen hiermit den Eingang Ihres Auftrags und freuen uns auf die Zusammenarbeit mit ${h(firm)}.</p>
+      <h2>Leistungsumfang</h2>
+      <ul>
+        <li>Entwicklung eines KI-Chatbots auf Basis der Landbot-Plattform</li>
+        <li>FAQ-Modul, Reservierungssystem &amp; Google-Sheets-Anbindung</li>
         <li>Design-Anpassung nach Corporate Identity</li>
-        <li>Interne QS und Testbetrieb mit ausgewählten Nutzern</li>
+        <li>Integration in Website oder gewünschte Plattform</li>
+        <li>AVV, Einweisung &amp; Übergabe inklusive</li>
       </ul>
-      <h2>5. Übergabe &amp; Gewährleistung</h2>
-      <ul>
-        <li>Dokumentation der Konfiguration</li>
-        <li>Einweisung des Teams in Administration und Pflege</li>
-        <li>12 Monate Gewährleistung auf alle entwickelten Funktionen</li>
-      </ul>` },
-
-    'Auftragsbestätigung Website': { label:'Auftragsbestätigung', title:'Website-Entwicklung', body: () => `
-      ${rcpt()}
-      <p>Sehr geehrte/r ${h(client.name)},</p>
-      <p>wir bestätigen hiermit den Eingang Ihres Auftrags und freuen uns auf die Zusammenarbeit mit ${h(firm)}.</p>
-      <h2>Auftragsinhalt</h2>
-      <table><tbody>
-        <tr><td style="width:160px"><strong>Projekttyp</strong></td><td>Website</td></tr>
-        <tr><td><strong>Auftraggeber</strong></td><td>${h(firm)}</td></tr>
-        <tr><td><strong>Ansprechpartner</strong></td><td>${h(client.name)}</td></tr>
-        <tr><td><strong>E-Mail</strong></td><td>${h(client.email||'–')}</td></tr>
-        <tr><td><strong>Telefon</strong></td><td>${h(client.phone||'–')}</td></tr>
-        <tr><td><strong>Gesamtpreis</strong></td><td class="ph">[XXX,XX&nbsp;€ brutto]</td></tr>
-      </tbody></table>
-      <h2>Zahlungsplan</h2>
+      <h2>Preis &amp; Zahlungsplan</h2>
       <table><thead><tr><th>Fälligkeit</th><th>Betrag</th><th>Beschreibung</th></tr></thead>
       <tbody>
-        <tr><td>Bei Auftragserteilung</td><td class="ph">[XXX,XX&nbsp;€]</td><td>50&nbsp;% Anzahlung</td></tr>
-        <tr><td>Nach Abnahme</td><td class="ph">[XXX,XX&nbsp;€]</td><td>50&nbsp;% Restzahlung</td></tr>
+        <tr><td>Bei Auftragserteilung</td><td class="ph">[Betrag eintragen]</td><td>50&nbsp;% Anzahlung</td></tr>
+        <tr><td>Nach Abnahme &amp; Livegang</td><td class="ph">[Betrag eintragen]</td><td>50&nbsp;% Restzahlung</td></tr>
+        <tr class="tr-total"><td><strong>Gesamtbetrag brutto</strong></td><td class="ph"><strong>[Betrag eintragen]</strong></td><td>inkl. 19&nbsp;% MwSt.</td></tr>
       </tbody></table>
-      <h2>Nächste Schritte</h2>
-      <ol>
-        <li>Kick-off-Gespräch zur Abstimmung aller Details</li>
-        <li>Übermittlung der Onboarding-Unterlagen und Checkliste</li>
-        <li>Bereitstellung der benötigten Zugangsdaten und Inhalte durch Sie</li>
-      </ol>
-      <p>Bitte senden Sie AVV und AGB unterschrieben zurück, sofern noch nicht erfolgt.</p>` },
+      <h2>Projektstart</h2>
+      <p>Der Projektstart erfolgt nach Eingang der Anzahlung und Rücksendung des unterzeichneten AVV. Wir melden uns innerhalb von 2 Werktagen.</p>
+      ${sig2()}` },
 
-    'Auftragsbestätigung Chatbot': { label:'Auftragsbestätigung', title:'KI-Chatbot-Entwicklung', body: () => `
-      ${rcpt()}
-      <p>Sehr geehrte/r ${h(client.name)},</p>
-      <p>wir bestätigen hiermit den Eingang Ihres Auftrags und freuen uns auf die Zusammenarbeit mit ${h(firm)}.</p>
-      <h2>Auftragsinhalt</h2>
-      <table><tbody>
-        <tr><td style="width:160px"><strong>Projekttyp</strong></td><td>KI-Chatbot</td></tr>
-        <tr><td><strong>Auftraggeber</strong></td><td>${h(firm)}</td></tr>
-        <tr><td><strong>Ansprechpartner</strong></td><td>${h(client.name)}</td></tr>
-        <tr><td><strong>E-Mail</strong></td><td>${h(client.email||'–')}</td></tr>
-        <tr><td><strong>Telefon</strong></td><td>${h(client.phone||'–')}</td></tr>
-        <tr><td><strong>Gesamtpreis</strong></td><td class="ph">[XXX,XX&nbsp;€ brutto]</td></tr>
-      </tbody></table>
-      <h2>Zahlungsplan</h2>
-      <table><thead><tr><th>Fälligkeit</th><th>Betrag</th><th>Beschreibung</th></tr></thead>
-      <tbody>
-        <tr><td>Bei Auftragserteilung</td><td class="ph">[XXX,XX&nbsp;€]</td><td>50&nbsp;% Anzahlung</td></tr>
-        <tr><td>Nach Abnahme</td><td class="ph">[XXX,XX&nbsp;€]</td><td>50&nbsp;% Restzahlung</td></tr>
-      </tbody></table>
-      <h2>Nächste Schritte</h2>
-      <ol>
-        <li>Kick-off-Gespräch und Anforderungsaufnahme</li>
-        <li>Übermittlung der Onboarding-Unterlagen und Checkliste</li>
-        <li>Bereitstellung der Wissensbasis und Unternehmensdaten durch Sie</li>
-      </ol>
-      <p>Bitte senden Sie AVV und AGB unterschrieben zurück, sofern noch nicht erfolgt.</p>` },
+    'Onboarding-Checkliste Website': { label:'Onboarding', title:'Checkliste Website-Projekt', body: ()=>`
+      <p><strong>Kunde:</strong> ${h(client.name)}${client.company?` · ${h(client.company)}`:''} &nbsp;·&nbsp; <strong>Datum:</strong> ${today}</p>
+      <h2>1. Inhalte &amp; Texte</h2>
+      ${chk('Texte für alle Seiten bereitgestellt (Start, Über uns, Leistungen, Kontakt …)')}
+      ${chk('Impressumsangaben vollständig (Name, Adresse, USt-ID, verantwortliche Person)')}
+      ${chk('Referenzen, Kundenstimmen oder Fallstudien (optional)')}
+      <h2>2. Bilder &amp; Medien</h2>
+      ${chk('Logo in hoher Auflösung (SVG bevorzugt, alternativ PNG 2× oder 3×)')}
+      ${chk('Fotos und Bilder (lizenzfrei oder eigene Aufnahmen, mind. 1920 px breit)')}
+      ${chk('Favicon (quadratisch, mind. 512 × 512 px, PNG oder SVG)')}
+      <h2>3. Design-Wünsche</h2>
+      ${chk('Farbpalette / Hex-Codes (falls vorhanden)')}
+      ${chk('Schriftart-Präferenzen (falls vorhanden)')}
+      ${chk('Referenz-Websites als Gestaltungsrichtlinie benannt')}
+      <h2>4. Funktionen &amp; Sonderwünsche</h2>
+      ${chk('Besondere Funktionen definiert (Blog, Shop, Buchungssystem …)')}
+      ${chk('Kontaktformular-Empfänger-E-Mail-Adresse angegeben')}
+      ${chk('Sprache(n) der Website festgelegt')}
+      <h2>5. Domain &amp; Hosting</h2>
+      ${chk('Domain vorhanden oder soll neu registriert werden?')}
+      ${chk('Hosting-Zugangsdaten bereitgestellt (falls vorhanden)')}
+      ${chk('SSL-Zertifikat vorhanden oder soll eingerichtet werden?')}
+      ${sig()}` },
 
-    'AVV': { label:'Vertrag', title:'Auftragsverarbeitungsvertrag', body: () => `
-      <p style="color:#999;font-size:9pt;margin-bottom:20px;">Gemäß Art.&nbsp;28 DSGVO · Datum: ${today}</p>
+    'Onboarding-Checkliste Chatbot': { label:'Onboarding', title:'Checkliste Chatbot-Projekt', body: ()=>`
+      <p><strong>Kunde:</strong> ${h(client.name)}${client.company?` · ${h(client.company)}`:''} &nbsp;·&nbsp; <strong>Datum:</strong> ${today}</p>
+      <h2>1. Datenerfassung &amp; FAQ</h2>
+      ${chk('FAQ-Dokument bereitgestellt (häufigste Fragen und Antworten, möglichst vollständig)')}
+      ${chk('Produktkatalog oder Preisliste bereitgestellt (falls relevant)')}
+      ${chk('Unternehmensbeschreibung und Dienstleistungsübersicht vorhanden')}
+      ${chk('Tonalität des Chatbots definiert (formell / informell / freundlich-professionell)')}
+      <h2>2. Reservierungssystem</h2>
+      ${chk('Welche Daten sollen erfasst werden? (Name, Datum, Uhrzeit, Anliegen …)')}
+      ${chk('Google-Sheets-Konto vorhanden und Zugang bereitgestellt')}
+      ${chk('Rückmeldung an Kunden nach Buchung: automatisch (E-Mail/Webhook) oder manuell?')}
+      <h2>3. Design &amp; Branding</h2>
+      ${chk('Logo für Chat-Widget bereitgestellt')}
+      ${chk('Primärfarbe für Chat-Widget-Button angegeben')}
+      ${chk('Begrüßungstext / Willkommensnachricht des Chatbots formuliert')}
+      <h2>4. Technisches &amp; Integration</h2>
+      ${chk('Ziel-Plattform definiert (Website, WhatsApp, andere)')}
+      ${chk('Integrationsmethode festgelegt (Embed-Widget / Standalone-Link)')}
+      ${chk('Themen, die der Bot NICHT behandeln soll, klar definiert')}
+      <h2>5. DSGVO &amp; Rechtliches</h2>
+      ${chk('Datenschutzhinweis für Chatbot-Nutzer vorbereitet')}
+      ${chk('AVV (Auftragsverarbeitungsvertrag) unterschrieben zurückgesendet')}
+      ${chk('Eskalations-Kontakt definiert: Wer übernimmt bei komplexen Anfragen?')}
+      ${sig()}` },
+
+    'Abnahmeprotokoll Website': { label:'Abnahmeprotokoll', title:'Website-Entwicklung', body: ()=>`
+      <p><strong>Auftraggeber:</strong> ${h(firm)} &nbsp;·&nbsp; <strong>Datum:</strong> ${today}</p>
+      <h2>Funktionsprüfung</h2>
+      ${chk('Alle Seiten laden vollständig und fehlerfrei (Chrome, Firefox, Safari, Edge)')}
+      ${chk('Kontaktformular funktioniert – E-Mail-Eingang bestätigt')}
+      ${chk('Alle Links geprüft, keine toten Links')}
+      ${chk('Website vollständig responsiv auf Desktop, Tablet und Smartphone')}
+      ${chk('Ladezeit akzeptabel (< 3 Sekunden bei normalem Internetzugang)')}
+      <h2>Design &amp; Inhalte</h2>
+      ${chk('Design entspricht dem freigegebenen Entwurf')}
+      ${chk('Alle Texte korrekt, vollständig und ohne Rechtschreibfehler')}
+      ${chk('Bilder und Medien korrekt dargestellt, keine fehlenden Bilder')}
+      ${chk('Logo, Farben und Schriften korrekt implementiert')}
+      <h2>SEO &amp; Rechtliches</h2>
+      ${chk('Meta-Titel und Meta-Beschreibungen für alle Seiten gesetzt')}
+      ${chk('SSL-Zertifikat aktiv (HTTPS), kein Mixed-Content-Fehler')}
+      ${chk('Cookie-Banner korrekt eingerichtet und datenschutzkonform')}
+      ${chk('Impressum und Datenschutzerklärung vollständig und aktuell')}
+      <h2>Mängel &amp; Anmerkungen</h2>
+      <div style="min-height:56px;border:1px solid #e8e8e8;border-radius:4px;padding:10px;margin-bottom:14px;color:#ccc;font-size:9pt;">Keine Mängel / Anmerkungen hier eintragen …</div>
+      <p><strong>Ergebnis:</strong></p>
+      ${chk('Abnahme erteilt – Projekt gilt als erfolgreich abgeschlossen')}
+      ${chk('Abnahme mit Mängeln (Details oben)')}
+      ${chk('Nachbesserung erforderlich – Abnahme zurückgestellt')}
+      ${sig2()}` },
+
+    'Abnahmeprotokoll Chatbot': { label:'Abnahmeprotokoll', title:'KI-Chatbot-Entwicklung', body: ()=>`
+      <p><strong>Auftraggeber:</strong> ${h(firm)} &nbsp;·&nbsp; <strong>Datum:</strong> ${today}</p>
+      <h2>Funktionsprüfung</h2>
+      ${chk('Chatbot beantwortet die definierten FAQ korrekt und vollständig')}
+      ${chk('Reservierungsmodul erfasst alle notwendigen Daten korrekt')}
+      ${chk('Eingehende Anfragen werden in Echtzeit in Google Sheets übertragen')}
+      ${chk('Eskalations-Logik funktioniert – Weiterleitung an Mitarbeiter korrekt')}
+      ${chk('Chatbot erscheint korrekt auf der Zielplattform / Website')}
+      <h2>Design &amp; Tonalität</h2>
+      ${chk('Design des Chat-Widgets entspricht der Corporate Identity')}
+      ${chk('Tonalität und Begrüßungstext entsprechen den Vorgaben')}
+      ${chk('Ladezeit und Reaktionszeit des Chatbots akzeptabel')}
+      <h2>DSGVO &amp; Datenschutz</h2>
+      ${chk('Datenschutzhinweis beim Start des Chats sichtbar und korrekt')}
+      ${chk('AVV liegt unterschrieben vor')}
+      ${chk('Keine unerlaubte Speicherung personenbezogener Daten')}
+      <h2>Mängel &amp; Anmerkungen</h2>
+      <div style="min-height:56px;border:1px solid #e8e8e8;border-radius:4px;padding:10px;margin-bottom:14px;color:#ccc;font-size:9pt;">Keine Mängel / Anmerkungen hier eintragen …</div>
+      <p><strong>Ergebnis:</strong></p>
+      ${chk('Abnahme erteilt – Projekt gilt als erfolgreich abgeschlossen')}
+      ${chk('Abnahme mit Mängeln (Details oben)')}
+      ${chk('Nachbesserung erforderlich – Abnahme zurückgestellt')}
+      ${sig2()}` },
+
+    'AVV': { label:'Vertrag', title:'Auftragsverarbeitungsvertrag', body: ()=>`
+      <p style="color:#999;font-size:8.5pt;margin-bottom:16px;">Gemäß Art.&nbsp;28 DSGVO · Datum: ${today}</p>
       <h2>Vertragsparteien</h2>
       <table><tbody>
-        <tr><td style="width:180px"><strong>Verantwortlicher</strong></td>
+        <tr><td style="width:180px;color:#999;font-size:9pt">Verantwortlicher</td>
             <td>${h(firm)}, vertr. d. ${h(client.name)}</td></tr>
-        <tr><td><strong>Auftragsverarbeiter</strong></td>
+        <tr><td style="color:#999;font-size:9pt">Auftragsverarbeiter</td>
             <td>NextStructure Solutions, Quickborn</td></tr>
       </tbody></table>
       <h2>§&nbsp;1 Gegenstand</h2>
@@ -2459,10 +2608,10 @@ function generateDocHTML(docName, client) {
       </ul>
       <h2>§&nbsp;3 Laufzeit</h2>
       <p>Dieser AVV gilt für die Dauer des zugrundeliegenden Hauptvertrags.</p>
-      ${sigLine2()}` },
+      ${sig2()}` },
 
-    'AGB': { label:'Dokument', title:'Allgemeine Geschäftsbedingungen', body: () => `
-      <p style="color:#999;font-size:9pt;margin-bottom:20px;">NextStructure Solutions · Stand: ${today}</p>
+    'AGB': { label:'Dokument', title:'Allgemeine Geschäftsbedingungen', body: ()=>`
+      <p style="color:#999;font-size:8.5pt;margin-bottom:16px;">NextStructure Solutions · Stand: ${today}</p>
       <h2>§&nbsp;1 Geltungsbereich</h2>
       <p>Diese AGB gelten für alle Verträge zwischen NextStructure Solutions und dem Auftraggeber über Leistungen im Bereich digitaler Produkte.</p>
       <h2>§&nbsp;2 Vertragsschluss</h2>
@@ -2472,7 +2621,7 @@ function generateDocHTML(docName, client) {
       <h2>§&nbsp;4 Mitwirkungspflichten</h2>
       <p>Der Auftraggeber stellt alle benötigten Informationen, Inhalte und Zugänge rechtzeitig bereit. Verzögerungen gehen zu Lasten des Auftraggebers.</p>
       <h2>§&nbsp;5 Vergütung &amp; Zahlung</h2>
-      <p>Zahlungen sind innerhalb von 14 Tagen nach Rechnungsstellung fällig. Bei Zahlungsverzug werden Zinsen i.H.v. 9&nbsp;% über dem Basiszinssatz berechnet.</p>
+      <p>Zahlungen sind innerhalb von 14 Tagen fällig. Bei Zahlungsverzug werden Zinsen i.H.v. 9&nbsp;% über dem Basiszinssatz berechnet.</p>
       <h2>§&nbsp;6 Nutzungsrechte</h2>
       <p>Nach vollständiger Zahlung erhält der Auftraggeber das einfache, zeitlich unbegrenzte Nutzungsrecht an den erstellten Werken.</p>
       <h2>§&nbsp;7 Gewährleistung</h2>
@@ -2484,210 +2633,49 @@ function generateDocHTML(docName, client) {
       <h2>§&nbsp;10 Schlussbestimmungen</h2>
       <p>Es gilt deutsches Recht. Gerichtsstand ist der Sitz des Auftragnehmers.</p>` },
 
-    'Onboarding-Checkliste Website': { label:'Onboarding', title:'Checkliste Website-Projekt', body: () => `
-      <p><strong>Kunde:</strong> ${h(client.name)}${client.company?` · ${h(client.company)}`:''} &nbsp;·&nbsp;
-         <strong>Kontakt:</strong> ${h(client.email||'–')} · ${h(client.phone||'–')}</p>
-      <h2>Schritt 1 – Zugangsdaten &amp; Accounts</h2>
-      ${chk('Domain und Hosting – Zugangsdaten übermitteln oder neu einrichten')}
-      ${chk('E-Mail-Postfächer – Adressen und Struktur festlegen')}
-      ${chk('Bestehendes CMS / Hosting-Konto: Zugang gewähren (falls vorhanden)')}
-      ${chk('Google Search Console und Analytics: einrichten oder Zugang erteilen')}
-      <h2>Schritt 2 – Inhalte bereitstellen</h2>
-      ${chk('Logo in hoher Auflösung (SVG bevorzugt, alternativ PNG 2×)')}
-      ${chk('Farbpalette und Schriftarten (Brand-Guidelines, falls vorhanden)')}
-      ${chk('Texte für alle Seiten (Start, Über uns, Leistungen, Kontakt …)')}
-      ${chk('Bilder und Medien (lizenzfrei oder eigene Aufnahmen)')}
-      ${chk('Referenzen oder Kundenstimmen (optional)')}
-      <h2>Schritt 3 – Rechtliches</h2>
-      ${chk('Impressumsangaben vollständig (gemäß § 5 TMG)')}
-      ${chk('Datenschutzbeauftragter vorhanden? Name und Kontakt mitteilen.')}
-      ${chk('AGB und AVV unterschrieben zurücksenden')}
-      <h2>Schritt 4 – Kick-off</h2>
-      ${chk('Kick-off-Termin vereinbart')}
-      ${chk('Projektzeitplan besprochen und freigegeben')}
-      ${chk('Kommunikationskanal festgelegt (E-Mail / Slack / …)')}` },
-
-    'Onboarding-Checkliste Chatbot': { label:'Onboarding', title:'Checkliste Chatbot-Projekt', body: () => `
-      <p><strong>Kunde:</strong> ${h(client.name)}${client.company?` · ${h(client.company)}`:''} &nbsp;·&nbsp;
-         <strong>Kontakt:</strong> ${h(client.email||'–')} · ${h(client.phone||'–')}</p>
-      <h2>Schritt 1 – Wissensbasis zusammenstellen</h2>
-      ${chk('FAQ-Dokument (häufige Fragen und Antworten, möglichst vollständig)')}
-      ${chk('Produktkatalog oder Preisliste (falls relevant)')}
-      ${chk('Unternehmensbeschreibung und Dienstleistungsübersicht')}
-      ${chk('Support-Prozesse und Eskalationswege')}
-      ${chk('Weitere Dokumente für den Bot (PDF, Word …)')}
-      <h2>Schritt 2 – Technische Integration</h2>
-      ${chk('Ziel-Plattform definieren (Website, WhatsApp, andere)')}
-      ${chk('Website-Zugang oder bevorzugte Integrationsmethode klären')}
-      ${chk('API-Zugänge für Drittsysteme bereitstellen (falls nötig)')}
-      ${chk('Design-Vorgaben für Chat-Widget (Farben, Logo, Schriften)')}
-      <h2>Schritt 3 – Anforderungen definieren</h2>
-      ${chk('Tonalität und Persönlichkeit des Chatbots festlegen')}
-      ${chk('Themen, die der Bot NICHT behandeln soll (klare Grenzen)')}
-      ${chk('Übergabe an Menschen: Wann und wie soll weitergeleitet werden?')}
-      ${chk('Sprache(n): Deutsch, Englisch oder mehrsprachig?')}
-      <h2>Schritt 4 – Rechtliches &amp; Kick-off</h2>
-      ${chk('Datenschutzhinweis für Chatbot-Nutzer vorbereiten')}
-      ${chk('AGB und AVV unterschrieben zurücksenden')}
-      ${chk('Kick-off-Termin vereinbart')}
-      ${chk('Projektzeitplan besprochen und freigegeben')}` },
-
-    'Abnahmeprotokoll Website': { label:'Abnahmeprotokoll', title:'Website', body: () => `
+    'Rechnung': { label:'Rechnung', title:'Rechnung', body: ()=>`
       ${rcpt()}
-      <p><strong>Projektgegenstand:</strong> Website-Entwicklung für ${h(firm)}</p>
-      <h2>Design &amp; Darstellung</h2>
-      ${chk('Design entspricht den vereinbarten Vorgaben')}
-      ${chk('Korrekte Darstellung auf Desktop, Tablet und Smartphone')}
-      ${chk('Schriften, Farben und Logo korrekt implementiert')}
-      <h2>Funktionen</h2>
-      ${chk('Alle Seiten laden vollständig und fehlerfrei')}
-      ${chk('Kontaktformular funktioniert und sendet E-Mails korrekt')}
-      ${chk('Alle Links und Navigationselemente funktionieren')}
-      <h2>Technisches</h2>
-      ${chk('Ladezeiten im akzeptablen Bereich (< 3 Sekunden)')}
-      ${chk('SSL-Zertifikat aktiv (HTTPS)')}
-      ${chk('SEO-Grundeinstellungen gesetzt, Cookie-Banner aktiv')}
-      <h2>Inhalte</h2>
-      ${chk('Alle Texte korrekt und vollständig')}
-      ${chk('Impressum und Datenschutzerklärung aktuell')}
-      <h2>Ergebnis</h2>
-      ${chk('Abnahme erteilt – Projekt gilt als erfolgreich abgeschlossen')}
-      ${chk('Abnahme mit Mängeln (Details siehe Anmerkungen)')}
-      ${chk('Abnahme verweigert – Nachbesserung erforderlich')}
-      <p style="margin-top:14px"><strong>Anmerkungen:</strong></p>
-      <div style="min-height:50px;border-bottom:1px solid #ddd;margin-bottom:4px;"></div>
-      ${sigLine2()}` },
-
-    'Abnahmeprotokoll Chatbot': { label:'Abnahmeprotokoll', title:'KI-Chatbot', body: () => `
-      ${rcpt()}
-      <p><strong>Projektgegenstand:</strong> KI-Chatbot-Entwicklung für ${h(firm)}</p>
-      <h2>Wissen &amp; Antwortqualität</h2>
-      ${chk('Chatbot beantwortet die definierten FAQ korrekt')}
-      ${chk('Tonalität entspricht den vereinbarten Vorgaben')}
-      ${chk('Themen außerhalb des Scopes werden korrekt abgegrenzt')}
-      ${chk('Übergabe an menschlichen Mitarbeiter funktioniert zuverlässig')}
-      <h2>Integration &amp; Darstellung</h2>
-      ${chk('Chatbot erscheint korrekt auf der Zielplattform')}
-      ${chk('Design entspricht den Corporate-Identity-Vorgaben')}
-      ${chk('Ladezeit und Reaktionszeit sind akzeptabel')}
-      <h2>Technisches</h2>
-      ${chk('Verbindung zur Wissensdatenbank stabil')}
-      ${chk('Fehlerbehandlung bei unbekannten Anfragen korrekt')}
-      ${chk('Datenschutzhinweis beim Start des Chats sichtbar')}
-      ${chk('Admin-Zugang und Dashboard an Auftraggeber übergeben')}
-      <h2>Ergebnis</h2>
-      ${chk('Abnahme erteilt – Projekt gilt als erfolgreich abgeschlossen')}
-      ${chk('Abnahme mit Mängeln (Details siehe Anmerkungen)')}
-      ${chk('Abnahme verweigert – Nachbesserung erforderlich')}
-      <p style="margin-top:14px"><strong>Anmerkungen:</strong></p>
-      <div style="min-height:50px;border-bottom:1px solid #ddd;margin-bottom:4px;"></div>
-      ${sigLine2()}` },
-
-    'Rechnung': { label:'Rechnung', title:'Rechnung', body: () => `
-      ${rcpt()}
-      <table style="margin-bottom:8px"><tbody>
-        <tr><td style="width:160px;color:#999;font-size:9pt;">Rechnungsdatum</td><td>${today}</td></tr>
-        <tr><td style="color:#999;font-size:9pt;">Projekt</td><td>${h(client.projectType)}</td></tr>
-        <tr><td style="color:#999;font-size:9pt;">Auftraggeber</td><td>${h(firm)}</td></tr>
+      <table style="margin-bottom:14px"><tbody>
+        <tr><td style="width:155px;color:#999;font-size:9pt;padding:4px 0">Rechnungsdatum</td><td style="padding:4px 0">${today}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Projekt</td><td style="padding:4px 0">${h(client.projectType)}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Auftraggeber</td><td style="padding:4px 0">${h(firm)}</td></tr>
       </tbody></table>
       <h2>Rechnungspositionen</h2>
-      <table><thead><tr><th style="width:36px">Pos.</th><th>Leistung</th>
-        <th>Menge</th><th class="ar" style="width:110px">Betrag netto</th></tr></thead>
+      <table><thead><tr><th style="width:34px">Pos.</th><th>Leistung</th>
+        <th style="width:40px">Mge.</th><th class="td-r" style="width:130px">Betrag netto</th></tr></thead>
       <tbody>
-        <tr><td>1</td><td>${h(client.projectType)} – Entwicklung</td><td>1</td>
-            <td class="ar ph">[XXX,XX&nbsp;€]</td></tr>
-        <tr><td>2</td><td class="ph">[weitere Position]</td><td class="ph">–</td>
-            <td class="ar ph">[XXX,XX&nbsp;€]</td></tr>
-        <tr class="ttl"><td colspan="3"><strong>Gesamt netto</strong></td>
-            <td class="ar ph">[XXX,XX&nbsp;€]</td></tr>
-        <tr><td colspan="3">zzgl. 19&nbsp;% MwSt.</td>
-            <td class="ar ph">[XXX,XX&nbsp;€]</td></tr>
-        <tr class="ttl"><td colspan="3"><strong>Gesamt brutto</strong></td>
-            <td class="ar ph">[XXX,XX&nbsp;€]</td></tr>
+        <tr><td>1</td><td>${h(client.projectType)} – Entwicklung &amp; Umsetzung</td><td>1</td><td class="td-r ph">[Betrag eintragen]</td></tr>
+        <tr><td>2</td><td class="ph">[weitere Position, falls zutreffend]</td><td class="ph">–</td><td class="td-r ph">[Betrag eintragen]</td></tr>
+        <tr class="tr-total"><td colspan="3"><strong>Gesamt netto</strong></td><td class="td-r ph">[Betrag eintragen]</td></tr>
+        <tr><td colspan="3">zzgl. 19&nbsp;% Mehrwertsteuer</td><td class="td-r ph">[Betrag eintragen]</td></tr>
+        <tr class="tr-total"><td colspan="3"><strong>Gesamt brutto</strong></td><td class="td-r ph">[Betrag eintragen]</td></tr>
       </tbody></table>
       <h2>Zahlungsbedingungen</h2>
       <p>Zahlbar innerhalb von <strong>14 Tagen</strong> nach Rechnungsstellung ohne Abzug.</p>
       <table><tbody>
-        <tr><td style="width:160px;color:#999;font-size:9pt;">IBAN</td><td class="ph">[IBAN]</td></tr>
-        <tr><td style="color:#999;font-size:9pt;">BIC</td><td class="ph">[BIC]</td></tr>
-        <tr><td style="color:#999;font-size:9pt;">Bank</td><td class="ph">[Bank]</td></tr>
-        <tr><td style="color:#999;font-size:9pt;">Verwendungszweck</td>
-            <td>${h(firm)} – ${h(client.projectType)} – ${today}</td></tr>
+        <tr><td style="width:155px;color:#999;font-size:9pt;padding:4px 0">IBAN</td><td style="padding:4px 0" class="ph">[IBAN eintragen]</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">BIC</td><td style="padding:4px 0" class="ph">[BIC eintragen]</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Bank</td><td style="padding:4px 0" class="ph">[Bank eintragen]</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Verwendungszweck</td>
+            <td style="padding:4px 0">${h(firm)} · ${h(client.projectType)} · ${today}</td></tr>
       </tbody></table>` },
   };
 
-  const def = DOCS[docName] || { label:'Dokument', title: docName, body: () => '<p>Vorlage nicht verfügbar.</p>' };
+  const def = DOCS[docName] || { label:'Dokument', title:docName, body:()=>'<p>Vorlage nicht verfügbar.</p>' };
 
-  const css = `
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 10.5pt;
-           color: #111; background: #fff; padding-bottom: 64px; }
-    .ns-header { background: #000; color: #fff; padding: 16px 48px;
-                 display: flex; align-items: center; justify-content: space-between; }
-    .ns-brand  { font-size: 13pt; letter-spacing: 0.12em; }
-    .ns-brand b { font-weight: 900; }
-    .ns-brand span { font-weight: 300; }
-    .ns-loc    { font-size: 9pt; color: #aaa; letter-spacing: 0.04em; }
-    .ns-red    { height: 3px; background: #C0392B; }
-    .ns-body   { padding: 36px 48px; }
-    .ns-label  { font-size: 8pt; color: #aaa; letter-spacing: 0.22em;
-                 text-transform: uppercase; margin-bottom: 3px; }
-    .ns-title  { font-size: 26pt; font-weight: 700; color: #000;
-                 margin-bottom: 4px; line-height: 1.1; }
-    .ns-date   { font-size: 9pt; color: #999; margin-bottom: 28px; }
-    .rcpt      { margin-bottom: 28px; line-height: 1.7; }
-    .rl        { font-size: 8pt; color: #999; text-transform: uppercase;
-                 letter-spacing: 0.1em; margin-bottom: 4px; }
-    .ph        { color: #bbb; }
-    p  { margin-bottom: 10px; line-height: 1.7; }
-    h2 { font-size: 9pt; font-weight: 700; text-transform: uppercase;
-         letter-spacing: 0.08em; color: #444; margin: 26px 0 10px;
-         padding-bottom: 6px; border-bottom: 1.5px solid #eee; }
-    ul, ol { padding-left: 22px; margin-bottom: 12px; }
-    li     { margin-bottom: 4px; line-height: 1.65; }
-    table  { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
-    th { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
-         color: #777; padding: 8px 10px; border-bottom: 2px solid #e0e0e0; text-align: left; }
-    td { padding: 8px 10px; border-bottom: 1px solid #f2f2f2; vertical-align: top; }
-    .ar  { text-align: right; }
-    .ttl td { font-weight: 700; border-top: 2px solid #e0e0e0;
-              border-bottom: none; background: #fafafa; }
-    .cr  { display: flex; gap: 10px; padding: 6px 0;
-           border-bottom: 1px solid #f5f5f5; align-items: flex-start; }
-    .cb  { width: 14px; height: 14px; border: 1.5px solid #ccc;
-           border-radius: 2px; flex-shrink: 0; margin-top: 2px; }
-    .sig { margin-top: 44px; padding-top: 20px;
-           border-top: 1px solid #e8e8e8; line-height: 1.85; }
-    .mu  { color: #888; font-size: 9.5pt; }
-    .ns-footer { position: fixed; bottom: 0; left: 0; right: 0; background: #000;
-                 color: #666; text-align: center; padding: 9px 24px;
-                 font-size: 7.5pt; letter-spacing: 0.04em; }
-    @media print {
-      @page { size: A4; margin: 0; }
-      body  { -webkit-print-color-adjust: exact; print-color-adjust: exact;
-              padding-bottom: 0; }
-      .ns-footer { position: fixed; bottom: 0; }
-    }`;
-
-  return `<!DOCTYPE html>
-<html lang="de"><head><meta charset="UTF-8">
-<title>${h(docName)} – ${h(client.name)}</title>
-<style>${css}</style></head>
-<body>
-  <div class="ns-header">
-    <div class="ns-brand"><b>NEXTSTRUCTURE</b> <span>SOLUTIONS</span></div>
-    <div class="ns-loc">Quickborn</div>
-  </div>
-  <div class="ns-red"></div>
-  <div class="ns-body">
-    <div class="ns-label">${def.label}</div>
-    <div class="ns-title">${def.title}</div>
-    <div class="ns-date">Datum: ${today}</div>
-    ${def.body()}
-    ${sigBlock()}
-  </div>
-  <div class="ns-footer">NextStructure Solutions · Quickborn · kontakt@nextstructure-solutions.com · nextstructure-solutions.com</div>
-</body></html>`;
+  return `
+    <div class="ns-hdr">
+      <div class="ns-hdr-brand"><b>NEXTSTRUCTURE</b>&nbsp;<span style="font-weight:300">SOLUTIONS</span></div>
+      <div class="ns-hdr-loc">Quickborn</div>
+    </div>
+    <div class="ns-redline"></div>
+    <div class="ns-doc-body">
+      <div class="ns-doc-label">${def.label}</div>
+      <div class="ns-doc-title">${def.title}</div>
+      <div class="ns-doc-date">Quickborn, ${today}</div>
+      ${def.body()}
+    </div>
+    <div class="ns-ftr">NextStructure Solutions · Quickborn · kontakt@nextstructure-solutions.com · nextstructure-solutions.com</div>`;
 }
 
 // ─── Quotes ───────────────────────────────────────────────────────────────
