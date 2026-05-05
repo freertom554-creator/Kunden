@@ -8,34 +8,1014 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --accent:   #7c6af7;
-      --accent-h: #9b8ff9;
-      --bg:       #0d0d0d;
-      --surface:  #111118;
-      --border:   #1e1e2e;
-      --text:     #f0f0f0;
-      --muted:    #888;
+      --bg:        #0D0D0D;
+      --surface:   #141414;
+      --surface2:  #1A1A1A;
+      --border:    #252525;
+      --accent:    #7c6af7;
+      --accent-h:  #9b8ff9;
+      --text:      #FFFFFF;
+      --text-muted:#888888;
+      --text-dim:  #555555;
+      --radius:    6px;
+      --font:      -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
 
     html, body {
       height: 100%;
       background: var(--bg);
+      background-image: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(80,55,200,0.18) 0%, transparent 65%);
+      background-attachment: fixed;
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.5;
       -webkit-font-smoothing: antialiased;
     }
 
-    body {
-      background-image: radial-gradient(ellipse 80% 45% at 50% 0%,
-        rgba(80,55,200,0.2) 0%, transparent 65%);
-      background-attachment: fixed;
-      min-height: 100vh;
+    /* ─── Header ─────────────────────────────────────────────── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 60px;
+      background: rgba(13,13,13,0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(124,106,247,0.22);
+      box-shadow: 0 1px 0 rgba(124,106,247,0.06), 0 8px 32px rgba(0,0,0,0.45);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 0.04em;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .logo-mark {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #7c6af7 0%, #5040d0 100%);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+      box-shadow: 0 0 14px rgba(124,106,247,0.5), 0 2px 6px rgba(0,0,0,0.4);
+      letter-spacing: 0;
+    }
+
+    .logo-sep { color: var(--text-dim); font-weight: 300; margin: 0 4px; }
+    .logo-sub {
+      background: linear-gradient(90deg, #9b8ff9 0%, #c4baf9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .header-right { display: flex; align-items: center; gap: 12px; }
+
+    .client-count { font-size: 12px; color: var(--text-muted); letter-spacing: 0.03em; }
+
+    /* ─── Buttons ─────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, opacity 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #7c6af7 0%, #5040d0 100%);
+      color: #fff;
+      box-shadow: 0 0 16px rgba(124,106,247,0.28), 0 2px 4px rgba(0,0,0,0.3);
+      transition: background 0.15s, box-shadow 0.2s, opacity 0.15s;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #9b8ff9 0%, #7c6af7 100%);
+      box-shadow: 0 0 24px rgba(124,106,247,0.45), 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: #444; color: var(--text); }
+
+    .btn-danger {
+      background: transparent;
+      color: #E74C3C;
+      border: 1px solid #3a1a1a;
+    }
+    .btn-danger:hover { background: #1e0e0e; }
+
+    .btn-sm { padding: 5px 11px; font-size: 12px; }
+
+    /* ─── Main layout ─────────────────────────────────────────── */
+    main { padding: 32px; max-width: 1280px; margin: 0 auto; }
+
+    /* ─── Empty state ─────────────────────────────────────────── */
+    .empty-state {
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+      padding: 80px 24px;
+      color: var(--text-dim);
+      text-align: center;
+      gap: 12px;
+    }
+    .empty-state svg { opacity: 0.3; }
+    .empty-state p { font-size: 15px; color: var(--text-muted); }
+    .empty-state small { font-size: 12px; color: var(--text-dim); }
+
+    /* ─── Stat cards ─────────────────────────────────────────── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 22px;
     }
 
-    /* ── Main layout ── */
+    .stat-card {
+      background: linear-gradient(155deg, #18152a 0%, #141414 60%);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px 18px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      border-radius: 10px 10px 0 0;
+    }
+    .stat-card:nth-child(1)::before { background: linear-gradient(90deg, #444, #666); }
+    .stat-card:nth-child(2)::before { background: linear-gradient(90deg, #7c6af7, #a89df9); }
+    .stat-card:nth-child(3)::before { background: linear-gradient(90deg, #b8921a, #e8c840); }
+    .stat-card:nth-child(4)::before { background: linear-gradient(90deg, #1e8a4a, #3aaa72); }
+    .stat-card:hover {
+      border-color: rgba(124,106,247,0.28);
+      box-shadow: 0 4px 28px rgba(124,106,247,0.1);
+    }
+
+    .stat-card-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 10px;
+    }
+
+    .stat-card-value {
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    /* ─── Client table ───────────────────────────────────────── */
+    .tbl-wrap {
+      background: var(--surface);
+      border: 1px solid rgba(124,106,247,0.12);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 24px rgba(0,0,0,0.25);
+    }
+
+    .client-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .client-table thead th {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 13px 18px;
+      text-align: left;
+      background: rgba(20,20,20,0.95);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .client-table tbody tr {
+      border-bottom: 1px solid rgba(37,37,37,0.7);
+      transition: background 0.15s, box-shadow 0.15s;
+      cursor: pointer;
+      position: relative;
+    }
+    .client-table tbody tr:last-child { border-bottom: none; }
+    .client-table tbody tr:hover {
+      background: rgba(124,106,247,0.055);
+      box-shadow: inset 3px 0 0 rgba(124,106,247,0.55);
+    }
+
+    .client-table td {
+      padding: 16px 18px;
+      vertical-align: middle;
+      font-size: 13px;
+    }
+
+    .td-name  { font-weight: 600; letter-spacing: 0.01em; }
+    .td-firma { color: var(--text-muted); }
+    .td-date  { color: var(--text-dim); font-size: 12px; white-space: nowrap; }
+
+    /* ─── Tag / pill helpers ─────────────────────────────────── */
+    .tag { display: inline-flex; align-items: center; font-size: 11px; padding: 2px 7px; border-radius: 3px; font-weight: 500; white-space: nowrap; }
+    .tag-website { background: #0d1f2d; color: #4a9fd4; }
+    .tag-chatbot { background: #1a1a0d; color: #b8a832; }
+    .tag-beides  { background: #1a0d1a; color: #b86fd4; }
+
+    /* ─── Phase pill badges ──────────────────────────────────── */
+    .phase-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .ph-1 { background: #1e1e1e; color: #888;    border: 1px solid #2e2e2e; }
+    .ph-2 { background: #0d1f33; color: #4a9fd4; border: 1px solid #1a3a5c; }
+    .ph-3 { background: #1a1030; color: #9b8ff9; border: 1px solid #2d1f55; }
+    .ph-4 { background: #1e1a08; color: #c9a830; border: 1px solid #3d3210; }
+    .ph-5 { background: #1e1208; color: #e07830; border: 1px solid #3d2410; }
+    .ph-6 { background: #1e0808; color: #e04040; border: 1px solid #3d1010; }
+    .ph-7 { background: #0d1e0d; color: #4ab84a; border: 1px solid #1a3d1a; }
+    .ph-8 { background: #0a160a; color: #2d9d2d; border: 1px solid #153815; }
+
+    /* ─── Status pill badges ─────────────────────────────────── */
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .st-arbeit { background: #160e33; color: #9b8ff9; border: 1px solid #2d1f55; }
+    .st-warten { background: #1e1a08; color: #c9a830; border: 1px solid #3d3210; }
+    .st-done   { background: #0a1f14; color: #3aaa72; border: 1px solid #1a3d28; }
+
+    /* ─── Row actions ────────────────────────────────────────── */
+    .row-actions { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+
+    .action-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+      font-family: var(--font);
+    }
+    .action-btn:hover { border-color: #444; color: var(--text); background: var(--surface2); }
+    .action-btn.del:hover { border-color: #5a1a1a; color: #E74C3C; background: #1e0808; }
+
+    /* ─── Modal overlay ───────────────────────────────────────── */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5,3,18,0.82);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .overlay.open { display: flex; }
+
+    .modal {
+      background: linear-gradient(155deg, #17132a 0%, #141414 55%);
+      border: 1px solid rgba(124,106,247,0.18);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 48px rgba(124,106,247,0.08);
+    }
+    .modal-xl { max-width: 740px; }
+
+    .modal-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 24px 18px;
+      background: linear-gradient(135deg, #17132a 0%, #141414 60%);
+      border-bottom: 1px solid rgba(124,106,247,0.12);
+    }
+    .modal-title { font-size: 16px; font-weight: 700; letter-spacing: 0.01em; }
+
+    .modal-close {
+      width: 30px;
+      height: 30px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: color 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+    .modal-close:hover { color: var(--text); border-color: #444; }
+
+    .modal-body { padding: 24px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
+    .form-field.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    input, select, textarea {
+      background: #0a0a14;
+      border: 1px solid #2a2a3a;
+      border-radius: 8px;
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 13px;
+      padding: 10px 13px;
+      width: 100%;
+      transition: border-color 0.18s, box-shadow 0.18s;
+      outline: none;
+      appearance: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(124,106,247,0.7);
+      box-shadow: 0 0 0 3px rgba(124,106,247,0.13);
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 30px;
+    }
+    select option { background: #1A1A1A; }
+    textarea { resize: vertical; min-height: 80px; }
+
+    .modal-footer {
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 16px 24px 20px;
+      background: linear-gradient(0deg, #141414 70%, transparent);
+      border-top: 1px solid rgba(124,106,247,0.1);
+    }
+
+    /* ─── Phase selector in detail modal ─────────────────────── */
+    .phase-selector { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 6px; }
+    .phase-opt {
+      padding: 7px 4px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-muted);
+      font-size: 11px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      line-height: 1.3;
+    }
+    .phase-opt:hover { border-color: #444; color: var(--text); }
+    .phase-opt.active { border-color: var(--accent); background: rgba(124,106,247,0.12); color: var(--text); }
+
+    /* ─── Documents section ───────────────────────────────────── */
+    .doc-section {
+      margin-top: 22px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .doc-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .doc-list { display: flex; flex-direction: column; gap: 7px; }
+
+    .doc-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      transition: border-color 0.12s;
+    }
+    .doc-item:hover { border-color: #333; }
+
+    .doc-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--surface2);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--text-dim);
+    }
+
+    .doc-name { flex: 1; font-size: 13px; color: var(--text); min-width: 0; }
+
+    .doc-sent-badge {
+      font-size: 10px;
+      color: #3aaa72;
+      background: #0a1f14;
+      border: 1px solid #1a3d28;
+      padding: 2px 8px;
+      border-radius: 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .doc-empty { font-size: 12px; color: var(--text-dim); font-style: italic; padding: 4px 0; }
+
+    /* ─── Document preview modal ──────────────────────────────── */
+    .doc-preview {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      font-size: 12.5px;
+      line-height: 1.85;
+      color: #ddd;
+      white-space: pre-wrap;
+      font-family: "Courier New", Courier, monospace;
+      max-height: 54vh;
+      overflow-y: auto;
+    }
+
+    /* ─── Detail view ────────────────────────────────────────── */
+    #detailView { display: none; }
+
+    .dv-inner {
+      padding: 28px 32px 56px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .dv-topbar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .dv-topbar-name {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dv-cols {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .dv-card {
+      background: linear-gradient(155deg, #17132a 0%, #141414 55%);
+      border: 1px solid rgba(124,106,247,0.13);
+      border-radius: 10px;
+      padding: 24px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+    }
+
+    .dv-card-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 20px;
+    }
+
+    .dv-save-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .dv-save-msg {
+      font-size: 12px;
+      color: #3aaa72;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .dv-save-msg.visible { opacity: 1; }
+
+    /* ─── Phase timeline ──────────────────────────────────────── */
+    .tl-list { display: flex; flex-direction: column; gap: 2px; }
+
+    .tl-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 10px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.1s;
+    }
+    .tl-item:hover { background: var(--surface2); }
+    .tl-item.tl-current { background: rgba(124,106,247,0.09); }
+
+    .tl-dot {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .tl-dot-done   { background: #0d2016; color: #3aaa72; border: 1.5px solid #1e4a2e; }
+    .tl-dot-active { background: var(--accent); color: #fff; }
+    .tl-dot-future { background: var(--border); color: var(--text-dim); }
+
+    .tl-label { font-size: 13px; }
+    .tl-label-done   { color: var(--text-muted); }
+    .tl-label-active { color: var(--text); font-weight: 600; }
+    .tl-label-future { color: var(--text-dim); }
+
+    /* ─── Detail view – document section ─────────────────────── */
+    .dv-docs {
+      margin-top: 20px;
+      background: linear-gradient(155deg, #17132a 0%, #141414 55%);
+      border: 1px solid rgba(124,106,247,0.13);
+      border-radius: 10px;
+      padding: 24px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+    }
+
+    .dv-docs-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 16px;
+    }
+
+    .dv-doc-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border: 1px solid #2a2a3a;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .dv-doc-row:last-child { margin-bottom: 0; }
+    .dv-doc-row:hover { border-color: rgba(124,106,247,0.3); box-shadow: 0 0 0 1px rgba(124,106,247,0.1); }
+
+    .dv-doc-icon {
+      width: 30px;
+      height: 30px;
+      background: var(--surface2);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      flex-shrink: 0;
+    }
+
+    .dv-doc-name { flex: 1; font-size: 13px; font-weight: 500; }
+
+    .badge-offen {
+      font-size: 11px;
+      padding: 2px 9px;
+      border-radius: 10px;
+      background: #1a1408;
+      color: #c08020;
+      border: 1px solid #2d2010;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .badge-gesendet {
+      font-size: 11px;
+      padding: 2px 9px;
+      border-radius: 10px;
+      background: #0a1f14;
+      color: #3aaa72;
+      border: 1px solid #1a3d28;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .dv-no-docs { font-size: 12px; color: var(--text-dim); font-style: italic; }
+
+    /* ─── Full-screen document preview ───────────────────────── */
+    #docPreviewOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      flex-direction: column;
+      background: rgba(5,3,18,0.92);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    #docPreviewOverlay.open { display: flex; }
+
+    .dp-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 20px;
+      background: rgba(8,6,20,0.98);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(124,106,247,0.18);
+      flex-shrink: 0;
+      min-height: 56px;
+    }
+
+    .dp-bar-title {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dp-hint {
+      text-align: center;
+      font-size: 11.5px;
+      color: #7a7a8a;
+      font-style: italic;
+      padding: 6px 20px;
+      background: rgba(8,6,20,0.7);
+      border-bottom: 1px solid rgba(124,106,247,0.08);
+      flex-shrink: 0;
+    }
+    @media print { .dp-hint { display: none !important; } }
+    .dp-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 32px 24px 64px;
+      background: #15121f;
+    }
+
+    /* ─── White-paper document box ──────────────────────────── */
+    .dp-doc-content {
+      background: #fff;
+      max-width: 780px;
+      margin: 0 auto;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 10.5pt;
+      color: #333;
+      line-height: 1.7;
+      box-shadow: 0 12px 60px rgba(0,0,0,0.55);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .ns-hdr { background: #000; color: #fff; padding: 14px 40px;
+              display: flex; align-items: center; justify-content: space-between; }
+    .ns-hdr-brand { font-size: 12pt; letter-spacing: 0.1em; }
+    .ns-hdr-brand b { font-weight: 900; }
+    .ns-hdr-loc { font-size: 8.5pt; color: #aaa; letter-spacing: 0.04em; }
+    .ns-redline { height: 3px; background: #C0392B; }
+    .ns-doc-body { padding: 36px 40px 48px; }
+    .ns-doc-label { font-size: 7.5pt; color: #aaa; letter-spacing: 0.22em;
+                    text-transform: uppercase; margin-bottom: 3px; }
+    .ns-doc-title { font-size: 22pt; font-weight: 700; color: #000;
+                    margin-bottom: 4px; line-height: 1.15; }
+    .ns-doc-date  { font-size: 8.5pt; color: #999; margin-bottom: 24px; }
+    .ns-rcpt      { margin-bottom: 22px; line-height: 1.75; font-size: 10pt; }
+    .ns-rcpt-lbl  { font-size: 7.5pt; color: #999; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 2px; }
+    .ns-doc-body p { margin-bottom: 10px; }
+    .ns-doc-body h2 { font-size: 8pt; font-weight: 700; text-transform: uppercase;
+                      letter-spacing: 0.09em; color: #555; margin: 22px 0 8px;
+                      padding-bottom: 5px; border-bottom: 1.5px solid #eee; }
+    .ns-doc-body ul, .ns-doc-body ol { padding-left: 20px; margin-bottom: 12px; }
+    .ns-doc-body li { margin-bottom: 4px; line-height: 1.65; }
+    .ns-doc-body table { width: 100%; border-collapse: collapse; margin: 10px 0 14px; font-size: 9.5pt; }
+    .ns-doc-body th { font-size: 7.5pt; font-weight: 700; text-transform: uppercase;
+                      letter-spacing: 0.05em; color: #777; padding: 7px 10px;
+                      border-bottom: 2px solid #e0e0e0; text-align: left; }
+    .ns-doc-body td { padding: 7px 10px; border-bottom: 1px solid #f2f2f2; vertical-align: top; }
+    .ns-doc-body .tr-total td { font-weight: 700; border-top: 2px solid #e0e0e0;
+                                 border-bottom: none; background: #fafafa; }
+    .ns-doc-body .td-r { text-align: right; }
+    .ns-doc-body .ph  { color: #bbb; }
+    .ns-doc-body .pho {
+      color: #d97706; font-weight: 600;
+      border-bottom: 1.5px dashed #d97706;
+      border-radius: 2px;
+      cursor: text;
+      outline: none;
+      min-width: 40px;
+      display: inline-block;
+      padding: 0 2px;
+    }
+    .ns-doc-body .pho:focus {
+      background: rgba(217,119,6,0.1);
+      border-bottom-style: solid;
+    }
+    @media print { .ns-doc-body .pho { border-bottom: none; background: none !important; } }
+    .ns-chk     { display: flex; gap: 10px; padding: 5px 0;
+                  border-bottom: 1px solid #f5f5f5; align-items: flex-start; }
+    .ns-chk-box { width: 13px; height: 13px; border: 1.5px solid #ccc;
+                  border-radius: 2px; flex-shrink: 0; margin-top: 2px; }
+    .ns-sig { margin-top: 36px; padding-top: 18px; border-top: 1px solid #e8e8e8;
+              line-height: 1.85; font-size: 10pt; }
+    .ns-sig-mu  { color: #888; font-size: 9pt; }
+    .ns-sig2    { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 36px; }
+    .ns-sig2-col { border-top: 1px solid #ccc; padding-top: 7px;
+                   color: #999; font-size: 8.5pt; line-height: 1.6; }
+    .ns-ftr { background: #000; color: #666; text-align: center; padding: 9px 24px;
+              font-size: 7pt; letter-spacing: 0.04em; }
+
+    /* ─── Scrollbar ───────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(124,106,247,0.25); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(124,106,247,0.45); }
+
+    /* ─── Landing screen ─────────────────────────────────────── */
+    #landingScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      background-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(80,55,200,0.22) 0%, transparent 68%);
+      overflow-y: auto;
+      padding: 40px 24px;
+    }
+
+    .ls-inner {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 36px;
+      padding: 20px 0 40px;
+    }
+
+    .ls-eyebrow {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .ls-greeting {
+      font-size: 16px;
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+    }
+
+    .ls-brand {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+
+    .ls-title {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.18;
+      background: linear-gradient(135deg, #ffffff 0%, #c4baf9 55%, #9b8ff9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .ls-quote-wrap {
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ls-quote-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-style: italic;
+      line-height: 1.75;
+    }
+
+    .ls-quote-author {
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 0.02em;
+    }
+
+    .ls-kacheln {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+
+    .ls-kachel {
+      background: linear-gradient(155deg, #18152a 0%, #141414 100%);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 14px 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.18s;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .ls-kachel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      border-radius: 10px 10px 0 0;
+    }
+    .ls-kachel:nth-child(1)::before { background: linear-gradient(90deg, #444, #666); }
+    .ls-kachel:nth-child(2)::before { background: linear-gradient(90deg, #7c6af7, #a89df9); }
+    .ls-kachel:nth-child(3)::before { background: linear-gradient(90deg, #b8921a, #e8c840); }
+    .ls-kachel:nth-child(4)::before { background: linear-gradient(90deg, #1e8a4a, #3aaa72); }
+    .ls-kachel:hover {
+      border-color: rgba(124,106,247,0.35);
+      box-shadow: 0 6px 28px rgba(124,106,247,0.14);
+      transform: translateY(-3px);
+    }
+
+    .ls-kachel-val {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .ls-kachel-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .ls-cta { margin-top: 4px; }
+    .ls-cta .btn { font-size: 15px; padding: 12px 36px; letter-spacing: 0.01em; }
+
+    /* ─── Print ───────────────────────────────────────────────── */
+    @media print {
+      @page { size: A4; margin: 15mm 18mm; }
+
+      html, body {
+        background: white !important;
+        color: black !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* Hide everything except the print container */
+      body > *:not(#printRoot) { display: none !important; }
+      .dp-bar  { display: none !important; }
+      .dp-hint { display: none !important; }
+
+      #printRoot {
+        display: block !important;
+        background: white !important;
+        color: black !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* Reset all children to black text on transparent background */
+      #printRoot * {
+        color: black !important;
+        background: transparent !important;
+        visibility: visible !important;
+      }
+
+      /* Restore intentional coloured blocks */
+      #printRoot .ns-hdr    { background: #000 !important; color: #fff !important; }
+      #printRoot .ns-hdr *  { background: transparent !important; color: #fff !important; }
+      #printRoot .ns-ftr    { background: #000 !important; color: #666 !important; }
+      #printRoot .ns-ftr *  { background: transparent !important; color: #666 !important; }
+      #printRoot .ns-redline { background: #C0392B !important; }
+
+      /* Explicit display for content elements */
+      #printRoot .ns-doc-body { display: block !important; }
+      #printRoot p   { display: block !important; color: black !important; }
+      #printRoot ul,
+      #printRoot ol  { display: block !important; color: black !important; }
+      #printRoot li  { display: list-item !important; color: black !important; }
+      #printRoot table   { display: table !important; width: 100% !important; }
+      #printRoot thead   { display: table-header-group !important; }
+      #printRoot tbody   { display: table-row-group !important; }
+      #printRoot tr      { display: table-row !important; }
+      #printRoot td,
+      #printRoot th      { display: table-cell !important; color: black !important; }
+      #printRoot .tr-total td { background: #fafafa !important; color: black !important; }
+
+      /* Orange placeholder: remove deco, keep text black */
+      #printRoot .pho {
+        border-bottom: none !important;
+        background: none !important;
+        color: black !important;
+      }
+    }
+
+    /* ─── Hub screen ──────────────────────────────────────────── */
+    #hubScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-y: auto;
+      background: var(--bg);
+      background-image: radial-gradient(ellipse 80% 45% at 50% 0%, rgba(80,55,200,0.2) 0%, transparent 65%);
+    }
+
     .hub-wrap {
       flex: 1;
       display: flex;
@@ -47,8 +1027,7 @@
       max-width: 1100px;
     }
 
-    /* ── Greeting ── */
-    .greeting {
+    .hub-greeting {
       font-size: 13px;
       font-weight: 500;
       letter-spacing: 0.08em;
@@ -58,7 +1037,6 @@
       opacity: 0.85;
     }
 
-    /* ── Hero title ── */
     .hub-title {
       font-size: clamp(28px, 4vw, 42px);
       font-weight: 800;
@@ -79,7 +1057,6 @@
       margin-bottom: 56px;
     }
 
-    /* ── Cards grid ── */
     .cards {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -87,9 +1064,7 @@
       width: 100%;
     }
 
-    @media (max-width: 720px) {
-      .cards { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 720px) { .cards { grid-template-columns: 1fr; } }
 
     .card {
       background: linear-gradient(155deg, #18152a 0%, #111118 60%);
@@ -119,25 +1094,15 @@
       transform: translateY(-3px);
     }
 
-    .card--disabled {
-      opacity: 0.45;
-      cursor: default;
-    }
+    .card--disabled { opacity: 0.45; cursor: default; }
+    .card--disabled::before { background: linear-gradient(90deg, #444, #666); }
 
-    .card--disabled::before {
-      background: linear-gradient(90deg, #444, #666);
-    }
-
-    /* ── Card icon ── */
     .card-icon {
-      width: 44px;
-      height: 44px;
+      width: 44px; height: 44px;
       border-radius: 10px;
       background: linear-gradient(135deg, rgba(124,106,247,0.22) 0%, rgba(80,64,208,0.14) 100%);
       border: 1px solid rgba(124,106,247,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
 
@@ -147,52 +1112,30 @@
     }
 
     .card-icon svg { opacity: 0.85; }
-
-    /* ── Card text ── */
     .card-body { flex: 1; display: flex; flex-direction: column; gap: 6px; }
 
     .card-title {
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      color: #fff;
-      line-height: 1.3;
+      font-size: 15px; font-weight: 700;
+      letter-spacing: -0.01em; color: #fff; line-height: 1.3;
     }
 
-    .card-desc {
-      font-size: 12.5px;
-      color: var(--muted);
-      line-height: 1.6;
-    }
+    .card-desc { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
 
-    /* ── Badge ── */
     .badge-soon {
       display: inline-block;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      background: rgba(255,255,255,0.07);
-      color: #888;
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      background: rgba(255,255,255,0.07); color: #888;
       border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 4px;
-      padding: 2px 7px;
-      margin-top: 2px;
-      align-self: flex-start;
+      border-radius: 4px; padding: 2px 7px;
+      margin-top: 2px; align-self: flex-start;
     }
 
-    /* ── Card button ── */
     .card-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 9px 18px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 18px; border-radius: 8px;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer; border: none; text-decoration: none;
       transition: opacity 0.15s, box-shadow 0.15s;
       background: linear-gradient(135deg, var(--accent) 0%, #5040d0 100%);
       color: #fff;
@@ -207,104 +1150,2081 @@
 
     .card-btn svg { flex-shrink: 0; }
 
-    /* ── Footer ── */
-    footer {
+    .hub-footer {
       padding: 20px 24px;
-      font-size: 12px;
-      color: #3a3a4a;
-      letter-spacing: 0.04em;
-      text-align: center;
+      font-size: 12px; color: #3a3a4a;
+      letter-spacing: 0.04em; text-align: center;
     }
   </style>
 </head>
 <body>
 
-<div class="hub-wrap">
-  <div class="greeting" id="greeting"></div>
-
-  <h1 class="hub-title">Willkommen bei NextStructure Solutions</h1>
-  <p class="hub-sub">Deine Tools. An einem Ort.</p>
-
-  <div class="cards">
-
-    <!-- Card 1: Kundendatenbank -->
-    <div class="card">
-      <div class="card-icon">
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-          <rect x="2" y="5" width="18" height="14" rx="2" stroke="#9b8ff9" stroke-width="1.5"/>
-          <path d="M2 9h18" stroke="#9b8ff9" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M7 5V3M15 5V3" stroke="#9b8ff9" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M6 13h4M6 16h6" stroke="#9b8ff9" stroke-width="1.2" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="card-body">
-        <div class="card-title">Kundendatenbank &amp; Vertriebsprozess</div>
-        <div class="card-desc">Kunden verwalten, Phasen tracken, Dokumente generieren</div>
-      </div>
-      <a class="card-btn" href="pipeline.html">
-        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-          <path d="M2 6.5h9M7 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.6"
-                stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Öffnen
-      </a>
+<!-- ═══════════════════════════════════════════════════════ HEADER -->
+<header>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <button class="btn btn-ghost" style="padding:5px 12px;font-size:12px;"
+            onclick="document.getElementById('landingScreen').style.display='flex';document.getElementById('pipelineMain').style.display='none';initLanding();">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path d="M9 2L3 7l6 5" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Start
+    </button>
+    <div class="logo">
+      <div class="logo-mark">N</div>
+      NextStructure <span class="logo-sep">·</span>
+      <span class="logo-sub">Kundendatenbank</span>
     </div>
+  </div>
+  <div class="header-right">
+    <span class="client-count" id="globalCount"></span>
+    <button class="btn btn-primary" onclick="openNewModal()">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      Neuer Kunde
+    </button>
+  </div>
+</header>
 
-    <!-- Card 2: Website-Generator -->
-    <div class="card">
-      <div class="card-icon">
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-          <rect x="2" y="3" width="18" height="14" rx="2" stroke="#9b8ff9" stroke-width="1.5"/>
-          <path d="M2 7h18" stroke="#9b8ff9" stroke-width="1.5" stroke-linecap="round"/>
-          <circle cx="5" cy="5" r=".8" fill="#9b8ff9"/>
-          <circle cx="8" cy="5" r=".8" fill="#9b8ff9"/>
-          <path d="M7 11l2 2-2 2M12 15h3" stroke="#9b8ff9" stroke-width="1.2"
-                stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M6 19h10" stroke="#9b8ff9" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
+<!-- ══════════════════════════════════════════════ LANDING SCREEN -->
+<!-- ══════════════════════════════════════════════════════════ HUB -->
+<div id="hubScreen">
+  <div class="hub-wrap">
+    <div class="hub-greeting" id="hub-greeting"></div>
+    <h1 class="hub-title">Willkommen bei NextStructure Solutions</h1>
+    <p class="hub-sub">Deine Tools. An einem Ort.</p>
+    <div class="cards">
+
+      <!-- Card 1: Kundendatenbank -->
+      <div class="card">
+        <div class="card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <rect x="2" y="5" width="18" height="14" rx="2" stroke="#9b8ff9" stroke-width="1.5"/>
+            <path d="M2 9h18" stroke="#9b8ff9" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M7 5V3M15 5V3" stroke="#9b8ff9" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M6 13h4M6 16h6" stroke="#9b8ff9" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Kundendatenbank &amp; Vertriebsprozess</div>
+          <div class="card-desc">Kunden verwalten, Phasen tracken, Dokumente generieren</div>
+        </div>
+        <button class="card-btn" onclick="openLanding()">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M2 6.5h9M7 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.6"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Öffnen
+        </button>
       </div>
-      <div class="card-body">
-        <div class="card-title">Demo-Website-Generator</div>
-        <div class="card-desc">Akquise-Demos in Sekunden erstellen</div>
+
+      <!-- Card 2: Website-Generator (Coming Soon) -->
+      <div class="card card--disabled">
+        <div class="card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <rect x="2" y="3" width="18" height="14" rx="2" stroke="#888" stroke-width="1.5"/>
+            <path d="M2 7h18" stroke="#888" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="5" cy="5" r=".8" fill="#888"/>
+            <circle cx="8" cy="5" r=".8" fill="#888"/>
+            <path d="M7 11l2 2-2 2M12 15h3" stroke="#888" stroke-width="1.2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 19h10" stroke="#888" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Demo-Website-Generator</div>
+          <div class="card-desc">Akquise-Demos in Sekunden erstellen</div>
+          <span class="badge-soon">Coming Soon</span>
+        </div>
       </div>
-      <a class="card-btn" href="generator.html">
-        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-          <path d="M2 6.5h9M7 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.6"
-                stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Öffnen
-      </a>
+
+      <!-- Card 3: Statistiken (Coming Soon) -->
+      <div class="card card--disabled">
+        <div class="card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M3 17V10M8 17V7M13 17v-5M18 17V4" stroke="#888" stroke-width="1.5"
+                  stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Statistiken</div>
+          <div class="card-desc">Pipeline-Übersicht und Conversion-Analyse</div>
+          <span class="badge-soon">Coming Soon</span>
+        </div>
+      </div>
+
     </div>
+  </div>
+  <div class="hub-footer">NextStructure Solutions &nbsp;·&nbsp; Quickborn</div>
+</div>
 
-    <!-- Card 3: Statistiken (coming soon) -->
-    <div class="card card--disabled">
-      <div class="card-icon">
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-          <path d="M3 17V10M8 17V7M13 17v-5M18 17V4" stroke="#888" stroke-width="1.5"
-                stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="card-body">
-        <div class="card-title">Statistiken</div>
-        <div class="card-desc">Pipeline-Übersicht und Conversion-Analyse</div>
-        <span class="badge-soon">Coming Soon</span>
-      </div>
+<!-- ══════════════════════════════════════════════════ LANDING -->
+<div id="landingScreen" style="display:none">
+  <div class="ls-inner">
+    <div class="ls-eyebrow">
+      <div class="ls-greeting" id="ls-greeting"></div>
+      <div class="ls-brand">NextStructure</div>
     </div>
-
+    <div class="ls-title">Willkommen in der<br>Kundendatenbank &amp; Vertriebsprozess</div>
+    <div class="ls-quote-wrap">
+      <div class="ls-quote-text" id="ls-quote-text"></div>
+      <div class="ls-quote-author" id="ls-quote-author"></div>
+    </div>
+    <div class="ls-kacheln" id="ls-kacheln"></div>
+    <div class="ls-cta">
+      <button class="btn btn-primary" onclick="enterDashboard('')">Kundendatenbank öffnen →</button>
+      <button class="btn btn-ghost" style="font-size:12px;margin-top:10px;" onclick="showHub()">← Hub</button>
+    </div>
   </div>
 </div>
 
-<footer>NextStructure Solutions &nbsp;·&nbsp; Quickborn</footer>
+<!-- ═══════════════════════════════════════════════════════ MAIN -->
+<main id="pipelineMain" style="display:none">
+  <div id="stat-grid" class="stat-grid"></div>
+  <div id="pipeline"></div>
+</main>
+
+<!-- ═══════════════════════════════════════════════ NEW MODAL -->
+<div class="overlay" id="newOverlay" onclick="overlayClick(event,'newOverlay')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Neuer Kunde</div>
+      <button class="modal-close" onclick="closeModal('newOverlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Name *</label>
+          <input id="f-name" type="text" placeholder="Max Mustermann" />
+        </div>
+        <div class="form-field">
+          <label>Firma</label>
+          <input id="f-company" type="text" placeholder="Muster GmbH" />
+        </div>
+        <div class="form-field">
+          <label>E-Mail</label>
+          <input id="f-email" type="email" placeholder="max@example.com" />
+        </div>
+        <div class="form-field">
+          <label>Telefon</label>
+          <input id="f-phone" type="tel" placeholder="+49 123 456789" />
+        </div>
+        <div class="form-field">
+          <label>Straße &amp; Hausnummer</label>
+          <input id="f-street" type="text" placeholder="Musterstraße 12" />
+        </div>
+        <div class="form-field">
+          <label>PLZ &amp; Ort</label>
+          <input id="f-city" type="text" placeholder="12345 Musterstadt" />
+        </div>
+        <div class="form-field">
+          <label>Projekttyp *</label>
+          <select id="f-type">
+            <option value="Website">Website</option>
+            <option value="Chatbot">Chatbot</option>
+            <option value="Beides">Beides</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Startphase</label>
+          <select id="f-phase">
+            <option value="1">1 – Outreach</option>
+            <option value="2">2 – Angebot</option>
+            <option value="3">3 – Auftragsbestätigung</option>
+            <option value="4">4 – Onboarding</option>
+            <option value="5">5 – Umsetzung</option>
+            <option value="6">6 – Abnahme</option>
+            <option value="7">7 – Rechnung</option>
+            <option value="8">8 – Abgeschlossen</option>
+          </select>
+        </div>
+        <div class="form-field full">
+          <label>Status</label>
+          <select id="f-status">
+            <option value="In Bearbeitung">In Bearbeitung</option>
+            <option value="Warten auf Rückmeldung">Warten auf Rückmeldung</option>
+            <option value="Abgeschlossen">Abgeschlossen</option>
+          </select>
+        </div>
+        <div class="form-field full">
+          <label>Notizen</label>
+          <textarea id="f-notes" placeholder="Weitere Informationen..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('newOverlay')">Abbrechen</button>
+      <button class="btn btn-primary" onclick="saveNewClient()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ DETAIL VIEW -->
+<div id="detailView">
+  <div class="dv-inner">
+    <div class="dv-topbar">
+      <button class="btn btn-ghost" onclick="showPipeline()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M9 2L3 7l6 5" stroke="currentColor" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Kundendatenbank
+      </button>
+      <div class="dv-topbar-name" id="dv-topbar-name"></div>
+      <button class="btn btn-danger" onclick="deleteClientFromDV()">Löschen</button>
+    </div>
+    <div class="dv-cols">
+      <div class="dv-card" id="dv-info-col"></div>
+      <div class="dv-card" id="dv-timeline-col"></div>
+    </div>
+    <div id="dv-docs-wrap"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════ DOC PREVIEW (full-screen) ════ -->
+<div id="docPreviewOverlay">
+  <div class="dp-bar">
+    <button class="btn btn-ghost" style="padding:6px 14px;font-size:12px;"
+            onclick="closeDocPreview()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M9 2L3 7l6 5" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Zurück
+    </button>
+    <div class="dp-bar-title" id="dp-bar-title"></div>
+    <button class="btn btn-ghost" id="dp-sent-btn" style="font-size:12px;"
+            onclick="markDocSentFromModal()">Als Gesendet markieren</button>
+    <button class="btn btn-primary" style="font-size:12px;" onclick="printDoc()">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <rect x="2" y="4.5" width="9" height="6" rx="1" stroke="currentColor" stroke-width="1.2"/>
+        <path d="M4.5 4.5V2.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5v2" stroke="currentColor" stroke-width="1.2"/>
+        <path d="M4.5 8.5h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        <circle cx="10" cy="6.5" r=".7" fill="currentColor"/>
+      </svg>
+      Drucken / PDF
+    </button>
+  </div>
+  <div class="dp-hint">Klicke auf die orangenen Felder um Werte einzutragen — danach auf Drucken / PDF.</div>
+  <div class="dp-scroll">
+    <div class="dp-doc-content" id="dp-doc-content"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ DOCUMENT MODAL -->
+<div class="overlay" id="docOverlay" onclick="overlayClick(event,'docOverlay')">
+  <div class="modal modal-xl">
+    <div class="modal-header">
+      <div class="modal-title" id="doc-modal-title">Dokument</div>
+      <button class="modal-close" onclick="closeModal('docOverlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="doc-preview" id="doc-preview-content"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('docOverlay')">Schließen</button>
+      <button class="btn btn-primary" onclick="printCurrentDoc()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <rect x="2" y="4.5" width="9" height="6" rx="1" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M4.5 4.5V2.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5v2" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M4.5 8.5h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          <circle cx="10" cy="6.5" r=".75" fill="currentColor"/>
+        </svg>
+        Als PDF speichern
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden print container -->
+<div id="printRoot" style="display:none"></div>
 
 <script>
-  function getGreeting() {
-    const h = new Date().getHours();
-    if (h >= 5  && h < 12) return 'Guten Morgen';
-    if (h >= 12 && h < 17) return 'Guten Mittag';
-    if (h >= 17 && h < 22) return 'Guten Abend';
-    return 'Noch wach?';
+// ─── Constants ────────────────────────────────────────────────────────────
+const PHASES = [
+  { id: 1, label: 'Outreach' },
+  { id: 2, label: 'Angebot' },
+  { id: 3, label: 'Auftragsbestätigung' },
+  { id: 4, label: 'Onboarding' },
+  { id: 5, label: 'Umsetzung' },
+  { id: 6, label: 'Abnahme' },
+  { id: 7, label: 'Rechnung' },
+  { id: 8, label: 'Abgeschlossen' },
+];
+
+const STORAGE_KEY   = 'ns_pipeline_clients';
+const COLLAPSED_KEY = 'ns_pipeline_collapsed';
+
+// ─── Data layer ───────────────────────────────────────────────────────────
+function loadClients() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+  catch { return []; }
+}
+
+function saveClients(clients) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(clients));
+}
+
+function loadCollapsed() {
+  try { return JSON.parse(localStorage.getItem(COLLAPSED_KEY)) || {}; }
+  catch { return {}; }
+}
+
+function saveCollapsed(state) {
+  localStorage.setItem(COLLAPSED_KEY, JSON.stringify(state));
+}
+
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+function daysSince(iso) {
+  return Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+}
+
+// ─── Document templates ───────────────────────────────────────────────────
+const DOC_TEMPLATES = {
+  'Angebot Website':
+`ANGEBOT – WEBSITE-ENTWICKLUNG
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+An:
+[Name]
+[Firma]
+[Email]  ·  [Telefon]
+
+Sehr geehrte/r [Name],
+
+vielen Dank für Ihr Interesse an den Leistungen von NextStructure. Hiermit
+unterbreiten wir Ihnen unser Angebot für die Entwicklung Ihrer professionellen
+Website.
+
+LEISTUNGSUMFANG
+────────────────────────────────────────
+  • Konzeption und Wireframing
+  • Individuelles responsives Design (Desktop, Tablet, Mobil)
+  • Entwicklung der Website inkl. CMS-Anbindung
+  • Kontaktformular mit datenschutzkonformer Verarbeitung
+  • SEO-Grundoptimierung (Meta-Tags, Ladezeit, Struktur)
+  • Cookie-Banner und Datenschutzseite
+  • Übergabe, Dokumentation und Einweisung
+
+KONDITIONEN
+────────────────────────────────────────
+  Projektdauer:       Ca. 4–6 Wochen nach Auftragserteilung
+  Zahlungsbedingung:  50 % bei Auftragserteilung, 50 % bei Abnahme
+  Angebotsgültigkeit: 30 Tage ab Ausstellungsdatum
+
+Wir freuen uns auf eine erfolgreiche Zusammenarbeit.
+
+Mit freundlichen Grüßen,
+NextStructure`,
+
+  'Leistungsbeschreibung Website':
+`LEISTUNGSBESCHREIBUNG – WEBSITE
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Auftraggeber:
+[Name]  |  [Firma]
+[Email]  ·  [Telefon]
+
+1.  PROJEKTUMFANG
+    Entwicklung einer professionellen Website für [Firma].
+
+2.  DESIGNPHASE
+    – Erstellung von Wireframes und Designentwürfen
+    – Freigabe durch den Auftraggeber vor Entwicklungsstart
+    – Bis zu 2 Überarbeitungsrunden inklusive
+
+3.  ENTWICKLUNG
+    – Technologie: modernes CMS oder Static-Site-Ansatz
+    – Responsives Design für alle gängigen Endgeräte
+    – Performance-optimierter, sauberer Quellcode
+
+4.  INHALTE
+    – Texte und Medien werden vom Auftraggeber bereitgestellt
+    – Integration von bereitgestelltem Material inklusive
+
+5.  ABNAHME & ÜBERGABE
+    – Testbetrieb auf Staging-System
+    – Formelle Abnahme per Abnahmeprotokoll
+    – Übergabe von Zugangsdaten und Dokumentation
+
+6.  GEWÄHRLEISTUNG
+    – 12 Monate auf alle entwickelten Funktionen`,
+
+  'Angebot Chatbot':
+`ANGEBOT – KI-CHATBOT-ENTWICKLUNG
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+An:
+[Name]
+[Firma]
+[Email]  ·  [Telefon]
+
+Sehr geehrte/r [Name],
+
+vielen Dank für Ihr Interesse. Hiermit unterbreiten wir Ihnen unser Angebot für
+die Entwicklung eines maßgeschneiderten KI-Chatbots für [Firma].
+
+LEISTUNGSUMFANG
+────────────────────────────────────────
+  • Anforderungsanalyse und Konzeption
+  • Training und Konfiguration des KI-Modells
+  • Integration in Ihre Website / Plattform
+  • Einrichtung der Wissensdatenbank (FAQ, Prozesse, Produkte)
+  • Anpassung von Tonalität und Design (Corporate Identity)
+  • Testphase und Qualitätssicherung
+  • Übergabe, Dokumentation und Einweisung
+
+KONDITIONEN
+────────────────────────────────────────
+  Projektdauer:       Ca. 3–5 Wochen nach Auftragserteilung
+  Zahlungsbedingung:  50 % bei Auftragserteilung, 50 % bei Abnahme
+  Angebotsgültigkeit: 30 Tage ab Ausstellungsdatum
+
+Mit freundlichen Grüßen,
+NextStructure`,
+
+  'Leistungsbeschreibung Chatbot':
+`LEISTUNGSBESCHREIBUNG – KI-CHATBOT
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Auftraggeber:
+[Name]  |  [Firma]
+[Email]  ·  [Telefon]
+
+1.  PROJEKTUMFANG
+    Entwicklung und Implementierung eines KI-Chatbots für [Firma].
+
+2.  KONZEPTIONSPHASE
+    – Erfassung von Use-Cases und Gesprächsflüssen
+    – Definition der Wissensbasis (Themen, Tonalität, Grenzen)
+    – Freigabe des Konzepts durch den Auftraggeber
+
+3.  ENTWICKLUNG & TRAINING
+    – Auswahl und Konfiguration des KI-Modells
+    – Training mit bereitgestellten Unternehmensdaten
+    – Anpassung von Persönlichkeit und Sprachstil
+
+4.  INTEGRATION
+    – Einbindung per Widget oder API in bestehende Systeme
+    – Design-Anpassung nach Corporate Identity
+
+5.  TESTPHASE
+    – Interne Qualitätssicherung
+    – Testbetrieb mit ausgewählten Nutzern
+
+6.  ÜBERGABE
+    – Dokumentation der Konfiguration
+    – Einweisung des Teams in Administration und Pflege
+    – 12 Monate Gewährleistung auf entwickelte Funktionen`,
+
+  'Auftragsbestätigung Website':
+`AUFTRAGSBESTÄTIGUNG – WEBSITE-ENTWICKLUNG
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Auftraggeber:
+[Name]
+[Firma]
+[Email]  ·  [Telefon]
+
+Sehr geehrte/r [Name],
+
+wir bestätigen hiermit den Eingang Ihres Auftrags zur Entwicklung Ihrer Website
+und freuen uns auf die Umsetzung des Projekts gemeinsam mit [Firma].
+
+AUFTRAGSINHALT
+────────────────────────────────────────
+  Projekttyp:      Website
+  Auftraggeber:    [Firma]
+  Ansprechpartner: [Name]
+
+NÄCHSTE SCHRITTE
+────────────────────────────────────────
+  1. Kick-off-Gespräch zur Abstimmung aller Details
+  2. Übermittlung der Onboarding-Unterlagen und Checkliste
+  3. Bereitstellung der benötigten Zugangsdaten und Inhalte durch Sie
+
+Bitte senden Sie AVV und AGB unterschrieben zurück, sofern noch nicht erfolgt.
+
+Mit freundlichen Grüßen,
+NextStructure`,
+
+  'Auftragsbestätigung Chatbot':
+`AUFTRAGSBESTÄTIGUNG – KI-CHATBOT
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Auftraggeber:
+[Name]
+[Firma]
+[Email]  ·  [Telefon]
+
+Sehr geehrte/r [Name],
+
+wir bestätigen hiermit den Eingang Ihres Auftrags zur Entwicklung eines
+KI-Chatbots und freuen uns auf die Zusammenarbeit mit [Firma].
+
+AUFTRAGSINHALT
+────────────────────────────────────────
+  Projekttyp:      KI-Chatbot
+  Auftraggeber:    [Firma]
+  Ansprechpartner: [Name]
+
+NÄCHSTE SCHRITTE
+────────────────────────────────────────
+  1. Kick-off-Gespräch und Anforderungsaufnahme
+  2. Übermittlung der Onboarding-Unterlagen und Checkliste
+  3. Bereitstellung der Wissensbasis und Unternehmensdaten durch Sie
+
+Bitte senden Sie AVV und AGB unterschrieben zurück, sofern noch nicht erfolgt.
+
+Mit freundlichen Grüßen,
+NextStructure`,
+
+  'AVV':
+`AUFTRAGSVERARBEITUNGSVERTRAG (AVV)
+gemäß Art. 28 DSGVO
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+ZWISCHEN
+
+Auftraggeber (Verantwortlicher):
+[Firma]
+Vertreten durch: [Name]
+[Email]  ·  [Telefon]
+
+UND
+
+Auftragnehmer (Auftragsverarbeiter):
+NextStructure
+
+§ 1  GEGENSTAND
+Der Auftragnehmer verarbeitet personenbezogene Daten im Auftrag und gemäß
+den Weisungen des Auftraggebers im Rahmen des Projekts: [Projekttyp] für [Firma].
+
+§ 2  PFLICHTEN DES AUFTRAGNEHMERS
+  – Verarbeitung ausschließlich auf dokumentierte Weisung des Auftraggebers
+  – Sicherstellung der Vertraulichkeit durch alle befugten Personen
+  – Umsetzung geeigneter technisch-organisatorischer Maßnahmen (TOM)
+  – Unterstützung bei Betroffenenrechten und Datenschutz-Folgenabschätzung
+  – Löschung oder Rückgabe aller personenbezogenen Daten nach Vertragsende
+
+§ 3  LAUFZEIT
+Dieser AVV gilt für die Dauer des zugrundeliegenden Hauptvertrags.
+
+─────────────────────────────────────────────────────────────────
+Auftraggeber ([Firma])           Auftragnehmer (NextStructure)
+
+Ort, Datum: __________________   Ort, Datum: __________________
+Unterschrift: ________________   Unterschrift: ________________`,
+
+  'AGB':
+`ALLGEMEINE GESCHÄFTSBEDINGUNGEN (AGB)
+NextStructure
+Stand: [Datum]
+─────────────────────────────────────────────────────────────────
+
+§ 1  GELTUNGSBEREICH
+Diese AGB gelten für alle Verträge zwischen NextStructure (Auftragnehmer) und
+dem Auftraggeber über Leistungen im Bereich digitaler Produkte und Dienstleistungen.
+
+§ 2  VERTRAGSSCHLUSS
+Ein Vertrag kommt durch die schriftliche Auftragsbestätigung des Auftragnehmers
+zustande. Mündliche Nebenabreden bedürfen der Schriftform.
+
+§ 3  LEISTUNGSERBRINGUNG
+Der Auftragnehmer erbringt die vereinbarten Leistungen nach dem Stand der Technik.
+Änderungen des Leistungsumfangs sind schriftlich zu vereinbaren.
+
+§ 4  MITWIRKUNGSPFLICHTEN
+Der Auftraggeber stellt alle benötigten Informationen, Inhalte und Zugänge
+rechtzeitig bereit. Verzögerungen durch fehlende Mitwirkung gehen zu Lasten
+des Auftraggebers.
+
+§ 5  VERGÜTUNG & ZAHLUNG
+Zahlungen sind innerhalb von 14 Tagen nach Rechnungsstellung fällig.
+Bei Zahlungsverzug werden Zinsen i.H.v. 9 % über dem Basiszinssatz berechnet.
+
+§ 6  NUTZUNGSRECHTE
+Nach vollständiger Zahlung erhält der Auftraggeber das einfache, zeitlich
+unbegrenzte Nutzungsrecht an den im Rahmen des Projekts erstellten Werken.
+
+§ 7  GEWÄHRLEISTUNG
+Die Gewährleistungsfrist beträgt 12 Monate ab formeller Abnahme.
+
+§ 8  HAFTUNG
+Die Haftung des Auftragnehmers ist auf Vorsatz und grobe Fahrlässigkeit
+beschränkt. Eine weitergehende Haftung ist ausgeschlossen.
+
+§ 9  DATENSCHUTZ
+Die Verarbeitung personenbezogener Daten erfolgt gemäß DSGVO und dem
+gesondert abgeschlossenen Auftragsverarbeitungsvertrag (AVV).
+
+§ 10  SCHLUSSBESTIMMUNGEN
+Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts.
+Gerichtsstand ist der Sitz des Auftragnehmers.`,
+
+  'Onboarding-Checkliste Website':
+`ONBOARDING-CHECKLISTE – WEBSITE-PROJEKT
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Kunde:       [Name]  |  [Firma]
+Kontakt:     [Email]  ·  [Telefon]
+Projekttyp:  Website
+
+SCHRITT 1 – ZUGANGSDATEN & ACCOUNTS
+  ☐  Domain und Hosting – Zugangsdaten übermitteln oder neu einrichten
+  ☐  E-Mail-Postfächer – Adressen und Struktur festlegen
+  ☐  Bestehendes CMS / Hosting-Konto: Zugang gewähren (falls vorhanden)
+  ☐  Google Search Console und Analytics: einrichten oder Zugang erteilen
+
+SCHRITT 2 – INHALTE BEREITSTELLEN
+  ☐  Logo in hoher Auflösung (SVG bevorzugt, alternativ PNG 2×)
+  ☐  Farbpalette und Schriftarten (Brand-Guidelines, falls vorhanden)
+  ☐  Texte für alle Seiten (Start, Über uns, Leistungen, Kontakt, …)
+  ☐  Bilder und Medien (lizenzfrei oder eigene Aufnahmen)
+  ☐  Referenzen oder Kundenstimmen (optional)
+
+SCHRITT 3 – RECHTLICHES
+  ☐  Impressumsangaben vollständig (gemäß § 5 TMG)
+  ☐  Datenschutzbeauftragter vorhanden? (Name und Kontakt mitteilen)
+  ☐  AGB und AVV unterschrieben zurücksenden
+
+SCHRITT 4 – KICK-OFF
+  ☐  Kick-off-Termin vereinbart
+  ☐  Projektzeitplan besprochen und freigegeben
+  ☐  Kommunikationskanal festgelegt (E-Mail / Slack / …)
+
+─────────────────────────────────────────────────────────────────
+Bitte alle offenen Punkte bis zum Kick-off-Termin abschließen.`,
+
+  'Onboarding-Checkliste Chatbot':
+`ONBOARDING-CHECKLISTE – KI-CHATBOT-PROJEKT
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Kunde:       [Name]  |  [Firma]
+Kontakt:     [Email]  ·  [Telefon]
+Projekttyp:  KI-Chatbot
+
+SCHRITT 1 – WISSENSBASIS ZUSAMMENSTELLEN
+  ☐  FAQ-Dokument (häufige Fragen und Antworten, möglichst vollständig)
+  ☐  Produktkatalog oder Preisliste (falls relevant)
+  ☐  Unternehmensbeschreibung und Dienstleistungsübersicht
+  ☐  Support-Prozesse und Eskalationswege
+  ☐  Weitere Dokumente für den Bot (PDF, Word, …)
+
+SCHRITT 2 – TECHNISCHE INTEGRATION
+  ☐  Ziel-Plattform definieren (Website, WhatsApp, andere)
+  ☐  Website-Zugang oder bevorzugte Integrationsmethode klären
+  ☐  API-Zugänge für Drittsysteme bereitstellen (falls nötig)
+  ☐  Design-Vorgaben für Chat-Widget (Farben, Logo, Schriften)
+
+SCHRITT 3 – ANFORDERUNGEN DEFINIEREN
+  ☐  Tonalität und Persönlichkeit des Chatbots festlegen
+  ☐  Themen, die der Bot NICHT behandeln soll (klare Grenzen)
+  ☐  Übergabe an Menschen: Wann und wie soll weitergeleitet werden?
+  ☐  Sprache(n): Deutsch, Englisch oder mehrsprachig?
+
+SCHRITT 4 – RECHTLICHES & KICK-OFF
+  ☐  Datenschutzhinweis für Chatbot-Nutzer vorbereiten
+  ☐  AGB und AVV unterschrieben zurücksenden
+  ☐  Kick-off-Termin vereinbart
+  ☐  Projektzeitplan besprochen und freigegeben
+
+─────────────────────────────────────────────────────────────────
+Bitte alle offenen Punkte bis zum Kick-off-Termin abschließen.`,
+
+  'Abnahmeprotokoll Website':
+`ABNAHMEPROTOKOLL – WEBSITE
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Auftraggeber:
+[Name]  |  [Firma]
+[Email]  ·  [Telefon]
+
+Projektgegenstand: Website-Entwicklung für [Firma]
+
+ABNAHMEKRITERIEN
+────────────────────────────────────────
+
+Design & Darstellung
+  ☐  Design entspricht den vereinbarten Vorgaben
+  ☐  Korrekte Darstellung auf Desktop, Tablet und Smartphone
+  ☐  Schriften, Farben und Logo korrekt implementiert
+
+Funktionen
+  ☐  Alle Seiten laden vollständig und fehlerfrei
+  ☐  Kontaktformular funktioniert und sendet E-Mails korrekt
+  ☐  Alle Links und Navigationselemente funktionieren
+  ☐  Bilder und Medien werden korrekt dargestellt
+
+Technisches
+  ☐  Ladezeiten im akzeptablen Bereich (< 3 Sekunden)
+  ☐  SSL-Zertifikat aktiv (HTTPS)
+  ☐  Grundlegende SEO-Einstellungen gesetzt
+  ☐  Cookie-Banner und Datenschutz korrekt eingerichtet
+
+Inhalte
+  ☐  Alle Texte korrekt und vollständig
+  ☐  Impressum und Datenschutzerklärung aktuell
+
+ERGEBNIS
+────────────────────────────────────────
+  ☐  Abnahme erteilt – Projekt gilt als erfolgreich abgeschlossen
+  ☐  Abnahme mit Mängeln (Details siehe Anmerkungen)
+  ☐  Abnahme verweigert – Nachbesserung erforderlich
+
+Anmerkungen:
+_____________________________________________________________
+_____________________________________________________________
+
+─────────────────────────────────────────────────────────────────
+Auftraggeber ([Firma])           Auftragnehmer (NextStructure)
+
+Datum: ______________________    Datum: ______________________
+Unterschrift: _______________    Unterschrift: _______________`,
+
+  'Abnahmeprotokoll Chatbot':
+`ABNAHMEPROTOKOLL – KI-CHATBOT
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Auftraggeber:
+[Name]  |  [Firma]
+[Email]  ·  [Telefon]
+
+Projektgegenstand: KI-Chatbot-Entwicklung für [Firma]
+
+ABNAHMEKRITERIEN
+────────────────────────────────────────
+
+Wissen & Antwortqualität
+  ☐  Chatbot beantwortet die definierten FAQ korrekt
+  ☐  Tonalität entspricht den vereinbarten Vorgaben
+  ☐  Themen außerhalb des Scopes werden korrekt abgegrenzt
+  ☐  Übergabe an menschlichen Mitarbeiter funktioniert zuverlässig
+
+Integration & Darstellung
+  ☐  Chatbot erscheint korrekt auf der Zielplattform
+  ☐  Design entspricht den Corporate-Identity-Vorgaben
+  ☐  Ladezeit und Reaktionszeit sind akzeptabel
+
+Technisches
+  ☐  Verbindung zur Wissensdatenbank stabil
+  ☐  Fehlerbehandlung bei unbekannten Anfragen korrekt
+  ☐  Datenschutzhinweis beim Start des Chats sichtbar
+  ☐  Admin-Zugang und Dashboard an Auftraggeber übergeben
+
+ERGEBNIS
+────────────────────────────────────────
+  ☐  Abnahme erteilt – Projekt gilt als erfolgreich abgeschlossen
+  ☐  Abnahme mit Mängeln (Details siehe Anmerkungen)
+  ☐  Abnahme verweigert – Nachbesserung erforderlich
+
+Anmerkungen:
+_____________________________________________________________
+_____________________________________________________________
+
+─────────────────────────────────────────────────────────────────
+Auftraggeber ([Firma])           Auftragnehmer (NextStructure)
+
+Datum: ______________________    Datum: ______________________
+Unterschrift: _______________    Unterschrift: _______________`,
+
+  'Rechnung':
+`RECHNUNG
+Datum: [Datum]
+─────────────────────────────────────────────────────────────────
+
+Von:  NextStructure
+
+An:
+[Name]
+[Firma]
+[Email]  ·  [Telefon]
+
+RECHNUNGSPOSITIONEN
+────────────────────────────────────────
+  Projekttyp:    [Projekttyp]
+  Auftraggeber:  [Firma]
+
+  Pos.  Beschreibung                                     Betrag
+  ────  ───────────────────────────────────────────────  ──────────
+   1    Projektrealisierung – [Projekttyp]               [Betrag]
+   2    Abschlusszahlung (50 % des Gesamtvolumens)       [Betrag]
+                                                         ──────────
+                                            Netto:       [Netto]
+                                            MwSt. 19 %:  [MwSt.]
+                                            ──────────────────────
+                                            GESAMT:      [Gesamt]
+
+ZAHLUNGSBEDINGUNGEN
+────────────────────────────────────────
+  Zahlbar bis:  [Zahlungsziel]
+  IBAN:         [IBAN]
+  BIC:          [BIC]
+  Bank:         [Bank]
+
+  Verwendungszweck: [Firma] – [Projekttyp] – [Datum]
+
+─────────────────────────────────────────────────────────────────
+Vielen Dank für Ihr Vertrauen in NextStructure.`,
+};
+
+// ─── Phase → document mapping ─────────────────────────────────────────────
+function getDocsForPhase(phase, projectType) {
+  const isWeb  = projectType === 'Website' || projectType === 'Beides';
+  const isChat = projectType === 'Chatbot'  || projectType === 'Beides';
+  switch (phase) {
+    case 2: return [
+      ...(isWeb  ? ['Angebot Website', 'Leistungsbeschreibung Website'] : []),
+      ...(isChat ? ['Angebot Chatbot', 'Leistungsbeschreibung Chatbot'] : []),
+    ];
+    case 3: return [
+      'Willkommensdokument',
+      ...(isWeb  ? ['Auftragsbestätigung Website'] : []),
+      ...(isChat ? ['Auftragsbestätigung Chatbot']  : []),
+      'AVV', 'AGB',
+    ];
+    case 4: return [
+      ...(isWeb  ? ['Onboarding-Checkliste Website'] : []),
+      ...(isChat ? ['Onboarding-Checkliste Chatbot']  : []),
+    ];
+    case 6: return [
+      ...(isWeb  ? ['Abnahmeprotokoll Website'] : []),
+      ...(isChat ? ['Abnahmeprotokoll Chatbot']  : []),
+    ];
+    case 7: return ['Rechnung'];
+    default: return [];
   }
-  document.getElementById('greeting').textContent = getGreeting();
+}
+
+// ─── Template fill ────────────────────────────────────────────────────────
+function fillTemplate(text, client) {
+  const today = new Date().toLocaleDateString('de-DE');
+  return text
+    .replace(/\[Name\]/g,       client.name        || '–')
+    .replace(/\[Firma\]/g,      client.company     || client.name || '–')
+    .replace(/\[Email\]/g,      client.email       || '–')
+    .replace(/\[Telefon\]/g,    client.phone       || '–')
+    .replace(/\[Projekttyp\]/g, client.projectType || '–')
+    .replace(/\[Datum\]/g,      today);
+}
+
+// ─── Documents section HTML ───────────────────────────────────────────────
+function buildDocsSectionHTML(client) {
+  const docs = getDocsForPhase(client.currentPhase, client.projectType);
+  const sentDocs = client.sentDocs || {};
+
+  const inner = docs.length === 0
+    ? `<div class="doc-empty">Keine Dokumente in dieser Phase.</div>`
+    : `<div class="doc-list">${docs.map(name => {
+        const sentAt = sentDocs[name];
+        const badge  = sentAt
+          ? `<span class="doc-sent-badge">✓ Gesendet ${new Date(sentAt).toLocaleDateString('de-DE')}</span>`
+          : '';
+        return `
+          <div class="doc-item">
+            <div class="doc-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M3 1h6l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V2a1 1 0 011-1z"
+                      stroke="currentColor" stroke-width="1.2"/>
+                <path d="M9 1v3h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M4.5 7h5M4.5 9.5h3.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="doc-name">${esc(name)}</div>
+            ${badge}
+            <button class="btn btn-primary btn-sm"
+              onclick="openDocPreview('${name}', '${client.id}')">
+              Generieren
+            </button>
+          </div>`;
+      }).join('')}</div>`;
+
+  return `
+    <div class="doc-section" id="detail-docs">
+      <div class="doc-section-title">Dokumente für diese Phase</div>
+      ${inner}
+    </div>`;
+}
+
+// ─── Document preview ─────────────────────────────────────────────────────
+let _previewText = '';
+
+function openDocPreview(docName, clientId) {
+  const clients = loadClients();
+  const c = clients.find(x => x.id === clientId);
+  if (!c) return;
+
+  const tmpl = DOC_TEMPLATES[docName];
+  if (!tmpl) return;
+
+  const filled = fillTemplate(tmpl, c);
+  _previewText = filled;
+
+  document.getElementById('doc-modal-title').textContent = docName;
+  document.getElementById('doc-preview-content').textContent = filled;
+  openModal('docOverlay');
+
+  // Mark as sent on first generation
+  const idx = clients.findIndex(x => x.id === clientId);
+  if (idx !== -1) {
+    if (!clients[idx].sentDocs) clients[idx].sentDocs = {};
+    if (!clients[idx].sentDocs[docName]) {
+      clients[idx].sentDocs[docName] = new Date().toISOString();
+      saveClients(clients);
+      refreshDocsSection(clientId);
+    }
+  }
+}
+
+function refreshDocsSection(clientId) {
+  const el = document.getElementById('detail-docs');
+  if (!el) return;
+  const clients = loadClients();
+  const c = clients.find(x => x.id === clientId);
+  if (!c) return;
+  const tmp = document.createElement('div');
+  tmp.innerHTML = buildDocsSectionHTML(c);
+  el.replaceWith(tmp.firstElementChild);
+}
+
+function printDoc() {
+  const root = document.getElementById('printRoot');
+  root.innerHTML = document.getElementById('dp-doc-content').innerHTML;
+  window.print();
+  root.innerHTML = '';
+}
+
+function printCurrentDoc() {
+  const title   = document.getElementById('doc-modal-title').textContent;
+  const root    = document.getElementById('printRoot');
+  root.style.display = 'block';
+  root.innerHTML = `<pre>${esc(title)}\n\n${esc(_previewText)}</pre>`;
+  window.print();
+  root.style.display = 'none';
+  root.innerHTML = '';
+}
+
+// ─── Rendering ────────────────────────────────────────────────────────────
+function tagClass(type) {
+  if (type === 'Website') return 'tag-website';
+  if (type === 'Chatbot') return 'tag-chatbot';
+  return 'tag-beides';
+}
+
+function renderPipeline(statusFilter) {
+  let clients = loadClients().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  if (statusFilter) clients = clients.filter(c => (c.status || 'In Bearbeitung') === statusFilter);
+  const container = document.getElementById('pipeline');
+  const statGrid  = document.getElementById('stat-grid');
+
+  document.getElementById('globalCount').textContent =
+    clients.length === 1 ? '1 Kunde' : `${clients.length} Kunden`;
+
+  const total    = clients.length;
+  const inArbeit = clients.filter(c => (c.status || 'In Bearbeitung') === 'In Bearbeitung').length;
+  const warten   = clients.filter(c => c.status === 'Warten auf Rückmeldung').length;
+  const done     = clients.filter(c => c.status === 'Abgeschlossen').length;
+
+  statGrid.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-card-label">Gesamt</div>
+      <div class="stat-card-value">${total}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">In Arbeit</div>
+      <div class="stat-card-value" style="color:#7c6af7">${inArbeit}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">Warten auf Rückmeldung</div>
+      <div class="stat-card-value" style="color:#c9a830">${warten}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">Abgeschlossen</div>
+      <div class="stat-card-value" style="color:#3aaa72">${done}</div>
+    </div>`;
+
+  if (clients.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <rect x="8" y="12" width="32" height="28" rx="3" stroke="#555" stroke-width="1.5"/>
+          <path d="M16 12V9a2 2 0 012-2h12a2 2 0 012 2v3" stroke="#555" stroke-width="1.5"/>
+          <path d="M16 22h16M16 28h10" stroke="#555" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <p>Noch keine Kunden</p>
+        <small>Lege jetzt deinen ersten Kunden an.</small>
+        <button class="btn btn-primary" onclick="openNewModal()" style="margin-top:4px">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          Neuer Kunde
+        </button>
+      </div>`;
+    return;
+  }
+
+  const PHASE_COLORS = ['','ph-1','ph-2','ph-3','ph-4','ph-5','ph-6','ph-7','ph-8'];
+
+  const rows = clients.map(client => {
+    const phaseLabel = PHASES.find(p => p.id === client.currentPhase)?.label || '–';
+    const status     = client.status || 'In Bearbeitung';
+    const stClass    = status === 'Abgeschlossen'          ? 'st-done'
+                     : status === 'Warten auf Rückmeldung' ? 'st-warten'
+                     : 'st-arbeit';
+    const ptClass    = client.projectType === 'Website' ? 'tag-website'
+                     : client.projectType === 'Chatbot'  ? 'tag-chatbot' : 'tag-beides';
+    const created    = new Date(client.createdAt).toLocaleDateString('de-DE');
+    return `
+      <tr onclick="showDetailView('${client.id}')">
+        <td class="td-name">${esc(client.name)}</td>
+        <td class="td-firma">${esc(client.company || '–')}</td>
+        <td><span class="tag ${ptClass}">${esc(client.projectType)}</span></td>
+        <td><span class="phase-pill ${PHASE_COLORS[client.currentPhase]}">${esc(phaseLabel)}</span></td>
+        <td><span class="status-pill ${stClass}">${esc(status)}</span></td>
+        <td class="td-date">${created}</td>
+        <td>
+          <div class="row-actions">
+            <button class="action-btn del" title="Löschen"
+                    onclick="event.stopPropagation(); deleteClient('${client.id}')">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                <path d="M1 1l9 9M10 1L1 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="tbl-wrap">
+      <table class="client-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Firma</th>
+            <th>Projekttyp</th>
+            <th>Phase</th>
+            <th>Status</th>
+            <th>Erstellt</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── New client modal ─────────────────────────────────────────────────────
+function openNewModal() {
+  ['f-name','f-company','f-email','f-phone','f-street','f-city','f-notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-type').value   = 'Website';
+  document.getElementById('f-phase').value  = '1';
+  document.getElementById('f-status').value = 'In Bearbeitung';
+  openModal('newOverlay');
+  setTimeout(() => document.getElementById('f-name').focus(), 60);
+}
+
+function saveNewClient() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { flashInvalid('f-name'); return; }
+
+  const clients = loadClients();
+  clients.push({
+    id: generateId(),
+    name,
+    company:     document.getElementById('f-company').value.trim(),
+    email:       document.getElementById('f-email').value.trim(),
+    phone:       document.getElementById('f-phone').value.trim(),
+    street:      document.getElementById('f-street').value.trim(),
+    city:        document.getElementById('f-city').value.trim(),
+    projectType: document.getElementById('f-type').value,
+    currentPhase: parseInt(document.getElementById('f-phase').value),
+    status:      document.getElementById('f-status').value || 'In Bearbeitung',
+    createdAt:   new Date().toISOString(),
+    notes:       document.getElementById('f-notes').value.trim(),
+    sentDocs:    {},
+  });
+  saveClients(clients);
+  closeModal('newOverlay');
+  renderPipeline();
+}
+
+// ─── Detail view ──────────────────────────────────────────────────────────
+let _dvClientId = null;
+
+function showDetailView(id) {
+  const clients = loadClients();
+  if (!clients.find(x => x.id === id)) return;
+  _dvClientId = id;
+  renderDetailView();
+  document.getElementById('pipelineMain').style.display = 'none';
+  document.getElementById('detailView').style.display   = 'block';
+  window.scrollTo(0, 0);
+}
+
+function showPipeline() {
+  document.getElementById('detailView').style.display    = 'none';
+  document.getElementById('landingScreen').style.display = 'none';
+  document.getElementById('pipelineMain').style.display  = 'block';
+  renderPipeline();
+}
+
+function renderDetailView() {
+  const clients = loadClients();
+  const c = clients.find(x => x.id === _dvClientId);
+  if (!c) { showPipeline(); return; }
+
+  document.getElementById('dv-topbar-name').textContent =
+    c.name + (c.company ? ` · ${c.company}` : '');
+  document.getElementById('dv-info-col').innerHTML     = buildDVInfoForm(c);
+  document.getElementById('dv-timeline-col').innerHTML = buildDVTimeline(c);
+  document.getElementById('dv-docs-wrap').innerHTML    = buildDVDocSection(c);
+}
+
+function buildDVInfoForm(c) {
+  return `
+    <div class="dv-card-title">Kundeninformationen</div>
+    <div class="form-grid">
+      <div class="form-field">
+        <label>Name *</label>
+        <input id="dv-name" type="text" value="${esc(c.name)}" />
+      </div>
+      <div class="form-field">
+        <label>Firma</label>
+        <input id="dv-company" type="text" value="${esc(c.company)}" />
+      </div>
+      <div class="form-field">
+        <label>E-Mail</label>
+        <input id="dv-email" type="email" value="${esc(c.email)}" />
+      </div>
+      <div class="form-field">
+        <label>Telefon</label>
+        <input id="dv-phone" type="tel" value="${esc(c.phone)}" />
+      </div>
+      <div class="form-field">
+        <label>Straße &amp; Hausnummer</label>
+        <input id="dv-street" type="text" value="${esc(c.street||'')}" placeholder="Musterstraße 12" />
+      </div>
+      <div class="form-field">
+        <label>PLZ &amp; Ort</label>
+        <input id="dv-city" type="text" value="${esc(c.city||'')}" placeholder="12345 Musterstadt" />
+      </div>
+      <div class="form-field">
+        <label>Projekttyp</label>
+        <select id="dv-type">
+          <option${c.projectType==='Website'?' selected':''}>Website</option>
+          <option${c.projectType==='Chatbot'?' selected':''}>Chatbot</option>
+          <option${c.projectType==='Beides'?' selected':''}>Beides</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Status</label>
+        <select id="dv-status">
+          <option${(c.status||'In Bearbeitung')==='In Bearbeitung'?' selected':''}>In Bearbeitung</option>
+          <option${c.status==='Warten auf Rückmeldung'?' selected':''}>Warten auf Rückmeldung</option>
+          <option${c.status==='Abgeschlossen'?' selected':''}>Abgeschlossen</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Erstellt</label>
+        <input type="text" value="${new Date(c.createdAt).toLocaleDateString('de-DE')}"
+          disabled style="color:var(--text-muted);cursor:default;" />
+      </div>
+      <div class="form-field full">
+        <label>Notizen</label>
+        <textarea id="dv-notes" rows="5">${esc(c.notes)}</textarea>
+      </div>
+    </div>
+    <div class="dv-save-row">
+      <span class="dv-save-msg" id="dv-save-msg"></span>
+      <button class="btn btn-primary" onclick="saveDVClient()">Speichern</button>
+    </div>`;
+}
+
+function buildDVTimeline(c) {
+  const items = PHASES.map(p => {
+    const state = p.id < c.currentPhase ? 'done'
+                : p.id === c.currentPhase ? 'active'
+                : 'future';
+    const dotInner = state === 'done' ? '✓' : p.id;
+    return `
+      <div class="tl-item${state === 'active' ? ' tl-current' : ''}"
+           onclick="setDVPhase(${p.id})" title="Phase ${p.id} setzen">
+        <div class="tl-dot tl-dot-${state}">${dotInner}</div>
+        <div class="tl-label tl-label-${state}">${esc(p.label)}</div>
+      </div>`;
+  }).join('');
+  return `
+    <div class="dv-card-title">Phasenverlauf</div>
+    <div class="tl-list">${items}</div>`;
+}
+
+function saveDVClient() {
+  const name = document.getElementById('dv-name')?.value.trim();
+  if (!name) { flashInvalid('dv-name'); return; }
+
+  const clients = loadClients();
+  const idx = clients.findIndex(x => x.id === _dvClientId);
+  if (idx === -1) return;
+
+  clients[idx] = {
+    ...clients[idx],
+    name,
+    company:     document.getElementById('dv-company').value.trim(),
+    email:       document.getElementById('dv-email').value.trim(),
+    phone:       document.getElementById('dv-phone').value.trim(),
+    street:      document.getElementById('dv-street').value.trim(),
+    city:        document.getElementById('dv-city').value.trim(),
+    projectType: document.getElementById('dv-type').value,
+    status:      document.getElementById('dv-status').value,
+    notes:       document.getElementById('dv-notes').value.trim(),
+  };
+  saveClients(clients);
+
+  const c = clients[idx];
+  document.getElementById('dv-topbar-name').textContent =
+    c.name + (c.company ? ` · ${c.company}` : '');
+
+  const msg = document.getElementById('dv-save-msg');
+  msg.textContent = '✓ Gespeichert';
+  msg.classList.add('visible');
+  setTimeout(() => msg.classList.remove('visible'), 2200);
+}
+
+function setDVPhase(phaseId) {
+  const clients = loadClients();
+  const idx = clients.findIndex(x => x.id === _dvClientId);
+  if (idx === -1 || clients[idx].currentPhase === phaseId) return;
+  clients[idx].currentPhase = phaseId;
+  saveClients(clients);
+  renderDetailView();
+}
+
+function deleteClientFromDV() {
+  const clients = loadClients();
+  const c = clients.find(x => x.id === _dvClientId);
+  if (!c || !confirm(`„${c.name}" wirklich löschen?`)) return;
+  saveClients(clients.filter(x => x.id !== _dvClientId));
+  showPipeline();
+}
+
+function deleteClient(id) {
+  const clients = loadClients();
+  const c = clients.find(x => x.id === id);
+  if (!c || !confirm(`„${c.name}" wirklich löschen?`)) return;
+  saveClients(clients.filter(x => x.id !== id));
+  renderPipeline();
+}
+
+// ─── Modal helpers ────────────────────────────────────────────────────────
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  if (!document.querySelector('.overlay.open')) document.body.style.overflow = '';
+}
+
+function overlayClick(e, id) {
+  if (e.target === document.getElementById(id)) closeModal(id);
+}
+
+function flashInvalid(id) {
+  const el = document.getElementById(id);
+  el.focus();
+  el.style.borderColor = '#7c6af7';
+  setTimeout(() => el.style.borderColor = '', 1200);
+}
+
+// ─── Keyboard shortcuts ───────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('docPreviewOverlay').classList.contains('open')) {
+      closeDocPreview(); return;
+    }
+    ['docOverlay', 'newOverlay'].forEach(id => closeModal(id));
+    if (document.getElementById('detailView').style.display !== 'none') showPipeline();
+  }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+    if (document.getElementById('newOverlay').classList.contains('open')) saveNewClient();
+    if (document.getElementById('detailView').style.display !== 'none')  saveDVClient();
+  }
+});
+
+// ─── Document section (detail view) ──────────────────────────────────────
+function buildDVDocSection(client) {
+  const docs = getDocsForPhase(client.currentPhase, client.projectType);
+  const sentDocs = client.sentDocs || {};
+  const phaseName = PHASES.find(p => p.id === client.currentPhase)?.label || '';
+
+  if (docs.length === 0) {
+    return `
+      <div class="dv-docs">
+        <div class="dv-docs-title">Dokumente dieser Phase – ${esc(phaseName)}</div>
+        <div class="dv-no-docs">Keine Dokumente für diese Phase.</div>
+      </div>`;
+  }
+
+  const rows = docs.map(name => {
+    const badge = sentDocs[name]
+      ? `<span class="badge-gesendet">✓ Gesendet</span>`
+      : `<span class="badge-offen">Offen</span>`;
+    return `
+      <div class="dv-doc-row">
+        <div class="dv-doc-icon">
+          <svg width="14" height="15" viewBox="0 0 14 15" fill="none">
+            <path d="M3 1h6l3.5 3.5V13a1 1 0 01-1 1H3a1 1 0 01-1-1V2a1 1 0 011-1z"
+                  stroke="currentColor" stroke-width="1.2"/>
+            <path d="M9 1v3.5h3.5" stroke="currentColor" stroke-width="1.2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4.5 7.5h5M4.5 10h3.5" stroke="currentColor" stroke-width="1"
+                  stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="dv-doc-name">${esc(name)}</div>
+        ${badge}
+        <button class="btn btn-primary btn-sm"
+                onclick="openDocModal('${name}', '${client.id}')">
+          Generieren
+        </button>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="dv-docs" id="dv-docs-section">
+      <div class="dv-docs-title">Dokumente dieser Phase – ${esc(phaseName)}</div>
+      ${rows}
+    </div>`;
+}
+
+// ─── Document preview ─────────────────────────────────────────────────────
+let _dpClientId = null;
+let _dpDocName  = null;
+
+function openDocModal(docName, clientId) {
+  console.log('[openDocModal] fired', docName, clientId);
+  const clients = loadClients();
+  const c = clients.find(x => x.id === clientId);
+  if (!c) { console.warn('[openDocModal] client not found', clientId); return; }
+  _dpClientId = clientId;
+  _dpDocName  = docName;
+  document.getElementById('dp-bar-title').textContent = docName;
+  try {
+    document.getElementById('dp-doc-content').innerHTML = generateDocInner(docName, c);
+  } catch (err) {
+    console.error('[openDocModal] generateDocInner error', err);
+    document.getElementById('dp-doc-content').innerHTML = `<div style="padding:32px;color:#c00"><strong>Fehler beim Generieren:</strong><br><pre>${err}</pre></div>`;
+  }
+  updateDPSentBtn(c, docName);
+  document.getElementById('docPreviewOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDocPreview() {
+  document.getElementById('docPreviewOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  if (_dpClientId) {
+    const clients = loadClients();
+    const c = clients.find(x => x.id === _dpClientId);
+    const el = document.getElementById('dv-docs-section');
+    if (c && el) {
+      const tmp = document.createElement('div');
+      tmp.innerHTML = buildDVDocSection(c);
+      el.replaceWith(tmp.firstElementChild);
+    }
+  }
+}
+
+function updateDPSentBtn(c, docName) {
+  const btn  = document.getElementById('dp-sent-btn');
+  const sent = (c.sentDocs || {})[docName];
+  if (sent) {
+    btn.textContent = `✓ Gesendet am ${new Date(sent).toLocaleDateString('de-DE')}`;
+    btn.disabled    = true;
+    btn.style.opacity = '0.45';
+  } else {
+    btn.textContent   = 'Als Gesendet markieren';
+    btn.disabled      = false;
+    btn.style.opacity = '';
+  }
+}
+
+function markDocSentFromModal() {
+  if (!_dpClientId || !_dpDocName) return;
+  const clients = loadClients();
+  const idx = clients.findIndex(x => x.id === _dpClientId);
+  if (idx === -1) return;
+  if (!clients[idx].sentDocs) clients[idx].sentDocs = {};
+  clients[idx].sentDocs[_dpDocName] = new Date().toISOString();
+  saveClients(clients);
+  closeDocPreview();
+}
+
+// ─── Document content generator ───────────────────────────────────────────
+function generateDocInner(docName, client) {
+  const today = new Date().toLocaleDateString('de-DE');
+  const firm  = client.company || client.name || '–';
+  function h(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function rcpt() { return `
+    <div class="ns-rcpt">
+      <div class="ns-rcpt-lbl">An</div>
+      <div><strong>${h(client.name)}</strong></div>
+      ${client.company ? `<div>${h(client.company)}</div>` : ''}
+      <div>${client.street ? h(client.street) : pho('[Straße und Hausnummer]')}</div>
+      <div>${client.city  ? h(client.city)   : pho('[PLZ und Ort]')}</div>
+    </div>`; }
+
+  function chk(t) { return `<div class="ns-chk"><div class="ns-chk-box"></div><div>${t}</div></div>`; }
+
+  function sig() { return `
+    <div class="ns-sig">
+      <p>Herzliche Grüße</p>
+      <p style="margin-top:6px"><strong>Tom Freer</strong></p>
+      <p class="ns-sig-mu">NextStructure Solutions · Quickborn</p>
+      <p class="ns-sig-mu">kontakt@nextstructure-solutions.com</p>
+      <p class="ns-sig-mu">nextstructure-solutions.com</p>
+    </div>`; }
+
+  function sig2() { return `
+    <div class="ns-sig2">
+      <div class="ns-sig2-col">Auftraggeber (${h(firm)})<br>Ort, Datum &amp; Unterschrift</div>
+      <div class="ns-sig2-col">Auftragnehmer (NextStructure Solutions)<br>Ort, Datum &amp; Unterschrift</div>
+    </div>`; }
+
+  function pho(t) { return `<span class="pho" contenteditable="true" spellcheck="false">${t}</span>`; }
+
+  function priceTable(rows) { return `
+    <table>
+      <thead><tr><th style="width:34px">Pos.</th><th>Leistung</th>
+        <th class="td-r" style="width:130px">Betrag netto</th></tr></thead>
+      <tbody>
+        ${rows.map((r,i)=>`<tr><td>${i+1}</td><td>${r}</td><td class="td-r ph">[Betrag eintragen]</td></tr>`).join('')}
+        <tr class="tr-total"><td colspan="2"><strong>Gesamt netto</strong></td><td class="td-r ph">[Betrag eintragen]</td></tr>
+        <tr><td colspan="2">zzgl. 19&nbsp;% MwSt.</td><td class="td-r ph">[Betrag eintragen]</td></tr>
+        <tr class="tr-total"><td colspan="2"><strong>Gesamt brutto</strong></td><td class="td-r ph">[Betrag eintragen]</td></tr>
+      </tbody>
+    </table>`; }
+
+  const DOCS = {
+    'Angebot Website': { label:'Angebot', title:'Website-Entwicklung', body: ()=>`
+      ${rcpt()}
+      <table style="margin-bottom:16px"><tbody>
+        <tr><td style="width:155px;color:#999;font-size:9pt;padding:4px 0">Anbieter</td>
+            <td style="padding:4px 0"><strong>NextStructure Solutions</strong> Inh. Tom Freer<br>Ulzburger Landstraße 401e, 25451 Quickborn</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Datum</td>
+            <td style="padding:4px 0">${today}</td></tr>
+      </tbody></table>
+      <p>Sehr geehrte/r ${h(client.name)},</p>
+      <p>vielen Dank für Ihr Interesse. Wir freuen uns, Ihnen unser Angebot für die Entwicklung Ihrer professionellen Website zu unterbreiten.</p>
+      <h2>Leistungsumfang</h2>
+      <ul>
+        <li>Individuelles responsives Design nach Ihrer Corporate Identity</li>
+        <li>Bis zu 5 Seiten (Start, Über uns, Leistungen, Kontakt + 1 weitere)</li>
+        <li>Kontaktformular inkl. Impressum &amp; Datenschutzerklärung</li>
+        <li>SSL-Zertifikat &amp; HTTPS-Verschlüsselung</li>
+        <li>Erstellung auf WordPress via 10Web mit Premium Theme &amp; Elementor</li>
+        <li>Vollständig responsiv (Desktop, Tablet, Mobile)</li>
+        <li>SEO-Grundoptimierung (Meta-Tags, Alt-Texte, URL-Struktur)</li>
+        <li>Cookie-Banner (DSGVO-konform)</li>
+        <li>Optional: Google Analytics / Google Search Console Einrichtung</li>
+        <li>Persönliche Einweisung nach Projektabschluss</li>
+      </ul>
+      <h2>Technische Umsetzung</h2>
+      <p>WordPress via <strong>10Web</strong> · Premium Theme · <strong>Elementor</strong> Page Builder</p>
+      <h2>Preisübersicht</h2>
+      <table><thead><tr><th style="width:34px">Pos.</th><th>Leistung</th><th class="td-r" style="width:130px">Betrag netto</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Design &amp; Konzeption</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td>2</td><td>Entwicklung &amp; Programmierung (WordPress / 10Web)</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td>3</td><td>SEO &amp; DSGVO-Setup</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td>4</td><td>Einweisung &amp; Übergabe</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr class="tr-total"><td colspan="2"><strong>Gesamtpreis netto</strong></td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td colspan="2">zzgl. 19&nbsp;% MwSt.</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr class="tr-total"><td colspan="2"><strong>Gesamtpreis brutto</strong></td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+      </tbody></table>
+      <h2>Laufende Kosten (separat)</h2>
+      <p>10Web Hosting: ab <strong>49 €/Monat</strong> (direkt beim Anbieter, nicht im Projektpreis enthalten)</p>
+      <h2>Projektablauf</h2>
+      <ol>
+        <li><strong>Kick-off &amp; Anforderungsanalyse</strong> – Abstimmung Ihrer Wünsche und Ziele</li>
+        <li><strong>Design &amp; Wireframes</strong> – Entwürfe zur Freigabe durch Sie</li>
+        <li><strong>Entwicklung auf WordPress / 10Web</strong> – Umsetzung nach freigegebenem Design</li>
+        <li><strong>Content-Integration</strong> – Einpflegen Ihrer Texte, Bilder und Medien</li>
+        <li><strong>SEO &amp; DSGVO-Setup</strong> – Meta-Tags, Cookie-Banner, Impressum, Datenschutz</li>
+        <li><strong>Qualitätssicherung &amp; Tests</strong> – Cross-Browser, Responsive, Ladezeit</li>
+        <li><strong>Launch &amp; Übergabe</strong> – Veröffentlichung und persönliche Einweisung</li>
+      </ol>
+      <h2>Zahlungsbedingungen</h2>
+      <p>50&nbsp;% Anzahlung bei Auftragserteilung · 50&nbsp;% nach Fertigstellung und Abnahme<br>Zahlungsziel: 14 Tage nach Rechnungsstellung · Angebotsgültigkeit: 30 Tage ab ${today}</p>
+      ${sig2()}` },
+
+    'Angebot Chatbot': { label:'Angebot', title:'KI-Chatbot-Entwicklung', body: ()=>`
+      ${rcpt()}
+      <table style="margin-bottom:16px"><tbody>
+        <tr><td style="width:155px;color:#999;font-size:9pt;padding:4px 0">Anbieter</td>
+            <td style="padding:4px 0"><strong>NextStructure Solutions</strong> Inh. Tom Freer<br>Ulzburger Landstraße 401e, 25451 Quickborn</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Datum</td>
+            <td style="padding:4px 0">${today}</td></tr>
+      </tbody></table>
+      <p>Sehr geehrte/r ${h(client.name)},</p>
+      <p>vielen Dank für Ihr Interesse. Wir freuen uns, Ihnen unser Angebot für die Entwicklung eines Chatbots für ${h(firm)} zu unterbreiten.</p>
+      <h2>Leistungsumfang</h2>
+      <ul>
+        <li>Begrüßungstext &amp; Unternehmensvorstellung</li>
+        <li>Öffnungszeiten &amp; Kontaktinformationen</li>
+        <li>FAQ-Modul (10–20 häufig gestellte Fragen)</li>
+        <li>Google Maps Einbindung</li>
+        <li>Bildergalerie / Fotopräsentation</li>
+        <li>Reservierungsformular mit automatischer E-Mail-Benachrichtigung</li>
+        <li>Bewertungssammlung (z.&nbsp;B. Weiterleitung zu Google Reviews)</li>
+        <li>DSGVO-konforme Datenschutzhinweise im Chat</li>
+      </ul>
+      <h2>Technische Umsetzung</h2>
+      <p><strong>Landbot EU</strong> (DSGVO-konform) · Google Sheets / Gmail / Apps Script · Einbindung per iframe / Widget</p>
+      <h2>Preisübersicht</h2>
+      <table><thead><tr><th style="width:34px">Pos.</th><th>Leistung</th><th class="td-r" style="width:130px">Betrag netto</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Konzeption &amp; Chatbot-Entwicklung (Landbot)</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td>2</td><td>Google Sheets &amp; E-Mail-Automatisierung (Apps Script)</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td>3</td><td>Design-Anpassung, Integration &amp; Übergabe</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr class="tr-total"><td colspan="2"><strong>Gesamtpreis netto</strong></td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td colspan="2">zzgl. 19&nbsp;% MwSt.</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr class="tr-total"><td colspan="2"><strong>Gesamtpreis brutto</strong></td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+      </tbody></table>
+      <h2>Laufende Kosten (separat)</h2>
+      <ul>
+        <li>Landbot: ab <strong>40 €/Monat</strong> (direkt beim Anbieter)</li>
+        <li>Google Workspace: optional ca. <strong>6 EUR/Monat</strong></li>
+      </ul>
+      <h2>Projektablauf</h2>
+      <ol>
+        <li><strong>Kick-off &amp; Anforderungsanalyse</strong> – FAQ-Themen, Tonalität und Ziele definieren</li>
+        <li><strong>Chatbot-Konfiguration</strong> – FAQ-Modul, Gesprächsflüsse, Formulare</li>
+        <li><strong>Automatisierung</strong> – Google Sheets, E-Mail-Benachrichtigungen via Apps Script</li>
+        <li><strong>Design-Anpassung</strong> – Farben, Logo, Tonalität nach Corporate Identity</li>
+        <li><strong>Integration</strong> – Einbindung in Website oder gewünschte Plattform</li>
+        <li><strong>Test, Übergabe &amp; Einweisung</strong></li>
+      </ol>
+      <h2>Zahlungsbedingungen</h2>
+      <p>50&nbsp;% Anzahlung bei Auftragserteilung · 50&nbsp;% nach Fertigstellung und Abnahme<br>Zahlungsziel: 14 Tage nach Rechnungsstellung · Angebotsgültigkeit: 30 Tage ab ${today}</p>
+      ${sig2()}` },
+
+    'Leistungsbeschreibung Website': { label:'Leistungsbeschreibung', title:'Website-Entwicklung', body: ()=>`
+      ${rcpt()}
+      <h2>Leistungsgegenstand</h2>
+      <p>Konzeption, Design und Entwicklung einer professionellen Website für ${h(firm)}.</p>
+      <h2>Design &amp; Gestaltung</h2>
+      <ul>
+        <li>Individuelles responsives Design auf Basis Ihrer Corporate Identity</li>
+        <li>Bis zu 2 Designentwürfe, bis zu 2 Überarbeitungsrunden inklusive</li>
+        <li>Optimiert für Desktop (1440&nbsp;px), Tablet (768&nbsp;px) und Mobile (375&nbsp;px)</li>
+      </ul>
+      <h2>Seitenumfang &amp; Funktionen</h2>
+      <ul>
+        <li>Bis zu 5 Seiten inkl. Start, Über uns, Leistungen, Kontakt</li>
+        <li>Kontaktformular mit automatischer E-Mail-Benachrichtigung</li>
+        <li>Cookie-Banner, Impressum &amp; Datenschutzerklärung (DSGVO-konform)</li>
+        <li>SSL-Zertifikat, Ladezeit-Optimierung, Bildkomprimierung</li>
+      </ul>
+      <h2>Technisches</h2>
+      <ul>
+        <li>Plattform: WordPress oder statische Lösung (nach Absprache)</li>
+        <li>Hosting: wird vom Auftraggeber bereitgestellt oder durch NextStructure eingerichtet</li>
+        <li>Browser-Kompatibilität: Chrome, Firefox, Safari, Edge (aktuelle Versionen)</li>
+      </ul>
+      <h2>SEO-Grundoptimierung</h2>
+      <ul>
+        <li>Meta-Titel und Meta-Beschreibungen für alle Seiten</li>
+        <li>Alt-Texte für Bilder, saubere URL-Struktur, robots.txt</li>
+        <li>Google Search Console Grundeinrichtung (optional)</li>
+      </ul>
+      <h2>Projektablauf (4 Phasen)</h2>
+      <ol>
+        <li><strong>Konzept &amp; Design</strong> – Wireframes, Designentwürfe, Freigabe</li>
+        <li><strong>Entwicklung</strong> – Umsetzung, CMS-Einrichtung, Content-Integration</li>
+        <li><strong>Test &amp; Abnahme</strong> – Qualitätssicherung, Abnahmeprotokoll</li>
+        <li><strong>Livegang &amp; Support</strong> – Veröffentlichung, Einweisung, 30 Tage Nachbetreuung</li>
+      </ol>
+      ${sig()}` },
+
+    'Leistungsbeschreibung Chatbot': { label:'Leistungsbeschreibung', title:'KI-Chatbot-Entwicklung', body: ()=>`
+      ${rcpt()}
+      <h2>Leistungsgegenstand</h2>
+      <p>Entwicklung, Konfiguration und Integration eines KI-gestützten Chatbots für ${h(firm)}.</p>
+      <h2>Funktionsumfang</h2>
+      <ul>
+        <li>FAQ-Modul: automatische Beantwortung häufiger Fragen zu Produkten und Dienstleistungen</li>
+        <li>Reservierungsmodul: Buchungsanfragen mit Datum, Uhrzeit und Kontaktdaten</li>
+        <li>Google-Sheets-Anbindung: Echtzeit-Speicherung aller eingehenden Anfragen</li>
+        <li>Eskalations-Logik: automatische Weiterleitung an Mitarbeiter bei komplexen Anfragen</li>
+      </ul>
+      <h2>Plattform &amp; Technologie</h2>
+      <ul>
+        <li>Plattform: Landbot (No-Code/Low-Code Chatbot-Builder)</li>
+        <li>Integration per Embed-Widget in bestehende Website oder als Standalone-Link</li>
+        <li>Design-Anpassung: Farben, Logo, Tonalität nach Corporate Identity</li>
+      </ul>
+      <h2>DSGVO &amp; Datenschutz</h2>
+      <ul>
+        <li>Datenschutzhinweis im Chat-Einstieg</li>
+        <li>Auftragsverarbeitungsvertrag (AVV) gemäß Art.&nbsp;28 DSGVO wird separat bereitgestellt</li>
+        <li>Keine Speicherung personenbezogener Daten ohne Einwilligung</li>
+      </ul>
+      <h2>Einrichtung &amp; Support</h2>
+      <ul>
+        <li>Vollständige Einrichtung und Konfiguration durch NextStructure</li>
+        <li>Persönliche Einweisung des Teams in Administration und Pflege</li>
+        <li>30 Tage Nachbetreuung nach Livegang inklusive</li>
+      </ul>
+      ${sig()}` },
+
+    'Auftragsbestätigung Website': { label:'Auftragsbestätigung', title:'Website-Entwicklung', body: ()=>`
+      <table style="margin-bottom:20px"><tbody>
+        <tr><td style="width:155px;color:#999;font-size:9pt;padding:5px 0"><strong>Auftragnehmer</strong></td>
+            <td style="padding:5px 0"><strong>NextStructure Solutions</strong> Inh. Tom Freer<br>Ulzburger Landstraße 401e · 25451 Quickborn</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Auftraggeber</strong></td>
+            <td style="padding:5px 0">${h(firm)}${client.company ? `, vertr. d. ${h(client.name)}` : ''}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>E-Mail</strong></td>
+            <td style="padding:5px 0">${h(client.email||'–')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Telefon</strong></td>
+            <td style="padding:5px 0">${h(client.phone||'–')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Auftragsgegenstand</strong></td>
+            <td style="padding:5px 0">Website-Entwicklung auf WordPress / 10Web</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Datum</strong></td>
+            <td style="padding:5px 0">${today}</td></tr>
+      </tbody></table>
+      <p>Sehr geehrte/r ${h(client.name)}, wir bestätigen hiermit Ihren Auftrag und freuen uns auf die Zusammenarbeit.</p>
+      <h2>Leistungsumfang</h2>
+      <ul>
+        <li>Individuelles responsives Website-Design nach Ihrer Corporate Identity</li>
+        <li>Bis zu 5 Seiten inkl. Kontaktformular</li>
+        <li>Erstellung auf WordPress via 10Web mit Premium Theme &amp; Elementor</li>
+        <li>SEO-Grundoptimierung &amp; DSGVO-Setup (Cookie-Banner, Impressum, Datenschutz)</li>
+        <li>SSL-Zertifikat, Ladezeit-Optimierung, Bildkomprimierung</li>
+        <li>2 Korrekturschleifen im Designprozess inklusive</li>
+        <li>Persönliche Einweisung &amp; Übergabe mit Dokumentation</li>
+      </ul>
+      <h2>Preis</h2>
+      <table><tbody>
+        <tr><td style="width:210px;padding:6px 0">Gesamtpreis netto</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td style="padding:6px 0">zzgl. 19&nbsp;% MwSt.</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr style="font-weight:700;border-top:2px solid #e0e0e0"><td style="padding:6px 0">Gesamtpreis brutto</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+      </tbody></table>
+      <h2>Zahlungsplan</h2>
+      <table><thead><tr><th>Fälligkeit</th><th>Betrag</th><th>Beschreibung</th></tr></thead>
+      <tbody>
+        <tr><td>Bei Auftragserteilung</td><td>${pho('[XXX,XX €]')}</td><td>50&nbsp;% Anzahlung</td></tr>
+        <tr><td>Nach Abnahme &amp; Livegang</td><td>${pho('[XXX,XX €]')}</td><td>50&nbsp;% Restzahlung</td></tr>
+      </tbody></table>
+      <h2>Vertragsgrundlagen &amp; Hinweise</h2>
+      <ul>
+        <li>Projektstart nach Eingang der Anzahlung (ca. 7–10 Werktage Umsetzungsdauer)</li>
+        <li>2 Korrekturschleifen im Designprozess inklusive</li>
+        <li>Hosting via 10Web: ca. 49&nbsp;€/Monat, direkt beim Anbieter, separat zu begleichen</li>
+        <li>Es gelten unsere Allgemeinen Geschäftsbedingungen (AGB)</li>
+      </ul>
+      ${sig2()}` },
+
+    'Auftragsbestätigung Chatbot': { label:'Auftragsbestätigung', title:'KI-Chatbot-Entwicklung', body: ()=>`
+      <table style="margin-bottom:20px"><tbody>
+        <tr><td style="width:155px;color:#999;font-size:9pt;padding:5px 0"><strong>Auftragnehmer</strong></td>
+            <td style="padding:5px 0"><strong>NextStructure Solutions</strong> Inh. Tom Freer<br>Ulzburger Landstraße 401e · 25451 Quickborn</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Auftraggeber</strong></td>
+            <td style="padding:5px 0">${h(firm)}${client.company ? `, vertr. d. ${h(client.name)}` : ''}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>E-Mail</strong></td>
+            <td style="padding:5px 0">${h(client.email||'–')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Telefon</strong></td>
+            <td style="padding:5px 0">${h(client.phone||'–')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Auftragsgegenstand</strong></td>
+            <td style="padding:5px 0">Chatbot-Entwicklung auf Landbot (EU)</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Datum</strong></td>
+            <td style="padding:5px 0">${today}</td></tr>
+      </tbody></table>
+      <p>Sehr geehrte/r ${h(client.name)}, wir bestätigen hiermit Ihren Auftrag und freuen uns auf die Zusammenarbeit.</p>
+      <h2>Leistungsumfang</h2>
+      <ul>
+        <li>Chatbot-Entwicklung auf Landbot EU (DSGVO-konform)</li>
+        <li>FAQ-Modul (10–20 Fragen), Reservierungsformular &amp; E-Mail-Benachrichtigungen</li>
+        <li>Google-Sheets-Anbindung zur Echtzeit-Erfassung aller Anfragen (Apps Script)</li>
+        <li>Design-Anpassung nach Ihrer Corporate Identity</li>
+        <li>Integration in Website oder gewünschte Plattform (iframe / Widget)</li>
+        <li>DSGVO-konforme Datenschutzhinweise im Chat</li>
+        <li>Einweisung &amp; Übergabe inklusive</li>
+      </ul>
+      <h2>Preis</h2>
+      <table><tbody>
+        <tr><td style="width:210px;padding:6px 0">Gesamtpreis netto</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td style="padding:6px 0">zzgl. 19&nbsp;% MwSt.</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr style="font-weight:700;border-top:2px solid #e0e0e0"><td style="padding:6px 0">Gesamtpreis brutto</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+      </tbody></table>
+      <h2>Zahlungsplan</h2>
+      <table><thead><tr><th>Fälligkeit</th><th>Betrag</th><th>Beschreibung</th></tr></thead>
+      <tbody>
+        <tr><td>Bei Auftragserteilung</td><td>${pho('[XXX,XX €]')}</td><td>50&nbsp;% Anzahlung</td></tr>
+        <tr><td>Nach Abnahme</td><td>${pho('[XXX,XX €]')}</td><td>50&nbsp;% Restzahlung</td></tr>
+      </tbody></table>
+      <h2>Vertragsgrundlagen &amp; Hinweise</h2>
+      <ul>
+        <li>Projektstart nach Eingang der Anzahlung und Rücksendung des unterzeichneten AVV (ca. 5–7 Werktage)</li>
+        <li>Auftragsverarbeitungsvertrag (AVV) gemäß Art.&nbsp;28 DSGVO liegt bei und ist zu unterzeichnen</li>
+        <li>Laufende Kosten Landbot: ab 40&nbsp;€/Monat, direkt beim Anbieter, separat zu begleichen</li>
+        <li>Es gelten unsere Allgemeinen Geschäftsbedingungen (AGB)</li>
+      </ul>
+      ${sig2()}` },
+
+    'Onboarding-Checkliste Website': { label:'Onboarding', title:'Checkliste Website-Projekt', body: ()=>`
+      <p><strong>Kunde:</strong> ${h(client.name)}${client.company?` · ${h(client.company)}`:''} &nbsp;·&nbsp; <strong>Datum:</strong> ${today}</p>
+      <h2>1. Inhalte &amp; Texte</h2>
+      ${chk('Texte für alle Seiten bereitgestellt (Start, Über uns, Leistungen, Kontakt …)')}
+      ${chk('Impressumsangaben vollständig (Name, Adresse, USt-ID, verantwortliche Person)')}
+      ${chk('Referenzen, Kundenstimmen oder Fallstudien (optional)')}
+      <h2>2. Bilder &amp; Medien</h2>
+      ${chk('Logo in hoher Auflösung (SVG bevorzugt, alternativ PNG 2× oder 3×)')}
+      ${chk('Fotos und Bilder (lizenzfrei oder eigene Aufnahmen, mind. 1920 px breit)')}
+      ${chk('Favicon (quadratisch, mind. 512 × 512 px, PNG oder SVG)')}
+      <h2>3. Design-Wünsche</h2>
+      ${chk('Farbpalette / Hex-Codes (falls vorhanden)')}
+      ${chk('Schriftart-Präferenzen (falls vorhanden)')}
+      ${chk('Referenz-Websites als Gestaltungsrichtlinie benannt')}
+      <h2>4. Funktionen &amp; Sonderwünsche</h2>
+      ${chk('Besondere Funktionen definiert (Blog, Shop, Buchungssystem …)')}
+      ${chk('Kontaktformular-Empfänger-E-Mail-Adresse angegeben')}
+      ${chk('Sprache(n) der Website festgelegt')}
+      <h2>5. Domain &amp; Hosting</h2>
+      ${chk('Domain vorhanden oder soll neu registriert werden?')}
+      ${chk('Hosting-Zugangsdaten bereitgestellt (falls vorhanden)')}
+      ${chk('SSL-Zertifikat vorhanden oder soll eingerichtet werden?')}
+      ${sig()}` },
+
+    'Onboarding-Checkliste Chatbot': { label:'Onboarding', title:'Checkliste Chatbot-Projekt', body: ()=>`
+      <p><strong>Kunde:</strong> ${h(client.name)}${client.company?` · ${h(client.company)}`:''} &nbsp;·&nbsp; <strong>Datum:</strong> ${today}</p>
+      <h2>1. Datenerfassung &amp; FAQ</h2>
+      ${chk('FAQ-Dokument bereitgestellt (häufigste Fragen und Antworten, möglichst vollständig)')}
+      ${chk('Produktkatalog oder Preisliste bereitgestellt (falls relevant)')}
+      ${chk('Unternehmensbeschreibung und Dienstleistungsübersicht vorhanden')}
+      ${chk('Tonalität des Chatbots definiert (formell / informell / freundlich-professionell)')}
+      <h2>2. Reservierungssystem</h2>
+      ${chk('Welche Daten sollen erfasst werden? (Name, Datum, Uhrzeit, Anliegen …)')}
+      ${chk('Google-Sheets-Konto vorhanden und Zugang bereitgestellt')}
+      ${chk('Rückmeldung an Kunden nach Buchung: automatisch (E-Mail/Webhook) oder manuell?')}
+      <h2>3. Design &amp; Branding</h2>
+      ${chk('Logo für Chat-Widget bereitgestellt')}
+      ${chk('Primärfarbe für Chat-Widget-Button angegeben')}
+      ${chk('Begrüßungstext / Willkommensnachricht des Chatbots formuliert')}
+      <h2>4. Technisches &amp; Integration</h2>
+      ${chk('Ziel-Plattform definiert (Website, WhatsApp, andere)')}
+      ${chk('Integrationsmethode festgelegt (Embed-Widget / Standalone-Link)')}
+      ${chk('Themen, die der Bot NICHT behandeln soll, klar definiert')}
+      <h2>5. DSGVO &amp; Rechtliches</h2>
+      ${chk('Datenschutzhinweis für Chatbot-Nutzer vorbereitet')}
+      ${chk('AVV (Auftragsverarbeitungsvertrag) unterschrieben zurückgesendet')}
+      ${chk('Eskalations-Kontakt definiert: Wer übernimmt bei komplexen Anfragen?')}
+      ${sig()}` },
+
+    'Abnahmeprotokoll Website': { label:'Abnahmeprotokoll', title:'Website-Entwicklung', body: ()=>`
+      <p><strong>Auftraggeber:</strong> ${h(firm)} &nbsp;·&nbsp; <strong>Datum:</strong> ${today}</p>
+      <h2>Funktionsprüfung</h2>
+      ${chk('Alle Seiten laden vollständig und fehlerfrei (Chrome, Firefox, Safari, Edge)')}
+      ${chk('Kontaktformular funktioniert – E-Mail-Eingang bestätigt')}
+      ${chk('Alle Links geprüft, keine toten Links')}
+      ${chk('Website vollständig responsiv auf Desktop, Tablet und Smartphone')}
+      ${chk('Ladezeit akzeptabel (< 3 Sekunden bei normalem Internetzugang)')}
+      <h2>Design &amp; Inhalte</h2>
+      ${chk('Design entspricht dem freigegebenen Entwurf')}
+      ${chk('Alle Texte korrekt, vollständig und ohne Rechtschreibfehler')}
+      ${chk('Bilder und Medien korrekt dargestellt, keine fehlenden Bilder')}
+      ${chk('Logo, Farben und Schriften korrekt implementiert')}
+      <h2>SEO &amp; Rechtliches</h2>
+      ${chk('Meta-Titel und Meta-Beschreibungen für alle Seiten gesetzt')}
+      ${chk('SSL-Zertifikat aktiv (HTTPS), kein Mixed-Content-Fehler')}
+      ${chk('Cookie-Banner korrekt eingerichtet und datenschutzkonform')}
+      ${chk('Impressum und Datenschutzerklärung vollständig und aktuell')}
+      <h2>Mängel &amp; Anmerkungen</h2>
+      <div style="min-height:56px;border:1px solid #e8e8e8;border-radius:4px;padding:10px;margin-bottom:14px;color:#ccc;font-size:9pt;">Keine Mängel / Anmerkungen hier eintragen …</div>
+      <p><strong>Ergebnis:</strong></p>
+      ${chk('Abnahme erteilt – Projekt gilt als erfolgreich abgeschlossen')}
+      ${chk('Abnahme mit Mängeln (Details oben)')}
+      ${chk('Nachbesserung erforderlich – Abnahme zurückgestellt')}
+      ${sig2()}` },
+
+    'Abnahmeprotokoll Chatbot': { label:'Abnahmeprotokoll', title:'KI-Chatbot-Entwicklung', body: ()=>`
+      <p><strong>Auftraggeber:</strong> ${h(firm)} &nbsp;·&nbsp; <strong>Datum:</strong> ${today}</p>
+      <h2>Funktionsprüfung</h2>
+      ${chk('Chatbot beantwortet die definierten FAQ korrekt und vollständig')}
+      ${chk('Reservierungsmodul erfasst alle notwendigen Daten korrekt')}
+      ${chk('Eingehende Anfragen werden in Echtzeit in Google Sheets übertragen')}
+      ${chk('Eskalations-Logik funktioniert – Weiterleitung an Mitarbeiter korrekt')}
+      ${chk('Chatbot erscheint korrekt auf der Zielplattform / Website')}
+      <h2>Design &amp; Tonalität</h2>
+      ${chk('Design des Chat-Widgets entspricht der Corporate Identity')}
+      ${chk('Tonalität und Begrüßungstext entsprechen den Vorgaben')}
+      ${chk('Ladezeit und Reaktionszeit des Chatbots akzeptabel')}
+      <h2>DSGVO &amp; Datenschutz</h2>
+      ${chk('Datenschutzhinweis beim Start des Chats sichtbar und korrekt')}
+      ${chk('AVV liegt unterschrieben vor')}
+      ${chk('Keine unerlaubte Speicherung personenbezogener Daten')}
+      <h2>Mängel &amp; Anmerkungen</h2>
+      <div style="min-height:56px;border:1px solid #e8e8e8;border-radius:4px;padding:10px;margin-bottom:14px;color:#ccc;font-size:9pt;">Keine Mängel / Anmerkungen hier eintragen …</div>
+      <p><strong>Ergebnis:</strong></p>
+      ${chk('Abnahme erteilt – Projekt gilt als erfolgreich abgeschlossen')}
+      ${chk('Abnahme mit Mängeln (Details oben)')}
+      ${chk('Nachbesserung erforderlich – Abnahme zurückgestellt')}
+      ${sig2()}` },
+
+    'AVV': { label:'Vertrag', title:'Auftragsverarbeitungsvertrag', body: ()=>`
+      <p style="color:#999;font-size:8.5pt;margin-bottom:16px;">Gemäß Art.&nbsp;28 DSGVO · Datum: ${today}</p>
+      <h2>Vertragsparteien</h2>
+      <table><tbody>
+        <tr><td style="width:180px;color:#999;font-size:9pt">Verantwortlicher</td>
+            <td>${h(firm)}, vertr. d. ${h(client.name)}</td></tr>
+        <tr><td style="color:#999;font-size:9pt">Auftragsverarbeiter</td>
+            <td>NextStructure Solutions, Quickborn</td></tr>
+      </tbody></table>
+      <h2>§&nbsp;1 Gegenstand</h2>
+      <p>Der Auftragnehmer verarbeitet personenbezogene Daten im Auftrag des Auftraggebers im Rahmen des Projekts: ${h(client.projectType)} für ${h(firm)}.</p>
+      <h2>§&nbsp;2 Pflichten des Auftragnehmers</h2>
+      <ul>
+        <li>Verarbeitung ausschließlich auf dokumentierte Weisung des Auftraggebers</li>
+        <li>Sicherstellung der Vertraulichkeit durch alle befugten Personen</li>
+        <li>Umsetzung geeigneter technisch-organisatorischer Maßnahmen (TOM)</li>
+        <li>Unterstützung bei Betroffenenrechten und Datenschutz-Folgenabschätzung</li>
+        <li>Löschung oder Rückgabe aller personenbezogenen Daten nach Vertragsende</li>
+      </ul>
+      <h2>§&nbsp;3 Laufzeit</h2>
+      <p>Dieser AVV gilt für die Dauer des zugrundeliegenden Hauptvertrags.</p>
+      ${sig2()}` },
+
+    'AGB': { label:'Dokument', title:'Allgemeine Geschäftsbedingungen', body: ()=>`
+      <p style="color:#999;font-size:8.5pt;margin-bottom:16px;">NextStructure Solutions · Stand: ${today}</p>
+      <h2>§&nbsp;1 Geltungsbereich</h2>
+      <p>Diese AGB gelten für alle Verträge zwischen NextStructure Solutions und dem Auftraggeber über Leistungen im Bereich digitaler Produkte.</p>
+      <h2>§&nbsp;2 Vertragsschluss</h2>
+      <p>Ein Vertrag kommt durch die schriftliche Auftragsbestätigung des Auftragnehmers zustande. Mündliche Nebenabreden bedürfen der Schriftform.</p>
+      <h2>§&nbsp;3 Leistungserbringung</h2>
+      <p>Der Auftragnehmer erbringt die vereinbarten Leistungen nach dem Stand der Technik. Änderungen des Leistungsumfangs sind schriftlich zu vereinbaren.</p>
+      <h2>§&nbsp;4 Mitwirkungspflichten</h2>
+      <p>Der Auftraggeber stellt alle benötigten Informationen, Inhalte und Zugänge rechtzeitig bereit. Verzögerungen gehen zu Lasten des Auftraggebers.</p>
+      <h2>§&nbsp;5 Vergütung &amp; Zahlung</h2>
+      <p>Zahlungen sind innerhalb von 14 Tagen fällig. Bei Zahlungsverzug werden Zinsen i.H.v. 9&nbsp;% über dem Basiszinssatz berechnet.</p>
+      <h2>§&nbsp;6 Nutzungsrechte</h2>
+      <p>Nach vollständiger Zahlung erhält der Auftraggeber das einfache, zeitlich unbegrenzte Nutzungsrecht an den erstellten Werken.</p>
+      <h2>§&nbsp;7 Gewährleistung</h2>
+      <p>Die Gewährleistungsfrist beträgt 12 Monate ab formeller Abnahme.</p>
+      <h2>§&nbsp;8 Haftung</h2>
+      <p>Die Haftung des Auftragnehmers ist auf Vorsatz und grobe Fahrlässigkeit beschränkt.</p>
+      <h2>§&nbsp;9 Datenschutz</h2>
+      <p>Die Verarbeitung personenbezogener Daten erfolgt gemäß DSGVO und dem gesondert abgeschlossenen AVV.</p>
+      <h2>§&nbsp;10 Schlussbestimmungen</h2>
+      <p>Es gilt deutsches Recht. Gerichtsstand ist der Sitz des Auftragnehmers.</p>` },
+
+    'Rechnung': { label:'Rechnung', title:'Rechnung', body: ()=>`
+      ${rcpt()}
+      <table style="margin-bottom:14px"><tbody>
+        <tr><td style="width:155px;color:#999;font-size:9pt;padding:4px 0">Rechnungsdatum</td><td style="padding:4px 0">${today}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Projekt</td><td style="padding:4px 0">${h(client.projectType)}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Auftraggeber</td><td style="padding:4px 0">${h(firm)}</td></tr>
+      </tbody></table>
+      <h2>Rechnungspositionen</h2>
+      <table><thead><tr><th style="width:34px">Pos.</th><th>Leistung</th>
+        <th style="width:40px">Mge.</th><th class="td-r" style="width:130px">Betrag netto</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>${h(client.projectType)} – Entwicklung &amp; Umsetzung</td><td>1</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td>2</td><td>${pho('[weitere Position, falls zutreffend]')}</td><td>${pho('–')}</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr class="tr-total"><td colspan="3"><strong>Gesamt netto</strong></td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td colspan="3">zzgl. 19&nbsp;% Mehrwertsteuer</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr class="tr-total"><td colspan="3"><strong>Gesamt brutto</strong></td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+      </tbody></table>
+      <h2>Zahlungsbedingungen</h2>
+      <p>Zahlbar innerhalb von <strong>14 Tagen</strong> nach Rechnungsstellung ohne Abzug.</p>
+      <table><tbody>
+        <tr><td style="width:155px;color:#999;font-size:9pt;padding:4px 0">IBAN</td><td style="padding:4px 0">${pho('[IBAN]')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">BIC</td><td style="padding:4px 0">${pho('[BIC]')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Bank</td><td style="padding:4px 0">${pho('[Bank]')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Verwendungszweck</td>
+            <td style="padding:4px 0">${h(firm)} · ${h(client.projectType)} · ${today}</td></tr>
+      </tbody></table>` },
+
+    'Willkommensdokument': { label:'Willkommen', title:'Willkommen bei NextStructure', body: ()=>`
+      <p>Sehr geehrte/r ${h(client.name)},</p>
+      <p>vielen Dank für Ihr Vertrauen in NextStructure Solutions. Wir freuen uns sehr auf die Zusammenarbeit mit ${h(firm)} und werden alles daransetzen, Ihr Projekt mit größter Sorgfalt umzusetzen.</p>
+      <h2>Ihr persönlicher Ansprechpartner</h2>
+      <table><tbody>
+        <tr><td style="width:155px;color:#999;font-size:9pt;padding:4px 0">Name</td><td style="padding:4px 0"><strong>Tom Freer</strong></td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Telefon</td><td style="padding:4px 0">+49 174 3009820</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Erreichbarkeit</td><td style="padding:4px 0">Mo–Fr, 9–18 Uhr</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">E-Mail</td><td style="padding:4px 0">kontakt@nextstructure-solutions.com</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Projektbezeichnung</td><td style="padding:4px 0">${h(client.projectType)}</td></tr>
+      </tbody></table>
+      <h2>Wie geht es weiter? (6 Schritte)</h2>
+      <ol>
+        <li><strong>Anzahlung</strong> – Bitte überweisen Sie die Anzahlung (Details unten). Das Projekt startet nach Zahlungseingang.</li>
+        <li><strong>Unterlagen</strong> – Senden Sie uns Ihre Inhalte (Texte, Bilder, Logo) sowie den unterschriebenen AVV und die AGB zurück.</li>
+        <li><strong>Kick-off</strong> – Wir vereinbaren einen Termin zur Abstimmung aller Anforderungen und Ziele.</li>
+        <li><strong>Umsetzung</strong> – Wir entwickeln Ihr Projekt und halten Sie regelmäßig auf dem Laufenden.</li>
+        <li><strong>Freigabe</strong> – Sie erhalten das fertige Ergebnis zur Prüfung und Abnahme.</li>
+        <li><strong>Launch &amp; Übergabe</strong> – Veröffentlichung und persönliche Einweisung durch Tom Freer.</li>
+      </ol>
+      <h2>Beiliegende Dokumente</h2>
+      <ul>
+        <li>Allgemeine Geschäftsbedingungen (AGB)</li>
+        <li>Auftragsverarbeitungsvertrag (AVV) gemäß Art.&nbsp;28 DSGVO – bitte unterschrieben zurücksenden</li>
+        <li>Auftragsbestätigung</li>
+        <li>Rahmenvertrag (optional, auf Anfrage erhältlich)</li>
+      </ul>
+      <h2>Zahlungsinformationen</h2>
+      <table><tbody>
+        <tr><td style="width:175px;color:#999;font-size:9pt;padding:5px 0">Zahlungsmodell</td><td style="padding:5px 0">${pho('[50 % / 100 %]')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0">Anzahlung / Betrag</td><td style="padding:5px 0">${pho('[XXX,XX EUR]')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0">Zahlungslink</td><td style="padding:5px 0">${pho('[ZAHLUNGSLINK]')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0">IBAN</td><td style="padding:5px 0">${pho('[IBAN]')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0">BIC</td><td style="padding:5px 0">${pho('[BIC]')}</td></tr>
+      </tbody></table>
+      ${sig()}` },
+  };
+
+  const def = DOCS[docName] || { label:'Dokument', title:docName, body:()=>'<p>Vorlage nicht verfügbar.</p>' };
+
+  return `
+    <div class="ns-hdr">
+      <div class="ns-hdr-brand"><b>NEXTSTRUCTURE</b>&nbsp;<span style="font-weight:300">SOLUTIONS</span></div>
+      <div class="ns-hdr-loc">Quickborn</div>
+    </div>
+    <div class="ns-redline"></div>
+    <div class="ns-doc-body">
+      <div class="ns-doc-label">${def.label}</div>
+      <div class="ns-doc-title">${def.title}</div>
+      <div class="ns-doc-date">Quickborn, ${today}</div>
+      ${def.body()}
+    </div>
+    <div class="ns-ftr">NextStructure Solutions · Quickborn · kontakt@nextstructure-solutions.com · nextstructure-solutions.com</div>`;
+}
+
+// ─── Quotes ───────────────────────────────────────────────────────────────
+const QUOTES = [
+  { text: 'Der beste Zeitpunkt, etwas zu beginnen, war gestern. Der zweitbeste ist jetzt.', author: 'Unbekannt' },
+  { text: 'Erfolg ist kein Zufall. Er ist harte Arbeit, Ausdauer, Lernen, Aufopferung und vor allem Liebe für das, was du tust.', author: 'Pelé' },
+  { text: 'Die einzige Möglichkeit, großartige Arbeit zu leisten, ist, das zu lieben, was du tust.', author: 'Steve Jobs' },
+  { text: 'Deine Zeit ist begrenzt, also verschwende sie nicht damit, das Leben eines anderen zu leben.', author: 'Steve Jobs' },
+  { text: 'Jeder Kunde, den du heute glücklich machst, bringt dir morgen drei neue.', author: 'Unbekannt' },
+  { text: 'Im Vertrieb geht es nicht darum, Menschen zu überreden — es geht darum, ihnen zu helfen, die richtige Entscheidung zu treffen.', author: 'Unbekannt' },
+  { text: 'Verkaufen bedeutet nicht, etwas anzubieten — es bedeutet, ein Problem zu lösen.', author: 'Unbekannt' },
+  { text: 'Wer aufhört, besser zu werden, hat aufgehört, gut zu sein.', author: 'Philip Rosenthal' },
+  { text: 'Das Geheimnis des Erfolgs ist, den Standpunkt des anderen zu verstehen.', author: 'Henry Ford' },
+  { text: 'Vertrauen ist die Währung des Vertriebs.', author: 'Unbekannt' },
+  { text: 'Jede Ablehnung bringt mich einem Ja näher.', author: 'Bo Bennett' },
+  { text: 'Es ist nicht genug, gut zu sein — du musst gut sein in dem, was du tust, und sicherstellen, dass andere das wissen.', author: 'Unbekannt' },
+  { text: 'Qualität wird erinnert, lange nachdem der Preis vergessen ist.', author: 'Gucci-Familienmotto' },
+  { text: 'Der Unterschied zwischen einem erfolgreichen Menschen und anderen ist nicht das Fehlen von Stärke oder Wissen, sondern das Fehlen von Willen.', author: 'Vince Lombardi' },
+  { text: 'Menschen kaufen nicht, was du tust — sie kaufen, warum du es tust.', author: 'Simon Sinek' },
+  { text: 'Die Kunst des Lebens liegt nicht darin, Probleme zu vermeiden, sondern sie zu meistern.', author: 'Helen Keller' },
+  { text: 'Tue, was du kannst, mit dem, was du hast, dort, wo du bist.', author: 'Theodore Roosevelt' },
+  { text: 'Verfolge nicht den Erfolg — verfolge Exzellenz, und der Erfolg wird dich finden.', author: 'Dr. A.P.J. Abdul Kalam' },
+  { text: 'Ein zufriedener Kunde ist die beste Geschäftsstrategie überhaupt.', author: 'Michael LeBoeuf' },
+  { text: 'Im Digitalen gewinnt, wer am schnellsten lernt.', author: 'Unbekannt' },
+  { text: 'Dein Netzwerk ist dein Nettovermögen.', author: 'Porter Gale' },
+  { text: 'Es braucht 20 Jahre, um einen guten Ruf aufzubauen, und fünf Minuten, um ihn zu ruinieren.', author: 'Warren Buffett' },
+  { text: 'Der Weg zum Erfolg und der Weg zum Scheitern sind fast identisch.', author: 'Colin R. Davis' },
+  { text: 'Wachstum entsteht außerhalb deiner Komfortzone.', author: 'Unbekannt' },
+  { text: 'Kreativität ist Intelligenz, die Spaß hat.', author: 'Albert Einstein' },
+  { text: 'Nicht die Stärksten überleben, sondern diejenigen, die am anpassungsfähigsten sind.', author: 'Charles Darwin' },
+  { text: 'Begeisterung ist der Funke, der alle anderen entzündet.', author: 'Unbekannt' },
+  { text: 'Große Dinge im Geschäft werden nie von einer einzelnen Person erledigt — sie werden von einem Team erledigt.', author: 'Steve Jobs' },
+  { text: 'Die Zukunft gehört denen, die an die Schönheit ihrer Träume glauben.', author: 'Eleanor Roosevelt' },
+  { text: 'Wenn du es dir vorstellen kannst, kannst du es auch erreichen.', author: 'Napoleon Hill' },
+  { text: 'Kein Wind ist günstig für den, der keinen Hafen kennt.', author: 'Seneca' },
+  { text: 'Jeden Tag tust du etwas, das dir einen kleinen Vorteil verschafft.', author: 'Unbekannt' },
+  { text: 'Fehler sind Beweise dafür, dass du es versucht hast.', author: 'Unbekannt' },
+  { text: 'Echtes Wachstum beginnt dort, wo Ausreden enden.', author: 'Unbekannt' },
+  { text: 'Disziplin ist die Brücke zwischen Zielen und Leistung.', author: 'Jim Rohn' },
+  { text: 'Wer immer tut, was er schon kann, bleibt immer das, was er schon ist.', author: 'Henry Ford' },
+  { text: 'Strategisch denken, konsequent handeln, mutig entscheiden.', author: 'Unbekannt' },
+  { text: 'Die meisten Menschen überschätzen, was sie in einem Jahr schaffen können, und unterschätzen, was sie in zehn Jahren erreichen können.', author: 'Bill Gates' },
+  { text: 'Es ist besser, auf der Suche nach Perfektion Schritte zu machen, als auf Perfektion zu warten und keinen Schritt zu tun.', author: 'George Patton' },
+];
+
+// ─── Landing screen ───────────────────────────────────────────────────────
+function getGreeting() {
+  const h = new Date().getHours();
+  if (h >= 5  && h < 12) return '🌅 Guten Morgen';
+  if (h >= 12 && h < 17) return '☀️ Guten Mittag';
+  if (h >= 17 && h < 22) return '🌆 Guten Abend';
+  return '🌙 Noch wach';
+}
+
+function initLanding() {
+  document.getElementById('ls-greeting').textContent = getGreeting();
+
+  const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+  document.getElementById('ls-quote-text').textContent   = `„${q.text}"`;
+  document.getElementById('ls-quote-author').textContent = `— ${q.author}`;
+
+  const clients = loadClients();
+  const total    = clients.length;
+  const inArbeit = clients.filter(c => (c.status || 'In Bearbeitung') === 'In Bearbeitung').length;
+  const warten   = clients.filter(c => c.status === 'Warten auf Rückmeldung').length;
+  const done     = clients.filter(c => c.status === 'Abgeschlossen').length;
+
+  const kacheln = [
+    { label: 'Gesamt',     val: total,     filter: '',                        color: 'var(--text)' },
+    { label: 'In Arbeit',  val: inArbeit,  filter: 'In Bearbeitung',          color: '#9b8ff9'     },
+    { label: 'Warten',     val: warten,    filter: 'Warten auf Rückmeldung',  color: '#c9a830'     },
+    { label: 'Fertig',     val: done,      filter: 'Abgeschlossen',           color: '#3aaa72'     },
+  ];
+
+  document.getElementById('ls-kacheln').innerHTML = kacheln.map(k => `
+    <div class="ls-kachel" onclick="enterDashboard(${JSON.stringify(k.filter)})">
+      <div class="ls-kachel-val" style="color:${k.color}">${k.val}</div>
+      <div class="ls-kachel-label">${k.label}</div>
+    </div>`).join('');
+}
+
+function enterDashboard(filter) {
+  document.getElementById('landingScreen').style.display = 'none';
+  document.getElementById('pipelineMain').style.display  = 'block';
+  renderPipeline(filter);
+}
+
+// ─── Hub / Landing navigation ─────────────────────────────────────────────
+function showHub() {
+  document.getElementById('hubScreen').style.display = 'flex';
+  document.getElementById('landingScreen').style.display = 'none';
+  document.getElementById('pipelineMain').style.display = 'none';
+  document.getElementById('hub-greeting').textContent = getGreeting();
+}
+
+function openLanding() {
+  document.getElementById('hubScreen').style.display = 'none';
+  document.getElementById('landingScreen').style.display = 'flex';
+  initLanding();
+}
+
+// ─── Boot ─────────────────────────────────────────────────────────────────
+initLanding();
+renderPipeline();
+showHub();
 </script>
 </body>
 </html>
