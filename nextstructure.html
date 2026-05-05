@@ -200,6 +200,45 @@
     }
 
     /* ─── Client table ───────────────────────────────────────── */
+    .search-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      position: relative;
+      max-width: 340px;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 12px;
+      color: #555;
+      pointer-events: none;
+      flex-shrink: 0;
+    }
+
+    #searchInput {
+      width: 340px;
+      padding-left: 36px;
+      background: #0a0a14;
+      border: 1px solid #2a2a3a;
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    #searchInput:focus {
+      border-color: rgba(124,106,247,0.7);
+      box-shadow: 0 0 0 3px rgba(124,106,247,0.13);
+    }
+
+    .search-no-results {
+      text-align: center;
+      padding: 32px 0;
+      color: #555;
+      font-size: 13px;
+    }
+
     .tbl-wrap {
       background: var(--surface);
       border: 1px solid rgba(124,106,247,0.12);
@@ -864,24 +903,11 @@
       background-clip: text;
     }
 
-    .ls-quote-wrap {
-      max-width: 500px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .ls-quote-text {
+    .ls-sub {
       font-size: 14px;
-      color: var(--text-muted);
-      font-style: italic;
-      line-height: 1.75;
-    }
-
-    .ls-quote-author {
-      font-size: 12px;
       color: var(--text-dim);
-      letter-spacing: 0.02em;
+      text-align: center;
+      margin-bottom: 4px;
     }
 
     .ls-kacheln {
@@ -1050,11 +1076,27 @@
       background-clip: text;
     }
 
-    .hub-sub {
-      font-size: 15px;
-      color: var(--muted);
+    .hub-quote-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 52px;
+      max-width: 520px;
       text-align: center;
-      margin-bottom: 56px;
+    }
+
+    .hub-quote-text {
+      font-size: 14px;
+      color: var(--muted);
+      font-style: italic;
+      line-height: 1.75;
+    }
+
+    .hub-quote-author {
+      font-size: 12px;
+      color: #555;
+      letter-spacing: 0.02em;
     }
 
     .cards {
@@ -1193,7 +1235,10 @@
   <div class="hub-wrap">
     <div class="hub-greeting" id="hub-greeting"></div>
     <h1 class="hub-title">Willkommen bei NextStructure Solutions</h1>
-    <p class="hub-sub">Deine Tools. An einem Ort.</p>
+    <div class="hub-quote-wrap">
+      <div class="hub-quote-text" id="hub-quote-text"></div>
+      <div class="hub-quote-author" id="hub-quote-author"></div>
+    </div>
     <div class="cards">
 
       <!-- Card 1: Kundendatenbank -->
@@ -1267,10 +1312,7 @@
       <div class="ls-brand">NextStructure</div>
     </div>
     <div class="ls-title">Willkommen in der<br>Kundendatenbank &amp; Vertriebsprozess</div>
-    <div class="ls-quote-wrap">
-      <div class="ls-quote-text" id="ls-quote-text"></div>
-      <div class="ls-quote-author" id="ls-quote-author"></div>
-    </div>
+    <p class="ls-sub">Verwalte Kunden, tracke Phasen und generiere Dokumente.</p>
     <div class="ls-kacheln" id="ls-kacheln"></div>
     <div class="ls-cta">
       <button class="btn btn-primary" onclick="enterDashboard('')">Kundendatenbank öffnen →</button>
@@ -1282,6 +1324,14 @@
 <!-- ═══════════════════════════════════════════════════════ MAIN -->
 <main id="pipelineMain" style="display:none">
   <div id="stat-grid" class="stat-grid"></div>
+  <div class="search-wrap">
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+      <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M10.5 10.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <input id="searchInput" type="text" placeholder="Suche nach Name, Firma, Projekttyp …"
+           oninput="filterPipeline()" />
+  </div>
   <div id="pipeline"></div>
 </main>
 
@@ -2126,9 +2176,20 @@ function tagClass(type) {
   return 'tag-beides';
 }
 
+function filterPipeline() {
+  renderPipeline();
+}
+
 function renderPipeline(statusFilter) {
   let clients = loadClients().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   if (statusFilter) clients = clients.filter(c => (c.status || 'In Bearbeitung') === statusFilter);
+  const searchEl = document.getElementById('searchInput');
+  const q = searchEl ? searchEl.value.trim().toLowerCase() : '';
+  if (q) clients = clients.filter(c =>
+    (c.name        || '').toLowerCase().includes(q) ||
+    (c.company     || '').toLowerCase().includes(q) ||
+    (c.projectType || '').toLowerCase().includes(q)
+  );
   const container = document.getElementById('pipeline');
   const statGrid  = document.getElementById('stat-grid');
 
@@ -2158,7 +2219,8 @@ function renderPipeline(statusFilter) {
       <div class="stat-card-value" style="color:#3aaa72">${done}</div>
     </div>`;
 
-  if (clients.length === 0) {
+  const allClients = loadClients();
+  if (allClients.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
         <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
@@ -2175,6 +2237,11 @@ function renderPipeline(statusFilter) {
           Neuer Kunde
         </button>
       </div>`;
+    return;
+  }
+
+  if (clients.length === 0) {
+    container.innerHTML = `<div class="search-no-results">Keine Ergebnisse für „${esc(q)}"</div>`;
     return;
   }
 
@@ -3177,10 +3244,6 @@ function getGreeting() {
 function initLanding() {
   document.getElementById('ls-greeting').textContent = getGreeting();
 
-  const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
-  document.getElementById('ls-quote-text').textContent   = `„${q.text}"`;
-  document.getElementById('ls-quote-author').textContent = `— ${q.author}`;
-
   const clients = loadClients();
   const total    = clients.length;
   const inArbeit = clients.filter(c => (c.status || 'In Bearbeitung') === 'In Bearbeitung').length;
@@ -3213,6 +3276,9 @@ function showHub() {
   document.getElementById('landingScreen').style.display = 'none';
   document.getElementById('pipelineMain').style.display = 'none';
   document.getElementById('hub-greeting').textContent = getGreeting();
+  const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+  document.getElementById('hub-quote-text').textContent   = `„${q.text}"`;
+  document.getElementById('hub-quote-author').textContent = `— ${q.author}`;
 }
 
 function openLanding() {
