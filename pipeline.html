@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NextStructure – Pipeline</title>
+  <title>NextStructure – Kundendatenbank</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -875,10 +875,20 @@
 
 <!-- ═══════════════════════════════════════════════════════ HEADER -->
 <header>
-  <div class="logo">
-    <div class="logo-mark">N</div>
-    NextStructure <span class="logo-sep">·</span>
-    <span class="logo-sub">Pipeline</span>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <button class="btn btn-ghost" style="padding:5px 12px;font-size:12px;"
+            onclick="document.getElementById('landingScreen').style.display='flex';document.getElementById('pipelineMain').style.display='none';initLanding();">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path d="M9 2L3 7l6 5" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Start
+    </button>
+    <div class="logo">
+      <div class="logo-mark">N</div>
+      NextStructure <span class="logo-sep">·</span>
+      <span class="logo-sub">Kundendatenbank</span>
+    </div>
   </div>
   <div class="header-right">
     <span class="client-count" id="globalCount"></span>
@@ -898,7 +908,7 @@
       <div class="ls-greeting" id="ls-greeting"></div>
       <div class="ls-brand">NextStructure</div>
     </div>
-    <div class="ls-title">Willkommen in der<br>Pipeline &amp; Vertriebssteuerung</div>
+    <div class="ls-title">Willkommen in der<br>Kundendatenbank &amp; Vertriebsprozess</div>
     <div class="ls-quote-wrap">
       <div class="ls-quote-text" id="ls-quote-text"></div>
       <div class="ls-quote-author" id="ls-quote-author"></div>
@@ -992,7 +1002,7 @@
           <path d="M9 2L3 7l6 5" stroke="currentColor" stroke-width="1.6"
                 stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        Pipeline
+        Kundendatenbank
       </button>
       <div class="dv-topbar-name" id="dv-topbar-name"></div>
       <button class="btn btn-danger" onclick="deleteClientFromDV()">Löschen</button>
