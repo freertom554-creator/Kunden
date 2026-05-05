@@ -713,6 +713,18 @@
       text-overflow: ellipsis;
     }
 
+    .dp-hint {
+      text-align: center;
+      font-size: 11.5px;
+      color: #7a7a8a;
+      font-style: italic;
+      padding: 6px 20px;
+      background: rgba(8,6,20,0.7);
+      border-bottom: 1px solid rgba(124,106,247,0.08);
+      flex-shrink: 0;
+    }
+    @media print { .dp-hint { display: none !important; } }
+
     .dp-scroll {
       flex: 1;
       overflow-y: auto;
@@ -763,7 +775,23 @@
                                  border-bottom: none; background: #fafafa; }
     .ns-doc-body .td-r { text-align: right; }
     .ns-doc-body .ph  { color: #bbb; }
-    .ns-doc-body .pho { color: #d97706; font-weight: 600; }
+    .ns-doc-body .pho {
+      color: #d97706; font-weight: 600;
+      border-bottom: 1.5px dashed #d97706;
+      border-radius: 2px;
+      cursor: text;
+      outline: none;
+      min-width: 40px;
+      display: inline-block;
+      padding: 0 2px;
+    }
+    .ns-doc-body .pho:focus {
+      background: rgba(217,119,6,0.1);
+      border-bottom-style: solid;
+    }
+    @media print {
+      .ns-doc-body .pho { border-bottom: none; background: none !important; }
+    }
     .ns-chk     { display: flex; gap: 10px; padding: 5px 0;
                   border-bottom: 1px solid #f5f5f5; align-items: flex-start; }
     .ns-chk-box { width: 13px; height: 13px; border: 1.5px solid #ccc;
@@ -1022,6 +1050,14 @@
           <input id="f-phone" type="tel" placeholder="+49 123 456789" />
         </div>
         <div class="form-field">
+          <label>Straße &amp; Hausnummer</label>
+          <input id="f-street" type="text" placeholder="Musterstraße 12" />
+        </div>
+        <div class="form-field">
+          <label>PLZ &amp; Ort</label>
+          <input id="f-city" type="text" placeholder="12345 Musterstadt" />
+        </div>
+        <div class="form-field">
           <label>Projekttyp *</label>
           <select id="f-type">
             <option value="Website">Website</option>
@@ -1109,6 +1145,7 @@
       Drucken / PDF
     </button>
   </div>
+  <div class="dp-hint">Klicke auf die orangenen Felder um Werte einzutragen — danach auf Drucken / PDF.</div>
   <div class="dp-scroll">
     <div class="dp-doc-content" id="dp-doc-content"></div>
   </div>
@@ -1931,7 +1968,7 @@ function esc(str) {
 
 // ─── New client modal ─────────────────────────────────────────────────────
 function openNewModal() {
-  ['f-name','f-company','f-email','f-phone','f-notes'].forEach(id => document.getElementById(id).value = '');
+  ['f-name','f-company','f-email','f-phone','f-street','f-city','f-notes'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('f-type').value   = 'Website';
   document.getElementById('f-phase').value  = '1';
   document.getElementById('f-status').value = 'In Bearbeitung';
@@ -1950,6 +1987,8 @@ function saveNewClient() {
     company:     document.getElementById('f-company').value.trim(),
     email:       document.getElementById('f-email').value.trim(),
     phone:       document.getElementById('f-phone').value.trim(),
+    street:      document.getElementById('f-street').value.trim(),
+    city:        document.getElementById('f-city').value.trim(),
     projectType: document.getElementById('f-type').value,
     currentPhase: parseInt(document.getElementById('f-phase').value),
     status:      document.getElementById('f-status').value || 'In Bearbeitung',
@@ -2015,6 +2054,14 @@ function buildDVInfoForm(c) {
         <input id="dv-phone" type="tel" value="${esc(c.phone)}" />
       </div>
       <div class="form-field">
+        <label>Straße &amp; Hausnummer</label>
+        <input id="dv-street" type="text" value="${esc(c.street||'')}" placeholder="Musterstraße 12" />
+      </div>
+      <div class="form-field">
+        <label>PLZ &amp; Ort</label>
+        <input id="dv-city" type="text" value="${esc(c.city||'')}" placeholder="12345 Musterstadt" />
+      </div>
+      <div class="form-field">
         <label>Projekttyp</label>
         <select id="dv-type">
           <option${c.projectType==='Website'?' selected':''}>Website</option>
@@ -2078,6 +2125,8 @@ function saveDVClient() {
     company:     document.getElementById('dv-company').value.trim(),
     email:       document.getElementById('dv-email').value.trim(),
     phone:       document.getElementById('dv-phone').value.trim(),
+    street:      document.getElementById('dv-street').value.trim(),
+    city:        document.getElementById('dv-city').value.trim(),
     projectType: document.getElementById('dv-type').value,
     status:      document.getElementById('dv-status').value,
     notes:       document.getElementById('dv-notes').value.trim(),
@@ -2276,8 +2325,8 @@ function generateDocInner(docName, client) {
       <div class="ns-rcpt-lbl">An</div>
       <div><strong>${h(client.name)}</strong></div>
       ${client.company ? `<div>${h(client.company)}</div>` : ''}
-      <div class="ph">[Straße und Hausnummer]</div>
-      <div class="ph">[PLZ Ort]</div>
+      <div>${client.street ? h(client.street) : pho('[Straße und Hausnummer]')}</div>
+      <div>${client.city  ? h(client.city)   : pho('[PLZ und Ort]')}</div>
     </div>`; }
 
   function chk(t) { return `<div class="ns-chk"><div class="ns-chk-box"></div><div>${t}</div></div>`; }
@@ -2297,7 +2346,7 @@ function generateDocInner(docName, client) {
       <div class="ns-sig2-col">Auftragnehmer (NextStructure Solutions)<br>Ort, Datum &amp; Unterschrift</div>
     </div>`; }
 
-  function pho(t) { return `<span class="pho">${t}</span>`; }
+  function pho(t) { return `<span class="pho" contenteditable="true" spellcheck="false">${t}</span>`; }
 
   function priceTable(rows) { return `
     <table>
@@ -2349,7 +2398,7 @@ function generateDocInner(docName, client) {
         <tr class="tr-total"><td colspan="2"><strong>Gesamtpreis brutto</strong></td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
       </tbody></table>
       <h2>Laufende Kosten (separat)</h2>
-      <p>10Web Hosting: ab <strong>10 USD/Monat</strong> (direkt beim Anbieter, nicht im Projektpreis enthalten)</p>
+      <p>10Web Hosting: ab <strong>49 €/Monat</strong> (direkt beim Anbieter, nicht im Projektpreis enthalten)</p>
       <h2>Projektablauf</h2>
       <ol>
         <li><strong>Kick-off &amp; Anforderungsanalyse</strong> – Abstimmung Ihrer Wünsche und Ziele</li>
@@ -2399,7 +2448,7 @@ function generateDocInner(docName, client) {
       </tbody></table>
       <h2>Laufende Kosten (separat)</h2>
       <ul>
-        <li>Landbot: ab <strong>40 USD/Monat</strong> (direkt beim Anbieter)</li>
+        <li>Landbot: ab <strong>40 €/Monat</strong> (direkt beim Anbieter)</li>
         <li>Google Workspace: optional ca. <strong>6 EUR/Monat</strong></li>
       </ul>
       <h2>Projektablauf</h2>
@@ -2526,7 +2575,7 @@ function generateDocInner(docName, client) {
       <ul>
         <li>Projektstart nach Eingang der Anzahlung (ca. 7–10 Werktage Umsetzungsdauer)</li>
         <li>2 Korrekturschleifen im Designprozess inklusive</li>
-        <li>Hosting via 10Web: ca. 10&nbsp;USD/Monat, direkt beim Anbieter, separat zu begleichen</li>
+        <li>Hosting via 10Web: ca. 49&nbsp;€/Monat, direkt beim Anbieter, separat zu begleichen</li>
         <li>Es gelten unsere Allgemeinen Geschäftsbedingungen (AGB)</li>
       </ul>
       ${sig2()}` },
@@ -2573,7 +2622,7 @@ function generateDocInner(docName, client) {
       <ul>
         <li>Projektstart nach Eingang der Anzahlung und Rücksendung des unterzeichneten AVV (ca. 5–7 Werktage)</li>
         <li>Auftragsverarbeitungsvertrag (AVV) gemäß Art.&nbsp;28 DSGVO liegt bei und ist zu unterzeichnen</li>
-        <li>Laufende Kosten Landbot: ab 40&nbsp;USD/Monat, direkt beim Anbieter, separat zu begleichen</li>
+        <li>Laufende Kosten Landbot: ab 40&nbsp;€/Monat, direkt beim Anbieter, separat zu begleichen</li>
         <li>Es gelten unsere Allgemeinen Geschäftsbedingungen (AGB)</li>
       </ul>
       ${sig2()}` },
