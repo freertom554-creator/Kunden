@@ -763,6 +763,7 @@
                                  border-bottom: none; background: #fafafa; }
     .ns-doc-body .td-r { text-align: right; }
     .ns-doc-body .ph  { color: #bbb; }
+    .ns-doc-body .pho { color: #d97706; font-weight: 600; }
     .ns-chk     { display: flex; gap: 10px; padding: 5px 0;
                   border-bottom: 1px solid #f5f5f5; align-items: flex-start; }
     .ns-chk-box { width: 13px; height: 13px; border: 1.5px solid #ccc;
@@ -1694,6 +1695,7 @@ function getDocsForPhase(phase, projectType) {
       ...(isChat ? ['Angebot Chatbot', 'Leistungsbeschreibung Chatbot'] : []),
     ];
     case 3: return [
+      'Willkommensdokument',
       ...(isWeb  ? ['Auftragsbestätigung Website'] : []),
       ...(isChat ? ['Auftragsbestätigung Chatbot']  : []),
       'AVV', 'AGB',
@@ -2295,6 +2297,8 @@ function generateDocInner(docName, client) {
       <div class="ns-sig2-col">Auftragnehmer (NextStructure Solutions)<br>Ort, Datum &amp; Unterschrift</div>
     </div>`; }
 
+  function pho(t) { return `<span class="pho">${t}</span>`; }
+
   function priceTable(rows) { return `
     <table>
       <thead><tr><th style="width:34px">Pos.</th><th>Leistung</th>
@@ -2310,53 +2314,105 @@ function generateDocInner(docName, client) {
   const DOCS = {
     'Angebot Website': { label:'Angebot', title:'Website-Entwicklung', body: ()=>`
       ${rcpt()}
+      <table style="margin-bottom:16px"><tbody>
+        <tr><td style="width:155px;color:#999;font-size:9pt;padding:4px 0">Anbieter</td>
+            <td style="padding:4px 0"><strong>NextStructure Solutions</strong> Inh. Tom Freer<br>Ulzburger Landstraße 401e, 25451 Quickborn</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Datum</td>
+            <td style="padding:4px 0">${today}</td></tr>
+      </tbody></table>
       <p>Sehr geehrte/r ${h(client.name)},</p>
       <p>vielen Dank für Ihr Interesse. Wir freuen uns, Ihnen unser Angebot für die Entwicklung Ihrer professionellen Website zu unterbreiten.</p>
       <h2>Leistungsumfang</h2>
       <ul>
-        <li>Individuelles responsives Design (Desktop, Tablet, Mobile)</li>
+        <li>Individuelles responsives Design nach Ihrer Corporate Identity</li>
         <li>Bis zu 5 Seiten (Start, Über uns, Leistungen, Kontakt + 1 weitere)</li>
-        <li>Kontaktformular mit DSGVO-konformer Datenverarbeitung</li>
+        <li>Kontaktformular inkl. Impressum &amp; Datenschutzerklärung</li>
         <li>SSL-Zertifikat &amp; HTTPS-Verschlüsselung</li>
-        <li>SEO-Grundoptimierung (Meta-Tags, Alt-Texte, Ladezeit)</li>
-        <li>Cookie-Banner &amp; DSGVO-konforme Datenschutzseite</li>
-        <li>Vollständig responsiv – optimiert für alle Endgeräte</li>
-        <li>Persönliche Einweisung &amp; Übergabe inkl. Dokumentation</li>
+        <li>Erstellung auf WordPress via 10Web mit Premium Theme &amp; Elementor</li>
+        <li>Vollständig responsiv (Desktop, Tablet, Mobile)</li>
+        <li>SEO-Grundoptimierung (Meta-Tags, Alt-Texte, URL-Struktur)</li>
+        <li>Cookie-Banner (DSGVO-konform)</li>
+        <li>Optional: Google Analytics / Google Search Console Einrichtung</li>
+        <li>Persönliche Einweisung nach Projektabschluss</li>
       </ul>
+      <h2>Technische Umsetzung</h2>
+      <p>WordPress via <strong>10Web</strong> · Premium Theme · <strong>Elementor</strong> Page Builder</p>
       <h2>Preisübersicht</h2>
-      ${priceTable(['Design &amp; Konzeption','Entwicklung &amp; Programmierung','SEO-Grundoptimierung &amp; DSGVO-Setup','Projektbegleitung, Einweisung &amp; Übergabe'])}
+      <table><thead><tr><th style="width:34px">Pos.</th><th>Leistung</th><th class="td-r" style="width:130px">Betrag netto</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Design &amp; Konzeption</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td>2</td><td>Entwicklung &amp; Programmierung (WordPress / 10Web)</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td>3</td><td>SEO &amp; DSGVO-Setup</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td>4</td><td>Einweisung &amp; Übergabe</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr class="tr-total"><td colspan="2"><strong>Gesamtpreis netto</strong></td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td colspan="2">zzgl. 19&nbsp;% MwSt.</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr class="tr-total"><td colspan="2"><strong>Gesamtpreis brutto</strong></td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+      </tbody></table>
+      <h2>Laufende Kosten (separat)</h2>
+      <p>10Web Hosting: ab <strong>10 USD/Monat</strong> (direkt beim Anbieter, nicht im Projektpreis enthalten)</p>
       <h2>Projektablauf</h2>
       <ol>
-        <li><strong>Kick-off</strong> – Anforderungsanalyse und Zieldefinition</li>
-        <li><strong>Konzept</strong> – Sitemap und Struktur abstimmen</li>
-        <li><strong>Design</strong> – Wireframes und visuelle Entwürfe zur Freigabe</li>
-        <li><strong>Entwicklung</strong> – Umsetzung nach freigegebenem Design</li>
-        <li><strong>Content</strong> – Integration Ihrer Inhalte und Medien</li>
-        <li><strong>Test</strong> – Qualitätssicherung auf allen Endgeräten</li>
-        <li><strong>Launch &amp; Übergabe</strong> – Veröffentlichung und Einweisung</li>
+        <li><strong>Kick-off &amp; Anforderungsanalyse</strong> – Abstimmung Ihrer Wünsche und Ziele</li>
+        <li><strong>Design &amp; Wireframes</strong> – Entwürfe zur Freigabe durch Sie</li>
+        <li><strong>Entwicklung auf WordPress / 10Web</strong> – Umsetzung nach freigegebenem Design</li>
+        <li><strong>Content-Integration</strong> – Einpflegen Ihrer Texte, Bilder und Medien</li>
+        <li><strong>SEO &amp; DSGVO-Setup</strong> – Meta-Tags, Cookie-Banner, Impressum, Datenschutz</li>
+        <li><strong>Qualitätssicherung &amp; Tests</strong> – Cross-Browser, Responsive, Ladezeit</li>
+        <li><strong>Launch &amp; Übergabe</strong> – Veröffentlichung und persönliche Einweisung</li>
       </ol>
       <h2>Zahlungsbedingungen</h2>
-      <p>50&nbsp;% bei Auftragserteilung · 50&nbsp;% nach Abnahme und Livegang<br>Zahlungsziel: 14 Tage · Angebotsgültigkeit: 30 Tage ab ${today}</p>
+      <p>50&nbsp;% Anzahlung bei Auftragserteilung · 50&nbsp;% nach Fertigstellung und Abnahme<br>Zahlungsziel: 14 Tage nach Rechnungsstellung · Angebotsgültigkeit: 30 Tage ab ${today}</p>
       ${sig2()}` },
 
     'Angebot Chatbot': { label:'Angebot', title:'KI-Chatbot-Entwicklung', body: ()=>`
       ${rcpt()}
+      <table style="margin-bottom:16px"><tbody>
+        <tr><td style="width:155px;color:#999;font-size:9pt;padding:4px 0">Anbieter</td>
+            <td style="padding:4px 0"><strong>NextStructure Solutions</strong> Inh. Tom Freer<br>Ulzburger Landstraße 401e, 25451 Quickborn</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Datum</td>
+            <td style="padding:4px 0">${today}</td></tr>
+      </tbody></table>
       <p>Sehr geehrte/r ${h(client.name)},</p>
-      <p>vielen Dank für Ihr Interesse. Wir freuen uns, Ihnen unser Angebot für die Entwicklung eines KI-Chatbots für ${h(firm)} zu unterbreiten.</p>
+      <p>vielen Dank für Ihr Interesse. Wir freuen uns, Ihnen unser Angebot für die Entwicklung eines Chatbots für ${h(firm)} zu unterbreiten.</p>
       <h2>Leistungsumfang</h2>
       <ul>
-        <li>Entwicklung des Chatbots auf Basis der Landbot-Plattform</li>
-        <li>FAQ-Modul: automatische Beantwortung häufiger Kundenanfragen</li>
-        <li>Reservierungssystem: Buchungsanfragen mit Datum, Uhrzeit und Kontaktdaten</li>
-        <li>Google-Sheets-Anbindung für Echtzeit-Erfassung eingehender Anfragen</li>
-        <li>Design-Anpassung nach Ihrer Corporate Identity (Farben, Logo, Tonalität)</li>
-        <li>Integration in Ihre Website oder gewünschte Plattform</li>
-        <li>AVV gemäß Art.&nbsp;28 DSGVO, Einweisung &amp; Übergabe</li>
+        <li>Begrüßungstext &amp; Unternehmensvorstellung</li>
+        <li>Öffnungszeiten &amp; Kontaktinformationen</li>
+        <li>FAQ-Modul (10–20 häufig gestellte Fragen)</li>
+        <li>Google Maps Einbindung</li>
+        <li>Bildergalerie / Fotopräsentation</li>
+        <li>Reservierungsformular mit automatischer E-Mail-Benachrichtigung</li>
+        <li>Bewertungssammlung (z.&nbsp;B. Weiterleitung zu Google Reviews)</li>
+        <li>DSGVO-konforme Datenschutzhinweise im Chat</li>
       </ul>
+      <h2>Technische Umsetzung</h2>
+      <p><strong>Landbot EU</strong> (DSGVO-konform) · Google Sheets / Gmail / Apps Script · Einbindung per iframe / Widget</p>
       <h2>Preisübersicht</h2>
-      ${priceTable(['Konzeption, Aufbau &amp; Konfiguration (Landbot)','Google-Sheets-Automatisierung &amp; Systemintegration','Design-Anpassung, Einweisung &amp; Übergabe'])}
+      <table><thead><tr><th style="width:34px">Pos.</th><th>Leistung</th><th class="td-r" style="width:130px">Betrag netto</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Konzeption &amp; Chatbot-Entwicklung (Landbot)</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td>2</td><td>Google Sheets &amp; E-Mail-Automatisierung (Apps Script)</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td>3</td><td>Design-Anpassung, Integration &amp; Übergabe</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr class="tr-total"><td colspan="2"><strong>Gesamtpreis netto</strong></td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td colspan="2">zzgl. 19&nbsp;% MwSt.</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr class="tr-total"><td colspan="2"><strong>Gesamtpreis brutto</strong></td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+      </tbody></table>
+      <h2>Laufende Kosten (separat)</h2>
+      <ul>
+        <li>Landbot: ab <strong>40 USD/Monat</strong> (direkt beim Anbieter)</li>
+        <li>Google Workspace: optional ca. <strong>6 EUR/Monat</strong></li>
+      </ul>
+      <h2>Projektablauf</h2>
+      <ol>
+        <li><strong>Kick-off &amp; Anforderungsanalyse</strong> – FAQ-Themen, Tonalität und Ziele definieren</li>
+        <li><strong>Chatbot-Konfiguration</strong> – FAQ-Modul, Gesprächsflüsse, Formulare</li>
+        <li><strong>Automatisierung</strong> – Google Sheets, E-Mail-Benachrichtigungen via Apps Script</li>
+        <li><strong>Design-Anpassung</strong> – Farben, Logo, Tonalität nach Corporate Identity</li>
+        <li><strong>Integration</strong> – Einbindung in Website oder gewünschte Plattform</li>
+        <li><strong>Test, Übergabe &amp; Einweisung</strong></li>
+      </ol>
       <h2>Zahlungsbedingungen</h2>
-      <p>50&nbsp;% bei Auftragserteilung · 50&nbsp;% nach Abnahme<br>Zahlungsziel: 14 Tage · Angebotsgültigkeit: 30 Tage ab ${today}</p>
+      <p>50&nbsp;% Anzahlung bei Auftragserteilung · 50&nbsp;% nach Fertigstellung und Abnahme<br>Zahlungsziel: 14 Tage nach Rechnungsstellung · Angebotsgültigkeit: 30 Tage ab ${today}</p>
       ${sig2()}` },
 
     'Leistungsbeschreibung Website': { label:'Leistungsbeschreibung', title:'Website-Entwicklung', body: ()=>`
@@ -2430,68 +2486,96 @@ function generateDocInner(docName, client) {
 
     'Auftragsbestätigung Website': { label:'Auftragsbestätigung', title:'Website-Entwicklung', body: ()=>`
       <table style="margin-bottom:20px"><tbody>
-        <tr><td style="width:155px;color:#999;font-size:9pt;padding:5px 0"><strong>Auftraggeber</strong></td>
-            <td style="padding:5px 0">${h(firm)}, vertr. d. ${h(client.name)}</td></tr>
+        <tr><td style="width:155px;color:#999;font-size:9pt;padding:5px 0"><strong>Auftragnehmer</strong></td>
+            <td style="padding:5px 0"><strong>NextStructure Solutions</strong> Inh. Tom Freer<br>Ulzburger Landstraße 401e · 25451 Quickborn</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Auftraggeber</strong></td>
+            <td style="padding:5px 0">${h(firm)}${client.company ? `, vertr. d. ${h(client.name)}` : ''}</td></tr>
         <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>E-Mail</strong></td>
             <td style="padding:5px 0">${h(client.email||'–')}</td></tr>
         <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Telefon</strong></td>
             <td style="padding:5px 0">${h(client.phone||'–')}</td></tr>
-        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Auftragnehmer</strong></td>
-            <td style="padding:5px 0">NextStructure Solutions, Quickborn</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Auftragsgegenstand</strong></td>
+            <td style="padding:5px 0">Website-Entwicklung auf WordPress / 10Web</td></tr>
         <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Datum</strong></td>
             <td style="padding:5px 0">${today}</td></tr>
       </tbody></table>
-      <p>Sehr geehrte/r ${h(client.name)}, wir bestätigen hiermit den Eingang Ihres Auftrags und freuen uns auf die Zusammenarbeit mit ${h(firm)}.</p>
+      <p>Sehr geehrte/r ${h(client.name)}, wir bestätigen hiermit Ihren Auftrag und freuen uns auf die Zusammenarbeit.</p>
       <h2>Leistungsumfang</h2>
       <ul>
-        <li>Individuelles responsives Website-Design</li>
-        <li>Entwicklung von bis zu 5 Seiten inkl. Kontaktformular</li>
+        <li>Individuelles responsives Website-Design nach Ihrer Corporate Identity</li>
+        <li>Bis zu 5 Seiten inkl. Kontaktformular</li>
+        <li>Erstellung auf WordPress via 10Web mit Premium Theme &amp; Elementor</li>
         <li>SEO-Grundoptimierung &amp; DSGVO-Setup (Cookie-Banner, Impressum, Datenschutz)</li>
         <li>SSL-Zertifikat, Ladezeit-Optimierung, Bildkomprimierung</li>
+        <li>2 Korrekturschleifen im Designprozess inklusive</li>
         <li>Persönliche Einweisung &amp; Übergabe mit Dokumentation</li>
       </ul>
-      <h2>Preis &amp; Zahlungsplan</h2>
+      <h2>Preis</h2>
+      <table><tbody>
+        <tr><td style="width:210px;padding:6px 0">Gesamtpreis netto</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td style="padding:6px 0">zzgl. 19&nbsp;% MwSt.</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr style="font-weight:700;border-top:2px solid #e0e0e0"><td style="padding:6px 0">Gesamtpreis brutto</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+      </tbody></table>
+      <h2>Zahlungsplan</h2>
       <table><thead><tr><th>Fälligkeit</th><th>Betrag</th><th>Beschreibung</th></tr></thead>
       <tbody>
-        <tr><td>Bei Auftragserteilung</td><td class="ph">[Betrag eintragen]</td><td>50&nbsp;% Anzahlung</td></tr>
-        <tr><td>Nach Abnahme &amp; Livegang</td><td class="ph">[Betrag eintragen]</td><td>50&nbsp;% Restzahlung</td></tr>
-        <tr class="tr-total"><td><strong>Gesamtbetrag brutto</strong></td><td class="ph"><strong>[Betrag eintragen]</strong></td><td>inkl. 19&nbsp;% MwSt.</td></tr>
+        <tr><td>Bei Auftragserteilung</td><td>${pho('[XXX,XX €]')}</td><td>50&nbsp;% Anzahlung</td></tr>
+        <tr><td>Nach Abnahme &amp; Livegang</td><td>${pho('[XXX,XX €]')}</td><td>50&nbsp;% Restzahlung</td></tr>
       </tbody></table>
-      <h2>Projektstart</h2>
-      <p>Der Projektstart erfolgt nach Eingang der Anzahlung. Wir melden uns innerhalb von 2 Werktagen mit dem Kick-off-Termin.</p>
+      <h2>Vertragsgrundlagen &amp; Hinweise</h2>
+      <ul>
+        <li>Projektstart nach Eingang der Anzahlung (ca. 7–10 Werktage Umsetzungsdauer)</li>
+        <li>2 Korrekturschleifen im Designprozess inklusive</li>
+        <li>Hosting via 10Web: ca. 10&nbsp;USD/Monat, direkt beim Anbieter, separat zu begleichen</li>
+        <li>Es gelten unsere Allgemeinen Geschäftsbedingungen (AGB)</li>
+      </ul>
       ${sig2()}` },
 
     'Auftragsbestätigung Chatbot': { label:'Auftragsbestätigung', title:'KI-Chatbot-Entwicklung', body: ()=>`
       <table style="margin-bottom:20px"><tbody>
-        <tr><td style="width:155px;color:#999;font-size:9pt;padding:5px 0"><strong>Auftraggeber</strong></td>
-            <td style="padding:5px 0">${h(firm)}, vertr. d. ${h(client.name)}</td></tr>
+        <tr><td style="width:155px;color:#999;font-size:9pt;padding:5px 0"><strong>Auftragnehmer</strong></td>
+            <td style="padding:5px 0"><strong>NextStructure Solutions</strong> Inh. Tom Freer<br>Ulzburger Landstraße 401e · 25451 Quickborn</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Auftraggeber</strong></td>
+            <td style="padding:5px 0">${h(firm)}${client.company ? `, vertr. d. ${h(client.name)}` : ''}</td></tr>
         <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>E-Mail</strong></td>
             <td style="padding:5px 0">${h(client.email||'–')}</td></tr>
         <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Telefon</strong></td>
             <td style="padding:5px 0">${h(client.phone||'–')}</td></tr>
-        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Auftragnehmer</strong></td>
-            <td style="padding:5px 0">NextStructure Solutions, Quickborn</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Auftragsgegenstand</strong></td>
+            <td style="padding:5px 0">Chatbot-Entwicklung auf Landbot (EU)</td></tr>
         <tr><td style="color:#999;font-size:9pt;padding:5px 0"><strong>Datum</strong></td>
             <td style="padding:5px 0">${today}</td></tr>
       </tbody></table>
-      <p>Sehr geehrte/r ${h(client.name)}, wir bestätigen hiermit den Eingang Ihres Auftrags und freuen uns auf die Zusammenarbeit mit ${h(firm)}.</p>
+      <p>Sehr geehrte/r ${h(client.name)}, wir bestätigen hiermit Ihren Auftrag und freuen uns auf die Zusammenarbeit.</p>
       <h2>Leistungsumfang</h2>
       <ul>
-        <li>Entwicklung eines KI-Chatbots auf Basis der Landbot-Plattform</li>
-        <li>FAQ-Modul, Reservierungssystem &amp; Google-Sheets-Anbindung</li>
-        <li>Design-Anpassung nach Corporate Identity</li>
-        <li>Integration in Website oder gewünschte Plattform</li>
-        <li>AVV, Einweisung &amp; Übergabe inklusive</li>
+        <li>Chatbot-Entwicklung auf Landbot EU (DSGVO-konform)</li>
+        <li>FAQ-Modul (10–20 Fragen), Reservierungsformular &amp; E-Mail-Benachrichtigungen</li>
+        <li>Google-Sheets-Anbindung zur Echtzeit-Erfassung aller Anfragen (Apps Script)</li>
+        <li>Design-Anpassung nach Ihrer Corporate Identity</li>
+        <li>Integration in Website oder gewünschte Plattform (iframe / Widget)</li>
+        <li>DSGVO-konforme Datenschutzhinweise im Chat</li>
+        <li>Einweisung &amp; Übergabe inklusive</li>
       </ul>
-      <h2>Preis &amp; Zahlungsplan</h2>
+      <h2>Preis</h2>
+      <table><tbody>
+        <tr><td style="width:210px;padding:6px 0">Gesamtpreis netto</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td style="padding:6px 0">zzgl. 19&nbsp;% MwSt.</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr style="font-weight:700;border-top:2px solid #e0e0e0"><td style="padding:6px 0">Gesamtpreis brutto</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+      </tbody></table>
+      <h2>Zahlungsplan</h2>
       <table><thead><tr><th>Fälligkeit</th><th>Betrag</th><th>Beschreibung</th></tr></thead>
       <tbody>
-        <tr><td>Bei Auftragserteilung</td><td class="ph">[Betrag eintragen]</td><td>50&nbsp;% Anzahlung</td></tr>
-        <tr><td>Nach Abnahme &amp; Livegang</td><td class="ph">[Betrag eintragen]</td><td>50&nbsp;% Restzahlung</td></tr>
-        <tr class="tr-total"><td><strong>Gesamtbetrag brutto</strong></td><td class="ph"><strong>[Betrag eintragen]</strong></td><td>inkl. 19&nbsp;% MwSt.</td></tr>
+        <tr><td>Bei Auftragserteilung</td><td>${pho('[XXX,XX €]')}</td><td>50&nbsp;% Anzahlung</td></tr>
+        <tr><td>Nach Abnahme</td><td>${pho('[XXX,XX €]')}</td><td>50&nbsp;% Restzahlung</td></tr>
       </tbody></table>
-      <h2>Projektstart</h2>
-      <p>Der Projektstart erfolgt nach Eingang der Anzahlung und Rücksendung des unterzeichneten AVV. Wir melden uns innerhalb von 2 Werktagen.</p>
+      <h2>Vertragsgrundlagen &amp; Hinweise</h2>
+      <ul>
+        <li>Projektstart nach Eingang der Anzahlung und Rücksendung des unterzeichneten AVV (ca. 5–7 Werktage)</li>
+        <li>Auftragsverarbeitungsvertrag (AVV) gemäß Art.&nbsp;28 DSGVO liegt bei und ist zu unterzeichnen</li>
+        <li>Laufende Kosten Landbot: ab 40&nbsp;USD/Monat, direkt beim Anbieter, separat zu begleichen</li>
+        <li>Es gelten unsere Allgemeinen Geschäftsbedingungen (AGB)</li>
+      </ul>
       ${sig2()}` },
 
     'Onboarding-Checkliste Website': { label:'Onboarding', title:'Checkliste Website-Projekt', body: ()=>`
@@ -2650,21 +2734,58 @@ function generateDocInner(docName, client) {
       <table><thead><tr><th style="width:34px">Pos.</th><th>Leistung</th>
         <th style="width:40px">Mge.</th><th class="td-r" style="width:130px">Betrag netto</th></tr></thead>
       <tbody>
-        <tr><td>1</td><td>${h(client.projectType)} – Entwicklung &amp; Umsetzung</td><td>1</td><td class="td-r ph">[Betrag eintragen]</td></tr>
-        <tr><td>2</td><td class="ph">[weitere Position, falls zutreffend]</td><td class="ph">–</td><td class="td-r ph">[Betrag eintragen]</td></tr>
-        <tr class="tr-total"><td colspan="3"><strong>Gesamt netto</strong></td><td class="td-r ph">[Betrag eintragen]</td></tr>
-        <tr><td colspan="3">zzgl. 19&nbsp;% Mehrwertsteuer</td><td class="td-r ph">[Betrag eintragen]</td></tr>
-        <tr class="tr-total"><td colspan="3"><strong>Gesamt brutto</strong></td><td class="td-r ph">[Betrag eintragen]</td></tr>
+        <tr><td>1</td><td>${h(client.projectType)} – Entwicklung &amp; Umsetzung</td><td>1</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td>2</td><td>${pho('[weitere Position, falls zutreffend]')}</td><td>${pho('–')}</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr class="tr-total"><td colspan="3"><strong>Gesamt netto</strong></td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr><td colspan="3">zzgl. 19&nbsp;% Mehrwertsteuer</td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
+        <tr class="tr-total"><td colspan="3"><strong>Gesamt brutto</strong></td><td class="td-r">${pho('[XXX,XX €]')}</td></tr>
       </tbody></table>
       <h2>Zahlungsbedingungen</h2>
       <p>Zahlbar innerhalb von <strong>14 Tagen</strong> nach Rechnungsstellung ohne Abzug.</p>
       <table><tbody>
-        <tr><td style="width:155px;color:#999;font-size:9pt;padding:4px 0">IBAN</td><td style="padding:4px 0" class="ph">[IBAN eintragen]</td></tr>
-        <tr><td style="color:#999;font-size:9pt;padding:4px 0">BIC</td><td style="padding:4px 0" class="ph">[BIC eintragen]</td></tr>
-        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Bank</td><td style="padding:4px 0" class="ph">[Bank eintragen]</td></tr>
+        <tr><td style="width:155px;color:#999;font-size:9pt;padding:4px 0">IBAN</td><td style="padding:4px 0">${pho('[IBAN]')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">BIC</td><td style="padding:4px 0">${pho('[BIC]')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Bank</td><td style="padding:4px 0">${pho('[Bank]')}</td></tr>
         <tr><td style="color:#999;font-size:9pt;padding:4px 0">Verwendungszweck</td>
             <td style="padding:4px 0">${h(firm)} · ${h(client.projectType)} · ${today}</td></tr>
       </tbody></table>` },
+
+    'Willkommensdokument': { label:'Willkommen', title:'Willkommen bei NextStructure', body: ()=>`
+      <p>Sehr geehrte/r ${h(client.name)},</p>
+      <p>vielen Dank für Ihr Vertrauen in NextStructure Solutions. Wir freuen uns sehr auf die Zusammenarbeit mit ${h(firm)} und werden alles daransetzen, Ihr Projekt mit größter Sorgfalt umzusetzen.</p>
+      <h2>Ihr persönlicher Ansprechpartner</h2>
+      <table><tbody>
+        <tr><td style="width:155px;color:#999;font-size:9pt;padding:4px 0">Name</td><td style="padding:4px 0"><strong>Tom Freer</strong></td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Telefon</td><td style="padding:4px 0">+49 174 3009820</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Erreichbarkeit</td><td style="padding:4px 0">Mo–Fr, 9–18 Uhr</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">E-Mail</td><td style="padding:4px 0">kontakt@nextstructure-solutions.com</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:4px 0">Projektbezeichnung</td><td style="padding:4px 0">${h(client.projectType)}</td></tr>
+      </tbody></table>
+      <h2>Wie geht es weiter? (6 Schritte)</h2>
+      <ol>
+        <li><strong>Anzahlung</strong> – Bitte überweisen Sie die Anzahlung (Details unten). Das Projekt startet nach Zahlungseingang.</li>
+        <li><strong>Unterlagen</strong> – Senden Sie uns Ihre Inhalte (Texte, Bilder, Logo) sowie den unterschriebenen AVV und die AGB zurück.</li>
+        <li><strong>Kick-off</strong> – Wir vereinbaren einen Termin zur Abstimmung aller Anforderungen und Ziele.</li>
+        <li><strong>Umsetzung</strong> – Wir entwickeln Ihr Projekt und halten Sie regelmäßig auf dem Laufenden.</li>
+        <li><strong>Freigabe</strong> – Sie erhalten das fertige Ergebnis zur Prüfung und Abnahme.</li>
+        <li><strong>Launch &amp; Übergabe</strong> – Veröffentlichung und persönliche Einweisung durch Tom Freer.</li>
+      </ol>
+      <h2>Beiliegende Dokumente</h2>
+      <ul>
+        <li>Allgemeine Geschäftsbedingungen (AGB)</li>
+        <li>Auftragsverarbeitungsvertrag (AVV) gemäß Art.&nbsp;28 DSGVO – bitte unterschrieben zurücksenden</li>
+        <li>Auftragsbestätigung</li>
+        <li>Rahmenvertrag (optional, auf Anfrage erhältlich)</li>
+      </ul>
+      <h2>Zahlungsinformationen</h2>
+      <table><tbody>
+        <tr><td style="width:175px;color:#999;font-size:9pt;padding:5px 0">Zahlungsmodell</td><td style="padding:5px 0">${pho('[50 % / 100 %]')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0">Anzahlung / Betrag</td><td style="padding:5px 0">${pho('[XXX,XX EUR]')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0">Zahlungslink</td><td style="padding:5px 0">${pho('[ZAHLUNGSLINK]')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0">IBAN</td><td style="padding:5px 0">${pho('[IBAN]')}</td></tr>
+        <tr><td style="color:#999;font-size:9pt;padding:5px 0">BIC</td><td style="padding:5px 0">${pho('[BIC]')}</td></tr>
+      </tbody></table>
+      ${sig()}` },
   };
 
   const def = DOCS[docName] || { label:'Dokument', title:docName, body:()=>'<p>Vorlage nicht verfügbar.</p>' };
