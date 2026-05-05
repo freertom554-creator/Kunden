@@ -1748,7 +1748,7 @@ function buildDocsSectionHTML(client) {
             <div class="doc-name">${esc(name)}</div>
             ${badge}
             <button class="btn btn-primary btn-sm"
-              onclick="openDocPreview(${JSON.stringify(name)}, ${JSON.stringify(client.id)})">
+              onclick="openDocPreview('${name}', '${client.id}')">
               Generieren
             </button>
           </div>`;
@@ -2187,7 +2187,7 @@ function buildDVDocSection(client) {
         <div class="dv-doc-name">${esc(name)}</div>
         ${badge}
         <button class="btn btn-primary btn-sm"
-                onclick="openDocModal(${JSON.stringify(name)}, ${JSON.stringify(client.id)})">
+                onclick="openDocModal('${name}', '${client.id}')">
           Generieren
         </button>
       </div>`;
@@ -2205,13 +2205,19 @@ let _dpClientId = null;
 let _dpDocName  = null;
 
 function openDocModal(docName, clientId) {
+  console.log('[openDocModal] fired', docName, clientId);
   const clients = loadClients();
   const c = clients.find(x => x.id === clientId);
-  if (!c) return;
+  if (!c) { console.warn('[openDocModal] client not found', clientId); return; }
   _dpClientId = clientId;
   _dpDocName  = docName;
   document.getElementById('dp-bar-title').textContent = docName;
-  document.getElementById('dp-doc-content').innerHTML = generateDocInner(docName, c);
+  try {
+    document.getElementById('dp-doc-content').innerHTML = generateDocInner(docName, c);
+  } catch (err) {
+    console.error('[openDocModal] generateDocInner error', err);
+    document.getElementById('dp-doc-content').innerHTML = `<div style="padding:32px;color:#c00"><strong>Fehler beim Generieren:</strong><br><pre>${err}</pre></div>`;
+  }
   updateDPSentBtn(c, docName);
   document.getElementById('docPreviewOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
