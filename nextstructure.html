@@ -1286,9 +1286,9 @@
     }
     .lm-table tbody tr:last-child { border-bottom: none; }
     .lm-table tbody tr:hover { background: rgba(124,106,247,.04); }
-    .lm-table tbody tr.lm-row-kont  { background: rgba(58,170,114,.06); }
+    .lm-table tbody tr.lm-row-kont  { background: rgba(34,197,94,.08); }
     .lm-table tbody tr.lm-row-nein  { background: rgba(220,80,80,.05); }
-    .lm-table tbody tr.lm-row-done  { background: rgba(124,106,247,.05); }
+    .lm-table tbody tr.lm-row-done  { background: rgba(124,106,247,.10); }
     .lm-table td { padding: 9px 10px; font-size: 12.5px; color: var(--text); vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .lm-td-act {
       position: sticky; right: 0; z-index: 1;
@@ -1780,9 +1780,143 @@
       font-size: 12px; color: #3a3a4a;
       letter-spacing: 0.04em; text-align: center;
     }
+
+    /* ─── NS Premium Animations ──────────────────────────────── */
+
+    /* Floating orbs */
+    .ns-orb {
+      position: fixed; border-radius: 50%;
+      pointer-events: none; z-index: 0;
+      filter: blur(80px); will-change: transform;
+    }
+    .ns-orb-1 {
+      width: 520px; height: 520px;
+      background: radial-gradient(circle, rgba(124,106,247,.20) 0%, transparent 70%);
+      top: -140px; left: -120px;
+      animation: nsOrbFloat1 20s ease-in-out infinite;
+    }
+    .ns-orb-2 {
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, rgba(79,70,229,.15) 0%, transparent 70%);
+      bottom: -80px; right: -120px;
+      animation: nsOrbFloat2 25s ease-in-out infinite;
+    }
+    .ns-orb-3 {
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, rgba(99,102,241,.10) 0%, transparent 70%);
+      top: 45%; left: 42%;
+      animation: nsOrbFloat3 30s ease-in-out infinite;
+    }
+    @keyframes nsOrbFloat1 {
+      0%,100% { transform: translate(0,0); }
+      33%     { transform: translate(70px,55px); }
+      66%     { transform: translate(-35px,95px); }
+    }
+    @keyframes nsOrbFloat2 {
+      0%,100% { transform: translate(0,0); }
+      33%     { transform: translate(-65px,-75px); }
+      66%     { transform: translate(55px,-35px); }
+    }
+    @keyframes nsOrbFloat3 {
+      0%,100% { transform: translate(0,0); }
+      33%     { transform: translate(-75px,50px); }
+      66%     { transform: translate(65px,-55px); }
+    }
+
+    /* Screen transitions */
+    @keyframes nsScreenIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes nsSlideIn {
+      from { opacity: 0; transform: translateX(32px) scale(0.98); }
+      to   { opacity: 1; transform: translateX(0) scale(1); }
+    }
+    @keyframes nsSlideOut {
+      from { opacity: 1; transform: translateX(0); }
+      to   { opacity: 0; transform: translateX(32px); }
+    }
+    .ns-screen-in { animation: nsScreenIn 300ms ease-out both; }
+    .ns-slide-in  { animation: nsSlideIn  300ms ease-out both; }
+
+    /* Button shimmer */
+    .btn-primary, .card-btn {
+      overflow: hidden;
+      position: relative;
+    }
+    .btn-primary::after, .card-btn::after {
+      content: '';
+      position: absolute; top: 0; left: -110%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+      transform: skewX(-18deg);
+      pointer-events: none;
+    }
+    .btn-primary:hover::after, .card-btn:hover::after {
+      animation: nsBtnShimmer .55s ease forwards;
+    }
+    @keyframes nsBtnShimmer { to { left: 140%; } }
+
+    /* CTA pulse on idle */
+    @keyframes nsCtaPulse {
+      0%,100% { transform: scale(1); box-shadow: 0 0 16px rgba(124,106,247,.28), 0 2px 4px rgba(0,0,0,.3); }
+      50%     { transform: scale(1.022); box-shadow: 0 0 26px rgba(124,106,247,.45), 0 4px 8px rgba(0,0,0,.35); }
+    }
+    .ls-cta .btn-primary { animation: nsCtaPulse 2s ease-in-out infinite; }
+    .ls-cta .btn-primary:hover { animation: none; }
+
+    /* Lead table row left borders */
+    .lm-table tbody tr.lm-row-kont { background: rgba(34,197,94,.08) !important; }
+    .lm-table tbody tr.lm-row-kont td:first-child { box-shadow: inset 3px 0 0 #22c55e; }
+    .lm-table tbody tr.lm-row-nein { background: rgba(220,80,80,.05) !important; opacity: .46; }
+    .lm-table tbody tr.lm-row-nein td:first-child { box-shadow: inset 3px 0 0 #e05050; }
+    .lm-table tbody tr.lm-row-nein td { color: var(--text-muted) !important; }
+    .lm-table tbody tr.lm-row-done { background: rgba(124,106,247,.10) !important; }
+    .lm-table tbody tr.lm-row-done td:first-child { box-shadow: inset 3px 0 0 #7c6af7; }
+    /* keep sticky td backgrounds in sync */
+    .lm-table tbody tr.lm-row-kont .lm-td-act { background: #0e1f14 !important; }
+    .lm-table tbody tr.lm-row-nein .lm-td-act { background: #1a1010 !important; }
+    .lm-table tbody tr.lm-row-done .lm-td-act { background: #121020 !important; }
+
+    /* Logo glitch */
+    @keyframes nsGlitch {
+      0%,100% { text-shadow: none; transform: none; }
+      20% { text-shadow: -2px 0 #7c6af7, 2px 0 #22d3ee; transform: translateX(-2px); }
+      40% { text-shadow: 2px 0 #7c6af7, -2px 0 #22d3ee; transform: translateX(2px); }
+      65% { text-shadow: -1px 0 #22d3ee, 1px 0 #7c6af7; transform: translateX(-1px); }
+      80% { text-shadow: none; transform: translateX(1px); }
+    }
+    .logo { cursor: default; }
+    .logo.ns-glitching { animation: nsGlitch .38s steps(1) forwards; }
+
+    /* Celebration glow pulse on stats bar */
+    @keyframes nsGreenGlow {
+      0%,100% { box-shadow: none; }
+      50%     { box-shadow: 0 0 32px rgba(34,197,94,.5), 0 0 60px rgba(34,197,94,.2); }
+    }
+    .ns-celebrate { animation: nsGreenGlow .9s ease-in-out 3; }
+
+    /* Easter egg overlay */
+    #ns-easter-egg {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,.88); backdrop-filter: blur(6px);
+      font-size: clamp(22px,3.5vw,42px); font-weight: 900;
+      color: #c4baf9; letter-spacing: .03em; text-align: center;
+      pointer-events: none;
+      animation: nsScreenIn .3s ease-out both;
+    }
+    .ns-easter-txt {
+      animation: nsGlitch .18s steps(1) infinite;
+      text-shadow: 0 0 40px rgba(124,106,247,.8);
+    }
   </style>
 </head>
 <body>
+<!-- floating background orbs -->
+<div class="ns-orb ns-orb-1" aria-hidden="true"></div>
+<div class="ns-orb ns-orb-2" aria-hidden="true"></div>
+<div class="ns-orb ns-orb-3" aria-hidden="true"></div>
 
 <!-- ═══════════════════════════════════════════════════════ HEADER -->
 <header>
@@ -3179,14 +3313,13 @@ function showDetailView(id) {
   _dvClientId = id;
   renderDetailView();
   document.getElementById('pipelineMain').style.display = 'none';
-  document.getElementById('detailView').style.display   = 'block';
+  _nsShow('detailView', true, 'block');
   window.scrollTo(0, 0);
 }
 
 function showPipeline() {
-  document.getElementById('detailView').style.display    = 'none';
-  document.getElementById('landingScreen').style.display = 'none';
-  document.getElementById('pipelineMain').style.display  = 'block';
+  ['detailView','landingScreen'].forEach(_nsHide);
+  _nsShow('pipelineMain', false, 'block');
   renderPipeline();
 }
 
@@ -4099,41 +4232,39 @@ function initLanding() {
 }
 
 function enterDashboard(filter) {
-  document.getElementById('landingScreen').style.display = 'none';
-  document.getElementById('pipelineMain').style.display  = 'block';
+  _nsHide('landingScreen');
+  _nsShow('pipelineMain', false, 'block');
   renderPipeline(filter);
 }
 
 // ─── Hub / Landing navigation ─────────────────────────────────────────────
 function showHub() {
-  document.getElementById('hubScreen').style.display       = 'flex';
-  document.getElementById('statsScreen').style.display     = 'none';
-  document.getElementById('leadsScreen').style.display     = 'none';
-  document.getElementById('generatorScreen').style.display = 'none';
-  document.getElementById('landingScreen').style.display   = 'none';
-  document.getElementById('pipelineMain').style.display    = 'none';
+  ['statsScreen','leadsScreen','generatorScreen','landingScreen'].forEach(_nsHide);
+  document.getElementById('pipelineMain').style.display = 'none';
+  _nsShow('hubScreen', false, 'flex');
   document.getElementById('hub-greeting').textContent = getGreeting();
   const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
   document.getElementById('hub-quote-text').textContent   = `„${q.text}"`;
   document.getElementById('hub-quote-author').textContent = `— ${q.author}`;
+  setTimeout(nsInitCardTilt, 60);
 }
 
 function openLanding() {
-  document.getElementById('hubScreen').style.display    = 'none';
-  document.getElementById('statsScreen').style.display  = 'none';
-  document.getElementById('landingScreen').style.display = 'flex';
+  ['hubScreen','statsScreen'].forEach(_nsHide);
+  _nsShow('landingScreen', false, 'flex');
   initLanding();
+  setTimeout(() => nsTriggerCountUp('.ls-kachel-val'), 30);
 }
 
 // ─── Stats tab state ──────────────────────────────────────────────────────
 let _statsTab = 'kunden';
 
 function openStats() {
-  document.getElementById('hubScreen').style.display    = 'none';
-  document.getElementById('landingScreen').style.display = 'none';
-  document.getElementById('pipelineMain').style.display  = 'none';
-  document.getElementById('statsScreen').style.display   = 'flex';
+  ['hubScreen','landingScreen'].forEach(_nsHide);
+  document.getElementById('pipelineMain').style.display = 'none';
+  _nsShow('statsScreen', true, 'flex');
   switchStatsTab(_statsTab);
+  setTimeout(() => nsTriggerCountUp('.stat-card-value, .lm-stat-val, .st-kpi-val'), 40);
 }
 
 function switchStatsTab(tab) {
@@ -4543,12 +4674,9 @@ function calcLeadScore(lead) {
 }
 
 function openLeads() {
-  document.getElementById('hubScreen').style.display       = 'none';
-  document.getElementById('statsScreen').style.display     = 'none';
-  document.getElementById('landingScreen').style.display   = 'none';
-  document.getElementById('pipelineMain').style.display    = 'none';
-  document.getElementById('generatorScreen').style.display = 'none';
-  document.getElementById('leadsScreen').style.display     = 'flex';
+  ['hubScreen','statsScreen','landingScreen','generatorScreen'].forEach(_nsHide);
+  document.getElementById('pipelineMain').style.display = 'none';
+  _nsShow('leadsScreen', true, 'flex');
   renderLeadsScreen();
 }
 
@@ -4603,7 +4731,7 @@ function lmRenderTable() {
         const rowCls = st === 'Kontaktiert' ? 'lm-row-kont' : st === 'Nicht interessiert' ? 'lm-row-nein' : done ? 'lm-row-done' : '';
         const addBtn = done
           ? `<button class="lm-act-btn lm-act-add done" disabled>✓</button>`
-          : `<button class="lm-act-btn lm-act-add" onclick="lmAddToDb('${esc(l.id)}')">+ DB</button>`;
+          : `<button class="lm-act-btn lm-act-add" onclick="lmAddToDb('${esc(l.id)}',event)">+ DB</button>`;
         const statusOpts = ['Neu','Kontaktiert','Nicht interessiert','Demo angefragt']
           .map(s => `<option${st===s?' selected':''}>${s}</option>`).join('');
         return `<tr class="${rowCls}">
@@ -4841,12 +4969,14 @@ function lmSetStatus(id, status) {
   if (!lead) return;
   lead.status = status;
   saveLeads(leads);
+  nsCheckAllContacted();
 }
 
-function lmAddToDb(id) {
+function lmAddToDb(id, ev) {
   const leads = loadLeads();
   const lead  = leads.find(l => l.id === id);
   if (!lead || lead.status === 'Demo angefragt') return;
+  if (ev) nsConfetti(ev.clientX, ev.clientY);
   const clients = loadClients();
   clients.push({
     id:           Date.now().toString(36) + Math.random().toString(36).slice(2),
@@ -4886,13 +5016,10 @@ function lmExportCsv() {
 
 // ─── Generator ────────────────────────────────────────────────────────────
 function openGenerator() {
-  document.getElementById('hubScreen').style.display       = 'none';
-  document.getElementById('statsScreen').style.display     = 'none';
-  document.getElementById('leadsScreen').style.display     = 'none';
-  document.getElementById('landingScreen').style.display   = 'none';
-  document.getElementById('pipelineMain').style.display    = 'none';
-  document.getElementById('generatorScreen').style.display = 'flex';
-  document.getElementById('previewSec').style.display      = 'none';
+  ['hubScreen','statsScreen','leadsScreen','landingScreen'].forEach(_nsHide);
+  document.getElementById('pipelineMain').style.display = 'none';
+  _nsShow('generatorScreen', true, 'flex');
+  document.getElementById('previewSec').style.display = 'none';
 }
 
 const INDUSTRY_LABELS = {
@@ -5640,10 +5767,134 @@ if(FX.typewriter){var h1=document.getElementById('heroH1');if(h1){var txt=h1.tex
   });
 })();
 
+// ─── NS Premium Animations ────────────────────────────────────────────────
+
+/* Screen transition helpers */
+function _nsShow(id, slide, display) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('ns-screen-in', 'ns-slide-in');
+  el.style.display = display || 'flex';
+  void el.offsetWidth;
+  el.classList.add(slide ? 'ns-slide-in' : 'ns-screen-in');
+}
+function _nsHide(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'none';
+}
+
+/* Count-up animation for stat numbers */
+function nsCountUp(el, target, dur) {
+  dur = dur || 800;
+  const start = performance.now();
+  el.dataset.nsTarget = target;
+  function step(now) {
+    if (el.dataset.nsTarget != target) return;
+    const t = Math.min((now - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(ease * target);
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+function nsTriggerCountUp(selector) {
+  document.querySelectorAll(selector).forEach(el => {
+    const v = parseInt(el.textContent) || 0;
+    if (v > 0) nsCountUp(el, v);
+  });
+}
+
+/* Confetti burst at (x, y) */
+function nsConfetti(x, y) {
+  const colors = ['#7c6af7','#c4baf9','#3aaa72','#c9a830','#60a5fa','#f472b6','#34d399'];
+  for (let i = 0; i < 15; i++) {
+    const p = document.createElement('div');
+    const ang = (Math.random() * 360) * Math.PI / 180;
+    const dist = 45 + Math.random() * 65;
+    const tx = Math.cos(ang) * dist, ty = Math.sin(ang) * dist;
+    const sz = 5 + Math.random() * 5;
+    Object.assign(p.style, {
+      position: 'fixed', left: x + 'px', top: y + 'px',
+      width: sz + 'px', height: sz + 'px',
+      borderRadius: Math.random() > .45 ? '50%' : '2px',
+      background: colors[i % colors.length],
+      pointerEvents: 'none', zIndex: 9998,
+      transform: 'translate(-50%,-50%)',
+      transition: 'transform .65s cubic-bezier(.19,1,.22,1), opacity .65s ease',
+      willChange: 'transform,opacity',
+    });
+    document.body.appendChild(p);
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      p.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) rotate(${Math.random()*360}deg)`;
+      p.style.opacity = '0';
+    }));
+    setTimeout(() => p.remove(), 750);
+  }
+}
+
+/* 3D card tilt for hub cards */
+function nsInitCardTilt() {
+  document.querySelectorAll('.card:not(.card--disabled)').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width  - .5;
+      const y = (e.clientY - r.top)  / r.height - .5;
+      card.style.transition = 'transform .08s ease, border-color .2s, box-shadow .2s';
+      card.style.transform  = `perspective(700px) rotateY(${x*6}deg) rotateX(${-y*6}deg) translateY(-3px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transition = 'transform .5s cubic-bezier(.19,1,.22,1), border-color .2s, box-shadow .2s';
+      card.style.transform  = '';
+    });
+  });
+}
+
+/* Logo glitch on hover */
+function nsInitLogoGlitch() {
+  const logo = document.querySelector('.logo');
+  if (!logo) return;
+  logo.addEventListener('mouseenter', () => {
+    if (logo.classList.contains('ns-glitching')) return;
+    logo.classList.add('ns-glitching');
+    setTimeout(() => logo.classList.remove('ns-glitching'), 400);
+  });
+}
+
+/* Check if all leads have been worked — green celebration pulse */
+function nsCheckAllContacted() {
+  const leads = loadLeads();
+  if (!leads.length) return;
+  if (leads.every(l => l.status && l.status !== 'Neu')) {
+    const bar = document.querySelector('.lm-stats-bar');
+    if (bar) {
+      bar.classList.remove('ns-celebrate');
+      void bar.offsetWidth;
+      bar.classList.add('ns-celebrate');
+      setTimeout(() => bar.classList.remove('ns-celebrate'), 2800);
+    }
+  }
+}
+
+/* Konami code easter egg */
+const _KONAMI_SEQ = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let _konamiIdx = 0;
+document.addEventListener('keydown', function nsKonami(e) {
+  _konamiIdx = (e.key === _KONAMI_SEQ[_konamiIdx]) ? _konamiIdx + 1 : (e.key === _KONAMI_SEQ[0] ? 1 : 0);
+  if (_konamiIdx === _KONAMI_SEQ.length) {
+    _konamiIdx = 0;
+    const el = document.createElement('div');
+    el.id = 'ns-easter-egg';
+    el.innerHTML = '<div class="ns-easter-txt">🚀 NextStructure Mode Activated</div>';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 2000);
+  }
+});
+
 // ─── Boot ─────────────────────────────────────────────────────────────────
 initLanding();
 renderPipeline();
 showHub();
+nsInitLogoGlitch();
 </script>
 </body>
 </html>
