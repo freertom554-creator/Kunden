@@ -1916,6 +1916,8 @@
     </button>
   </div>
   <div class="st-body" id="leads-body"></div>
+  <input type="file" id="lm-file-input" accept=".csv,.json" style="display:none"
+         onchange="lmHandleFile(this.files[0]); this.value='';">
 </div>
 
 <!-- ══════════════════════════════════════════════════ LANDING -->
@@ -4562,7 +4564,7 @@ function lmRenderTable() {
           .map(s => `<option${st===s?' selected':''}>${s}</option>`).join('');
         return `<tr>
           <td>${scoreBadge(l.score||0)}</td>
-          <td><strong>${esc(l.name)}</strong></td>
+          <td><strong>${esc(l.name)}</strong>${l.unpassend ? ' <span style="font-size:10px;background:rgba(201,168,48,.15);color:#c9a830;border-radius:4px;padding:1px 5px;vertical-align:middle">Unpassend</span>' : ''}</td>
           <td style="color:var(--muted)">${esc(l.category)||'–'}</td>
           <td>${stars(l.rating, l.reviewCount)}</td>
           <td style="color:var(--muted)">${phone ? `<a href="tel:${esc(phone)}" style="color:inherit;text-decoration:none">${esc(phone)}</a>` : '–'}</td>
@@ -4621,9 +4623,10 @@ function lmRenderImport() {
         Score = Bewertung × 12 + min(Anz. Bewertungen / 10, 20) + Telefon (+20) + Website (+10). Max: 110.
       </div>
       <div class="lm-import-branche">
-        <label>Branche-Filter (optional):</label>
+        <label>Branche-Kennzeichnung (optional):</label>
         <input type="text" id="lm-branche-kw" placeholder="z. B. Restaurant, Friseur …"
                value="${esc(_lmBranche)}" oninput="_lmBranche=this.value" />
+        <span style="font-size:11.5px;color:var(--muted);margin-left:6px">Leads ohne Match werden als „Unpassend" markiert, aber trotzdem importiert.</span>
       </div>
       <div class="lm-drop-zone" id="lm-drop-zone">
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none" style="margin-bottom:10px">
@@ -4633,9 +4636,8 @@ function lmRenderImport() {
         </svg>
         <div style="font-size:13px;color:var(--muted);margin-bottom:6px">
           CSV oder JSON hier ablegen oder
-          <label style="color:#9b8ff9;cursor:pointer;text-decoration:underline;text-underline-offset:3px">
-            auswählen<input type="file" accept=".csv,.json" onchange="lmHandleFile(this.files[0])" />
-          </label>
+          <span style="color:#9b8ff9;cursor:pointer;text-decoration:underline;text-underline-offset:3px"
+                onclick="document.getElementById('lm-file-input').click()">auswählen</span>
         </div>
         <div class="lm-drop-hint">CSV: komma- oder semikolongetrennt &nbsp;·&nbsp; JSON: Array von Objekten</div>
       </div>
@@ -4667,20 +4669,21 @@ function lmHandleFile(file) {
     try {
       const text = e.target.result;
       const raw  = file.name.toLowerCase().endsWith('.json') ? lmParseJson(text) : lmParseCsv(text);
+      console.log('[LM Import] parsed', raw.length, 'rows. First 3:', raw.slice(0, 3));
       const existing = loadLeads();
-      let added = 0, skipped = 0;
+      let added = 0, skipped = 0, flagged = 0;
+      const kw = _lmBranche.trim().toLowerCase();
       raw.forEach(r => {
         const nl = (r.name||'').toLowerCase(), cl = (r.category||'').toLowerCase();
         if (/geschlossen|permanently closed|closed permanently|temporarily closed/.test(nl+' '+cl)) {
           skipped++; return;
         }
-        if (_lmBranche && !cl.includes(_lmBranche.toLowerCase()) &&
-            !nl.includes(_lmBranche.toLowerCase())) { skipped++; return; }
         r.score     = calcLeadScore(r);
         r.status    = 'Neu';
         r.addedDate = new Date().toISOString();
         r.notes     = r.notes || '';
         r.id        = Date.now().toString(36) + Math.random().toString(36).slice(2) + added;
+        if (kw && !cl.includes(kw) && !nl.includes(kw)) { r.unpassend = true; flagged++; }
         existing.push(r);
         added++;
       });
@@ -4688,7 +4691,8 @@ function lmHandleFile(file) {
       const sumEl = document.getElementById('lm-summary');
       if (sumEl) sumEl.innerHTML = `<div class="lm-summary">
         <strong>${added} Lead${added!==1?'s':''} importiert</strong> und gespeichert.
-        ${skipped ? `<span class="lm-filtered"> ${skipped} übersprungen</span> (geschlossen oder kein Branchenmatch).` : ''}
+        ${skipped ? `<span class="lm-filtered"> ${skipped} übersprungen</span> (geschlossen).` : ''}
+        ${flagged ? `<span style="color:#c9a830"> ${flagged} als „Unpassend" markiert</span> (kein Branchenmatch).` : ''}
         Gesamt im Lead-Manager: <strong>${existing.length}</strong>.
       </div>`;
     } catch(err) { alert('Import-Fehler: ' + err.message); }
@@ -4713,19 +4717,22 @@ function lmParseCsv(text) {
   const delim = lines[0].includes(';') ? ';' : ',';
   const hdrs  = lines[0].split(delim).map(h => h.trim().replace(/^"|"$/g,'').toLowerCase());
   const aliases = {
-    name:        ['name','firma','unternehmen','company','bezeichnung','title','betrieb'],
-    category:    ['kategorie','branche','industry','typ','type','sektor','category','art'],
-    rating:      ['bewertung','rating','stars','sterne','wertung','note','durchschnitt','avg'],
-    reviewCount: ['bewertungen','reviews','anzahl','reviewcount','total reviews','anzahl bewertungen','rezensionen','count','anzahl_bewertungen','reviews count'],
-    phone:       ['telefon','phone','tel','mobil','mobile','telefonnummer','kontakt','rufnummer'],
+    name:        ['title','name','firma','unternehmen','company','bezeichnung','betrieb'],
+    category:    ['categoryname','kategorie','branche','industry','typ','type','sektor','category','art'],
+    rating:      ['totalscore','bewertung','rating','stars','sterne','wertung','note','durchschnitt','avg'],
+    reviewCount: ['reviewscount','bewertungen','reviews','anzahl','reviewcount','total reviews','anzahl bewertungen','rezensionen','count','anzahl_bewertungen','reviews count'],
+    phone:       ['phoneunformatted','telefon','phone','tel','mobil','mobile','telefonnummer','kontakt','rufnummer'],
     website:     ['website','url','web','homepage','webseite','link','domain'],
-    address:     ['adresse','address','anschrift','ort','location','standort','stadt','city','straße'],
+    address:     ['street','adresse','address','anschrift','ort','location','standort','stadt','city','straße'],
     notes:       ['notizen','notes','anmerkung','kommentar','comment'],
   };
   const colMap = {};
   hdrs.forEach((h, i) => {
+    const hClean = h.replace(/[^a-z0-9]/g,'');
     for (const [f, al] of Object.entries(aliases))
-      if (al.some(a => h.includes(a)||a.includes(h))) { if (colMap[i]===undefined) colMap[i]=f; break; }
+      if (al.some(a => hClean === a || h === a || h.includes(a) || a.includes(h))) {
+        if (colMap[i] === undefined) { colMap[i] = f; break; }
+      }
   });
   return lines.slice(1).map(line => {
     const cols = lmParseCsvLine(line, delim);
@@ -4741,13 +4748,13 @@ function lmParseJson(text) {
   const data = JSON.parse(text);
   const arr  = Array.isArray(data) ? data : (data.leads||data.data||data.results||Object.values(data));
   return arr.map(item => ({
-    name:        String(item.name||item.firma||item.company||item.bezeichnung||item.title||''),
-    category:    String(item.category||item.kategorie||item.branche||item.industry||item.type||item.art||''),
-    rating:      Math.min(5, Math.max(0, parseFloat(item.rating||item.bewertung||item.stars||item.note)||0)),
-    reviewCount: parseInt(item.reviewCount||item.reviews||item.anzahl||item.bewertungen||item.count)||0,
-    phone:       String(item.phone||item.telefon||item.tel||item.mobile||item.rufnummer||''),
+    name:        String(item.title||item.name||item.firma||item.company||item.bezeichnung||''),
+    category:    String(item.categoryName||item.category||item.kategorie||item.branche||item.industry||item.type||item.art||''),
+    rating:      Math.min(5, Math.max(0, parseFloat(item.totalScore||item.rating||item.bewertung||item.stars||item.note)||0)),
+    reviewCount: parseInt(item.reviewsCount||item.reviewCount||item.reviews||item.anzahl||item.bewertungen||item.count)||0,
+    phone:       String(item.phoneUnformatted||item.phone||item.telefon||item.tel||item.mobile||item.rufnummer||''),
     website:     String(item.website||item.url||item.web||item.homepage||item.domain||''),
-    address:     String(item.address||item.adresse||item.anschrift||item.ort||item.location||item.city||''),
+    address:     String(item.street||item.address||item.adresse||item.anschrift||item.ort||item.location||item.city||''),
     notes:       String(item.notes||item.notizen||item.anmerkung||''),
   })).filter(r => r.name);
 }
