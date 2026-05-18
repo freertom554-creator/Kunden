@@ -4687,6 +4687,7 @@ let _lmSearch       = '';
 let _lmStatusFilter = '';
 let _lmKatFilter    = '';
 let _lmPhoneOnly    = true;
+let _lmSort         = 'score';
 
 function loadLeads() {
   try { return JSON.parse(localStorage.getItem(LM_KEY)) || []; } catch(e) { return []; }
@@ -4739,7 +4740,15 @@ function lmRenderTable() {
     if (_lmStatusFilter && (l.status||'Neu') !== _lmStatusFilter) return false;
     if (_lmPhoneOnly && !l.phone) return false;
     return true;
-  }).sort((a,b) => (b.score||0) - (a.score||0));
+  }).sort((a, b) => {
+    if (_lmSort === 'date') {
+      return new Date(b.addedDate || 0) - new Date(a.addedDate || 0);
+    }
+    // score desc, ties broken by addedDate desc
+    const sd = (b.score || 0) - (a.score || 0);
+    if (sd !== 0) return sd;
+    return new Date(b.addedDate || 0) - new Date(a.addedDate || 0);
+  });
 
   function scoreBadge(s) {
     const cls = s >= 70 ? 'green' : s >= 40 ? 'yellow' : 'red';
@@ -4805,6 +4814,10 @@ function lmRenderTable() {
         <input type="checkbox" ${_lmPhoneOnly?'checked':''} onchange="_lmPhoneOnly=this.checked;lmRefreshTable()">
         Nur mit Tel.
       </label>
+      <select class="lm-status-filter-sel" onchange="_lmSort=this.value;lmRefreshTable()" title="Sortierung">
+        <option value="score"${_lmSort==='score'?' selected':''}>Score ↓</option>
+        <option value="date"${_lmSort==='date'?' selected':''}>Neueste zuerst</option>
+      </select>
       <button class="lm-del-sel-btn" onclick="lmDeleteSelected()">🗑 Löschen</button>
       <button class="lm-del-all-btn" onclick="lmDeleteAll()">Alle löschen</button>
       <button class="lm-export-btn" onclick="lmExportCsv()">
@@ -4923,6 +4936,8 @@ function lmHandleFile(file) {
         added++;
       });
       saveLeads(existing);
+      _lmSort = 'date';
+      switchLmTab('tabelle');
       const sumEl = document.getElementById('lm-summary');
       if (sumEl) sumEl.innerHTML = `<div class="lm-summary">
         <strong>${added} Lead${added!==1?'s':''} importiert</strong> und gespeichert.
