@@ -1917,6 +1917,128 @@
     .nm-send-btn svg { width: 13px; height: 13px; }
     .nm-hint { font-size: 10px; color: #252535; text-align: center; margin-top: 6px; }
 
+    /* Expand button in panel header */
+    .nm-hdr-actions { display: flex; align-items: center; gap: 4px; }
+    .nm-expand-btn {
+      width: 28px; height: 28px; border-radius: 7px; border: none;
+      background: rgba(255,255,255,0.06); color: #666688; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; line-height: 1; transition: background 0.15s, color 0.15s;
+    }
+    .nm-expand-btn:hover { background: rgba(255,255,255,0.11); color: #c4baf9; }
+
+    /* Fullscreen overlay */
+    #nmFullscreen {
+      position: fixed; inset: 0; z-index: 9000;
+      display: none; flex-direction: column;
+      background: var(--bg);
+      background-image: radial-gradient(ellipse 60% 35% at 50% 0%, rgba(80,55,200,0.15) 0%, transparent 55%);
+    }
+    #nmFullscreen.nm-fs-open {
+      display: flex;
+      animation: nmFsIn 260ms cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes nmFsIn {
+      from { opacity: 0; transform: scale(0.97); transform-origin: bottom right; }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .nm-fs-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 28px; flex-shrink: 0;
+      background: rgba(13,13,13,0.9); backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(124,106,247,0.13);
+    }
+    .nm-fs-hdr-left { display: flex; align-items: center; gap: 10px; }
+    .nm-fs-hdr-icon {
+      width: 32px; height: 32px; border-radius: 8px; font-size: 16px; flex-shrink: 0;
+      background: linear-gradient(135deg,rgba(124,106,247,0.3),rgba(80,64,208,0.2));
+      border: 1px solid rgba(124,106,247,0.25);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nm-fs-hdr-title { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.02em; }
+    .nm-fs-hdr-sub   { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .nm-fs-hdr-actions { display: flex; align-items: center; gap: 8px; }
+    .nm-shrink-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: 7px; cursor: pointer;
+      border: 1px solid rgba(124,106,247,0.25);
+      background: rgba(124,106,247,0.08); color: #c4baf9;
+      font-size: 12px; font-weight: 600;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .nm-shrink-btn:hover { background: rgba(124,106,247,0.18); border-color: rgba(124,106,247,0.45); }
+
+    .nm-fs-body { flex: 1; display: flex; overflow: hidden; }
+
+    .nm-fs-sidebar {
+      width: 240px; flex-shrink: 0;
+      border-right: 1px solid rgba(124,106,247,0.1);
+      background: rgba(10,10,18,0.5);
+      display: flex; flex-direction: column; overflow-y: auto;
+      padding: 20px 0 16px;
+    }
+    .nm-fs-sidebar-label {
+      display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #454560; padding: 0 16px 8px;
+    }
+    .nm-fs-mem-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 16px; font-size: 13px; color: var(--muted);
+      cursor: pointer; transition: background 0.12s, color 0.12s;
+    }
+    .nm-fs-mem-item:hover { background: rgba(124,106,247,0.1); color: #c4baf9; }
+    .nm-fs-mem-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(124,106,247,0.4); flex-shrink: 0;
+    }
+    .nm-fs-mem-empty { padding: 6px 16px; font-size: 12px; color: #333348; font-style: italic; }
+    .nm-fs-divider { height: 1px; background: rgba(124,106,247,0.08); margin: 10px 16px 18px; }
+
+    .nm-fs-chat { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    #nmFsMessages {
+      flex: 1; overflow-y: auto; padding: 28px 32px 16px;
+      display: flex; flex-direction: column; gap: 18px; scroll-behavior: smooth;
+    }
+    #nmFsMessages::-webkit-scrollbar { width: 4px; }
+    #nmFsMessages::-webkit-scrollbar-track { background: transparent; }
+    #nmFsMessages::-webkit-scrollbar-thumb { background: rgba(124,106,247,0.2); border-radius: 4px; }
+
+    .nm-fs-input-bar {
+      padding: 14px 28px 20px; flex-shrink: 0;
+      border-top: 1px solid rgba(124,106,247,0.1);
+      background: rgba(10,10,18,0.5); backdrop-filter: blur(8px);
+    }
+    .nm-fs-input-wrap {
+      display: flex; align-items: flex-end; gap: 10px;
+      background: rgba(18,16,32,0.9);
+      border: 1px solid rgba(124,106,247,0.22); border-radius: 12px;
+      padding: 10px 10px 10px 16px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .nm-fs-input-wrap:focus-within {
+      border-color: rgba(124,106,247,0.5);
+      box-shadow: 0 0 0 3px rgba(124,106,247,0.08);
+    }
+    #nmFsInput {
+      flex: 1; background: none; border: none; outline: none;
+      color: #e8e4ff; font-size: 14px; font-family: inherit;
+      resize: none; min-height: 22px; max-height: 140px;
+      padding: 0; overflow-y: auto; line-height: 1.5;
+    }
+    #nmFsInput::placeholder { color: #383858; }
+    .nm-fs-send-btn {
+      width: 36px; height: 36px; border-radius: 8px; border: none; flex-shrink: 0;
+      background: linear-gradient(135deg,var(--accent),#5040d0);
+      color: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.15s, box-shadow 0.15s;
+      box-shadow: 0 0 14px rgba(124,106,247,0.3);
+    }
+    .nm-fs-send-btn:hover { opacity: 0.85; box-shadow: 0 0 20px rgba(124,106,247,0.5); }
+    .nm-fs-send-btn svg { width: 15px; height: 15px; }
+    .nm-fs-hint { font-size: 11px; color: #2a2a40; text-align: center; margin-top: 8px; }
+
     /* ─── Game Screen ────────────────────────────────────────── */
     #gameScreen {
       position: fixed; inset: 0; z-index: 700;
@@ -2214,7 +2336,10 @@
         <div class="nm-hdr-sub">Strategischer KI-Kopilot</div>
       </div>
     </div>
-    <button class="nm-close-btn" onclick="nmToggle()" aria-label="Schließen">✕</button>
+    <div class="nm-hdr-actions">
+      <button class="nm-expand-btn" onclick="nmExpand()" aria-label="Vollbild">⛶</button>
+      <button class="nm-close-btn" onclick="nmToggle()" aria-label="Schließen">✕</button>
+    </div>
   </div>
   <div class="nm-messages" id="nmMessages"></div>
   <div class="nm-input-bar">
@@ -2225,6 +2350,45 @@
       </button>
     </div>
     <div class="nm-hint">Enter · Shift+Enter für Zeilenumbruch</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════ NEXT MANAGER FULLSCREEN -->
+<div id="nmFullscreen">
+  <div class="nm-fs-hdr">
+    <div class="nm-fs-hdr-left">
+      <div class="nm-fs-hdr-icon">🧠</div>
+      <div>
+        <div class="nm-fs-hdr-title">Next Manager</div>
+        <div class="nm-fs-hdr-sub">Strategischer KI-Kopilot</div>
+      </div>
+    </div>
+    <div class="nm-fs-hdr-actions">
+      <button class="nm-shrink-btn" onclick="nmCollapse()">↙ Verkleinern</button>
+    </div>
+  </div>
+  <div class="nm-fs-body">
+    <aside class="nm-fs-sidebar">
+      <span class="nm-fs-sidebar-label">Memory</span>
+      <div class="nm-fs-mem-item"><div class="nm-fs-mem-dot"></div>Kunden</div>
+      <div class="nm-fs-mem-item"><div class="nm-fs-mem-dot"></div>Ziele</div>
+      <div class="nm-fs-mem-item"><div class="nm-fs-mem-dot"></div>Strategie</div>
+      <div class="nm-fs-divider"></div>
+      <span class="nm-fs-sidebar-label">Verlauf</span>
+      <div class="nm-fs-mem-empty">Noch keine Gespräche</div>
+    </aside>
+    <div class="nm-fs-chat">
+      <div id="nmFsMessages"></div>
+      <div class="nm-fs-input-bar">
+        <div class="nm-fs-input-wrap">
+          <textarea id="nmFsInput" rows="1" placeholder="Nachricht eingeben …"></textarea>
+          <button class="nm-fs-send-btn" onclick="nmFsSend()" aria-label="Senden">
+            <svg viewBox="0 0 15 15" fill="none"><path d="M13 7.5L2 2l2 5.5-2 5.5 11-5.5z" fill="currentColor"/></svg>
+          </button>
+        </div>
+        <div class="nm-fs-hint">Enter zum Senden &nbsp;·&nbsp; Shift+Enter für Zeilenumbruch</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -4448,12 +4612,13 @@ function openLanding() {
   setTimeout(() => nsTriggerCountUp('.ls-kachel-val'), 30);
 }
 
-// ─── Next Manager FAB + Floating Panel ───────────────────────────────────
+// ─── Next Manager FAB + Floating Panel + Fullscreen ──────────────────────
 (function() {
-  var _nmOpen = false;
+  var _nmOpen    = false;
+  var _nmFsOpen  = false;
   var _nmGreeted = false;
+  var _nmMsgs    = []; // shared message store for both panel and fullscreen
 
-  // Context-aware greeting based on which screen is visible
   function _nmGreeting() {
     var screens = {
       hubScreen:       'Wie kann ich NextStructure heute weiterbringen?',
@@ -4478,31 +4643,63 @@ function openLanding() {
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
   }
 
-  function _nmAppend(role, text) {
-    var msgs = document.getElementById('nmMessages');
-    if (!msgs) return;
-    var isAi = role === 'ai';
-    var div = document.createElement('div');
-    div.className = 'nm-msg nm-msg--' + (isAi ? 'ai' : 'user');
-    div.innerHTML =
+  function _nmBubbleHtml(msg) {
+    var isAi = msg.role === 'ai';
+    return '<div class="nm-msg nm-msg--' + (isAi ? 'ai' : 'user') + '">' +
       '<div class="nm-msg-avatar">' + (isAi ? '🧠' : '👤') + '</div>' +
       '<div>' +
-        '<div class="nm-msg-bubble">' + _nmEsc(text) + '</div>' +
-        '<div class="nm-msg-time"' + (!isAi ? ' style="text-align:right"' : '') + '>' + _nmTime() + '</div>' +
-      '</div>';
-    msgs.appendChild(div);
-    msgs.scrollTop = msgs.scrollHeight;
+        '<div class="nm-msg-bubble">' + _nmEsc(msg.text) + '</div>' +
+        '<div class="nm-msg-time"' + (!isAi ? ' style="text-align:right"' : '') + '>' + msg.time + '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function _nmRenderTo(containerId) {
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = _nmMsgs.map(_nmBubbleHtml).join('');
+    el.scrollTop = el.scrollHeight;
+  }
+
+  function _nmAppend(role, text) {
+    var msg = { role: role, text: text, time: _nmTime() };
+    _nmMsgs.push(msg);
+    // Append to panel messages
+    var panelMsgs = document.getElementById('nmMessages');
+    if (panelMsgs) {
+      var div = document.createElement('div');
+      div.innerHTML = _nmBubbleHtml(msg);
+      panelMsgs.appendChild(div.firstChild);
+      panelMsgs.scrollTop = panelMsgs.scrollHeight;
+    }
+    // Mirror to fullscreen if open
+    if (_nmFsOpen) {
+      var fsMsgs = document.getElementById('nmFsMessages');
+      if (fsMsgs) {
+        var div2 = document.createElement('div');
+        div2.innerHTML = _nmBubbleHtml(msg);
+        fsMsgs.appendChild(div2.firstChild);
+        fsMsgs.scrollTop = fsMsgs.scrollHeight;
+      }
+    }
   }
 
   window.nmToggle = function() {
     var panel = document.getElementById('nmPanel');
     var fab   = document.getElementById('nmFab');
     if (!panel || !fab) return;
+    // If fullscreen is open, close everything
+    if (_nmFsOpen) {
+      document.getElementById('nmFullscreen').classList.remove('nm-fs-open');
+      _nmFsOpen = false;
+      _nmOpen   = false;
+      fab.classList.remove('nm-open');
+      return;
+    }
     _nmOpen = !_nmOpen;
     if (_nmOpen) {
       panel.classList.add('nm-panel-open');
       fab.classList.add('nm-open');
-      // Show greeting on first open
       if (!_nmGreeted) {
         _nmGreeted = true;
         _nmAppend('ai', _nmGreeting());
@@ -4516,8 +4713,35 @@ function openLanding() {
     }
   };
 
+  window.nmExpand = function() {
+    var panel = document.getElementById('nmPanel');
+    var fs    = document.getElementById('nmFullscreen');
+    if (!panel || !fs) return;
+    // Hide panel, show fullscreen
+    panel.classList.remove('nm-panel-open');
+    _nmFsOpen = true;
+    _nmRenderTo('nmFsMessages');
+    fs.classList.add('nm-fs-open');
+    setTimeout(function() {
+      var inp = document.getElementById('nmFsInput'); if (inp) inp.focus();
+    }, 200);
+  };
+
+  window.nmCollapse = function() {
+    var panel = document.getElementById('nmPanel');
+    var fs    = document.getElementById('nmFullscreen');
+    if (!panel || !fs) return;
+    fs.classList.remove('nm-fs-open');
+    _nmFsOpen = false;
+    // Re-open panel
+    panel.classList.add('nm-panel-open');
+    setTimeout(function() {
+      var inp = document.getElementById('nmInput'); if (inp) inp.focus();
+    }, 60);
+  };
+
   window.nmSend = function() {
-    var inp  = document.getElementById('nmInput');
+    var inp = document.getElementById('nmInput');
     if (!inp) return;
     var text = inp.value.trim();
     if (!text) return;
@@ -4526,17 +4750,31 @@ function openLanding() {
     inp.style.height = '';
   };
 
-  // Wire up textarea after DOM ready
-  document.addEventListener('DOMContentLoaded', function() {
-    var inp = document.getElementById('nmInput');
+  window.nmFsSend = function() {
+    var inp = document.getElementById('nmFsInput');
     if (!inp) return;
-    inp.addEventListener('input', function() {
-      this.style.height = '';
-      this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-    });
-    inp.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); window.nmSend(); }
-    });
+    var text = inp.value.trim();
+    if (!text) return;
+    _nmAppend('user', text);
+    inp.value = '';
+    inp.style.height = '';
+  };
+
+  // Wire up textareas
+  document.addEventListener('DOMContentLoaded', function() {
+    function wireInput(id, sendFn) {
+      var inp = document.getElementById(id);
+      if (!inp) return;
+      inp.addEventListener('input', function() {
+        this.style.height = '';
+        this.style.height = Math.min(this.scrollHeight, 140) + 'px';
+      });
+      inp.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendFn(); }
+      });
+    }
+    wireInput('nmInput',   window.nmSend);
+    wireInput('nmFsInput', window.nmFsSend);
   });
 })();
 
