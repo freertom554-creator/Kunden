@@ -1781,6 +1781,219 @@
       letter-spacing: 0.04em; text-align: center;
     }
 
+    /* ─── NS Manager Screen ─────────────────────────────────── */
+    #managerScreen {
+      position: fixed; inset: 0; z-index: 600;
+      display: flex; flex-direction: column;
+      background: var(--bg);
+      background-image: radial-gradient(ellipse 60% 35% at 50% 0%, rgba(80,55,200,0.18) 0%, transparent 55%);
+    }
+
+    .mgr-hdr {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 28px;
+      background: rgba(13,13,13,0.90);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(124,106,247,0.13);
+      flex-shrink: 0;
+    }
+
+    .mgr-hdr-left {
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .mgr-hdr-brain {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(124,106,247,0.3) 0%, rgba(80,64,208,0.2) 100%);
+      border: 1px solid rgba(124,106,247,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; line-height: 1; flex-shrink: 0;
+    }
+
+    .mgr-hdr-title {
+      font-size: 14px; font-weight: 700; letter-spacing: 0.03em; color: var(--text);
+    }
+
+    .mgr-hdr-sub {
+      font-size: 11px; color: var(--muted); letter-spacing: 0.02em; margin-top: 1px;
+    }
+
+    .mgr-back-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 14px; border-radius: 7px;
+      border: 1px solid rgba(124,106,247,0.25);
+      background: rgba(124,106,247,0.08); color: #c4baf9;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .mgr-back-btn:hover { background: rgba(124,106,247,0.18); border-color: rgba(124,106,247,0.45); }
+
+    .mgr-body {
+      flex: 1; display: flex; overflow: hidden;
+    }
+
+    /* Sidebar */
+    .mgr-sidebar {
+      width: 260px; flex-shrink: 0;
+      border-right: 1px solid rgba(124,106,247,0.1);
+      background: rgba(10,10,18,0.6);
+      display: flex; flex-direction: column;
+      overflow-y: auto;
+      padding: 20px 0 16px;
+    }
+
+    .mgr-sidebar-section {
+      padding: 0 16px; margin-bottom: 24px;
+    }
+
+    .mgr-sidebar-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #454560;
+      padding: 0 6px; margin-bottom: 8px;
+    }
+
+    .mgr-mem-list {
+      display: flex; flex-direction: column; gap: 2px;
+    }
+
+    .mgr-mem-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 10px; border-radius: 7px;
+      font-size: 13px; color: var(--muted);
+      cursor: pointer; transition: background 0.12s, color 0.12s;
+      user-select: none;
+    }
+    .mgr-mem-item:hover { background: rgba(124,106,247,0.1); color: #c4baf9; }
+
+    .mgr-mem-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(124,106,247,0.4); flex-shrink: 0;
+    }
+
+    .mgr-mem-empty {
+      padding: 10px 10px;
+      font-size: 12px; color: #333348; font-style: italic;
+    }
+
+    .mgr-sidebar-divider {
+      height: 1px; background: rgba(124,106,247,0.08);
+      margin: 8px 16px 20px;
+    }
+
+    /* Chat area */
+    .mgr-chat {
+      flex: 1; display: flex; flex-direction: column;
+      overflow: hidden; background: transparent;
+    }
+
+    .mgr-messages {
+      flex: 1; overflow-y: auto; padding: 28px 32px 16px;
+      display: flex; flex-direction: column; gap: 18px;
+      scroll-behavior: smooth;
+    }
+
+    /* Scrollbar */
+    .mgr-messages::-webkit-scrollbar { width: 4px; }
+    .mgr-messages::-webkit-scrollbar-track { background: transparent; }
+    .mgr-messages::-webkit-scrollbar-thumb { background: rgba(124,106,247,0.2); border-radius: 4px; }
+
+    .mgr-msg {
+      display: flex; gap: 12px; max-width: 720px;
+    }
+
+    .mgr-msg--ai { align-self: flex-start; }
+    .mgr-msg--user { align-self: flex-end; flex-direction: row-reverse; }
+
+    .mgr-msg-avatar {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0; margin-top: 2px;
+      background: linear-gradient(135deg, rgba(124,106,247,0.28) 0%, rgba(80,64,208,0.18) 100%);
+      border: 1px solid rgba(124,106,247,0.22);
+    }
+
+    .mgr-msg--user .mgr-msg-avatar {
+      background: linear-gradient(135deg, rgba(124,106,247,0.55) 0%, rgba(80,64,208,0.45) 100%);
+      border-color: rgba(124,106,247,0.4);
+    }
+
+    .mgr-msg-bubble {
+      padding: 12px 16px; border-radius: 12px;
+      font-size: 14px; line-height: 1.7; color: var(--text);
+      max-width: 600px;
+    }
+
+    .mgr-msg--ai .mgr-msg-bubble {
+      background: linear-gradient(155deg, #18152e 0%, #111120 80%);
+      border: 1px solid rgba(124,106,247,0.15);
+      border-radius: 4px 12px 12px 12px;
+    }
+
+    .mgr-msg--user .mgr-msg-bubble {
+      background: linear-gradient(135deg, rgba(124,106,247,0.45) 0%, rgba(80,64,208,0.38) 100%);
+      border: 1px solid rgba(124,106,247,0.35);
+      border-radius: 12px 4px 12px 12px;
+      color: #ede9ff;
+    }
+
+    .mgr-msg-time {
+      font-size: 10px; color: #333348; margin-top: 5px;
+      padding: 0 4px;
+    }
+
+    .mgr-msg--user .mgr-msg-time { text-align: right; }
+
+    /* Input bar */
+    .mgr-input-bar {
+      padding: 16px 28px 20px;
+      border-top: 1px solid rgba(124,106,247,0.1);
+      background: rgba(10,10,18,0.5);
+      backdrop-filter: blur(8px);
+      flex-shrink: 0;
+    }
+
+    .mgr-input-wrap {
+      display: flex; align-items: flex-end; gap: 10px;
+      background: rgba(18,16,32,0.9);
+      border: 1px solid rgba(124,106,247,0.22);
+      border-radius: 12px; padding: 10px 10px 10px 16px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .mgr-input-wrap:focus-within {
+      border-color: rgba(124,106,247,0.5);
+      box-shadow: 0 0 0 3px rgba(124,106,247,0.08);
+    }
+
+    #mgrInput {
+      flex: 1; background: none; border: none; outline: none;
+      color: var(--text); font-size: 14px; line-height: 1.5;
+      font-family: inherit; resize: none; min-height: 22px; max-height: 140px;
+      padding: 0; overflow-y: auto;
+    }
+    #mgrInput::placeholder { color: #383858; }
+
+    #mgrInput::-webkit-scrollbar { width: 3px; }
+    #mgrInput::-webkit-scrollbar-thumb { background: rgba(124,106,247,0.2); border-radius: 3px; }
+
+    .mgr-send-btn {
+      width: 36px; height: 36px; border-radius: 8px; border: none;
+      background: linear-gradient(135deg, var(--accent) 0%, #5040d0 100%);
+      color: #fff; cursor: pointer; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.15s, box-shadow 0.15s;
+      box-shadow: 0 0 14px rgba(124,106,247,0.3);
+    }
+    .mgr-send-btn:hover { opacity: 0.85; box-shadow: 0 0 20px rgba(124,106,247,0.5); }
+    .mgr-send-btn:disabled { opacity: 0.3; cursor: default; box-shadow: none; }
+    .mgr-send-btn svg { width: 15px; height: 15px; }
+
+    .mgr-input-hint {
+      font-size: 11px; color: #2a2a40;
+      text-align: center; margin-top: 8px; letter-spacing: 0.02em;
+    }
+
     /* ─── Game Screen ────────────────────────────────────────── */
     #gameScreen {
       position: fixed; inset: 0; z-index: 700;
@@ -2061,9 +2274,109 @@
         </button>
       </div>
 
+      <!-- Card 5: NS Manager -->
+      <div class="card">
+        <div class="card-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2a7 7 0 0 1 7 7c0 2.5-1.3 4.7-3.3 6l-.7 1H9l-.7-1A7 7 0 0 1 5 9a7 7 0 0 1 7-7z" stroke="#9b8ff9" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M9 22h6M10 19h4" stroke="#9b8ff9" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M12 6v4M10 8h4" stroke="#9b8ff9" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="card-title">NS Manager</div>
+          <div class="card-desc">Dein KI-CEO-Brain — Strategie, Planung, Entscheidungen</div>
+        </div>
+        <button class="card-btn" onclick="openManager()">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M2 6.5h9M7 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.6"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Öffnen
+        </button>
+      </div>
+
     </div>
   </div>
   <div class="hub-footer">NextStructure Solutions &nbsp;·&nbsp; Quickborn</div>
+</div>
+
+<!-- ══════════════════════════════════════════ NS MANAGER -->
+<div id="managerScreen" style="display:none">
+  <div class="mgr-hdr">
+    <div class="mgr-hdr-left">
+      <div class="mgr-hdr-brain">🧠</div>
+      <div>
+        <div class="mgr-hdr-title">NextStructure · NS Manager</div>
+        <div class="mgr-hdr-sub">Strategischer KI-Kopilot</div>
+      </div>
+    </div>
+    <button class="mgr-back-btn" onclick="showHub()">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <path d="M11 6.5H2M6 2.5L2 6.5l4 4" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Hub
+    </button>
+  </div>
+
+  <div class="mgr-body">
+
+    <!-- Sidebar: Memory -->
+    <aside class="mgr-sidebar">
+      <div class="mgr-sidebar-section">
+        <div class="mgr-sidebar-label">Memory</div>
+        <div class="mgr-mem-list">
+          <div class="mgr-mem-item">
+            <div class="mgr-mem-dot"></div>
+            Kunden
+          </div>
+          <div class="mgr-mem-item">
+            <div class="mgr-mem-dot"></div>
+            Ziele
+          </div>
+          <div class="mgr-mem-item">
+            <div class="mgr-mem-dot"></div>
+            Strategie
+          </div>
+        </div>
+      </div>
+      <div class="mgr-sidebar-divider"></div>
+      <div class="mgr-sidebar-section">
+        <div class="mgr-sidebar-label">Verlauf</div>
+        <div class="mgr-mem-empty">Noch keine Gespräche</div>
+      </div>
+    </aside>
+
+    <!-- Chat -->
+    <div class="mgr-chat">
+      <div class="mgr-messages" id="mgrMessages">
+
+        <!-- Initial AI message -->
+        <div class="mgr-msg mgr-msg--ai">
+          <div class="mgr-msg-avatar">🧠</div>
+          <div>
+            <div class="mgr-msg-bubble">Guten Abend. Ich bin dein NS Manager — dein strategischer Kopilot für NextStructure Solutions. Womit kann ich dir heute helfen?</div>
+            <div class="mgr-msg-time" id="mgrInitTime"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="mgr-input-bar">
+        <div class="mgr-input-wrap">
+          <textarea id="mgrInput" rows="1" placeholder="Nachricht eingeben …"></textarea>
+          <button class="mgr-send-btn" id="mgrSendBtn" onclick="mgrSend()" aria-label="Senden">
+            <svg viewBox="0 0 15 15" fill="none">
+              <path d="M13 7.5L2 2l2 5.5-2 5.5 11-5.5z" fill="currentColor"/>
+            </svg>
+          </button>
+        </div>
+        <div class="mgr-input-hint">Enter zum Senden &nbsp;·&nbsp; Shift+Enter für Zeilenumbruch</div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════════════════ STATS -->
@@ -4264,7 +4577,7 @@ function enterDashboard(filter) {
 
 // ─── Hub / Landing navigation ─────────────────────────────────────────────
 function showHub() {
-  ['statsScreen','leadsScreen','generatorScreen','landingScreen','gameScreen'].forEach(_nsHide);
+  ['statsScreen','leadsScreen','generatorScreen','landingScreen','gameScreen','managerScreen'].forEach(_nsHide);
   document.getElementById('pipelineMain').style.display = 'none';
   _nsShow('hubScreen', false, 'flex');
   const greet = getGreeting();
@@ -4285,6 +4598,62 @@ function openLanding() {
   initLanding();
   setTimeout(() => nsTriggerCountUp('.ls-kachel-val'), 30);
 }
+
+// ─── NS Manager ───────────────────────────────────────────────────────────
+function openManager() {
+  ['hubScreen','statsScreen','leadsScreen','generatorScreen','landingScreen'].forEach(_nsHide);
+  document.getElementById('pipelineMain').style.display = 'none';
+  _nsShow('managerScreen', true, 'flex');
+  // Set initial message timestamp
+  const t = document.getElementById('mgrInitTime');
+  if (t && !t.textContent) t.textContent = _mgrTime();
+  // Auto-focus input
+  setTimeout(() => { const inp = document.getElementById('mgrInput'); if (inp) inp.focus(); }, 120);
+}
+
+function _mgrTime() {
+  const n = new Date();
+  return n.getHours().toString().padStart(2,'0') + ':' + n.getMinutes().toString().padStart(2,'0');
+}
+
+function mgrSend() {
+  const inp = document.getElementById('mgrInput');
+  const msgs = document.getElementById('mgrMessages');
+  if (!inp || !msgs) return;
+  const text = inp.value.trim();
+  if (!text) return;
+
+  // Append user bubble
+  const userBubble = document.createElement('div');
+  userBubble.className = 'mgr-msg mgr-msg--user';
+  userBubble.innerHTML =
+    '<div class="mgr-msg-avatar">👤</div>' +
+    '<div>' +
+      '<div class="mgr-msg-bubble">' + _mgrEsc(text) + '</div>' +
+      '<div class="mgr-msg-time" style="text-align:right">' + _mgrTime() + '</div>' +
+    '</div>';
+  msgs.appendChild(userBubble);
+  inp.value = '';
+  inp.style.height = '';
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function _mgrEsc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+(function() {
+  // Auto-resize textarea
+  const inp = document.getElementById('mgrInput');
+  if (!inp) return;
+  inp.addEventListener('input', function() {
+    this.style.height = '';
+    this.style.height = Math.min(this.scrollHeight, 140) + 'px';
+  });
+  inp.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); mgrSend(); }
+  });
+})();
 
 // ─── Stats tab state ──────────────────────────────────────────────────────
 let _statsTab = 'kunden';
