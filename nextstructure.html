@@ -1781,218 +1781,141 @@
       letter-spacing: 0.04em; text-align: center;
     }
 
-    /* ─── NS Manager Screen ─────────────────────────────────── */
-    #managerScreen {
-      position: fixed; inset: 0; z-index: 600;
-      display: flex; flex-direction: column;
-      background: var(--bg);
-      background-image: radial-gradient(ellipse 60% 35% at 50% 0%, rgba(80,55,200,0.18) 0%, transparent 55%);
+    /* ─── Next Manager FAB + Floating Panel ─────────────────── */
+    #nmFab {
+      position: fixed; bottom: 28px; right: 28px; z-index: 9999;
+      width: 56px; height: 56px; border-radius: 50%; border: none;
+      background: linear-gradient(135deg, #7c6af7 0%, #5040d0 100%);
+      box-shadow: 0 0 0 1px rgba(124,106,247,0.4), 0 4px 24px rgba(124,106,247,0.5);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 22px; line-height: 1;
+      transition: transform 0.18s cubic-bezier(0.22,1,0.36,1), box-shadow 0.18s;
+    }
+    #nmFab:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 0 1px rgba(124,106,247,0.6), 0 6px 36px rgba(124,106,247,0.7);
+    }
+    #nmFab.nm-open { transform: scale(0.92); }
+
+    #nmPanel {
+      position: fixed; bottom: 96px; right: 28px; z-index: 9998;
+      width: 380px; height: 520px;
+      background: rgba(12,10,22,0.92);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(124,106,247,0.28);
+      border-radius: 16px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(124,106,247,0.1);
+      display: none; flex-direction: column; overflow: hidden;
+      transform-origin: bottom right;
+    }
+    #nmPanel.nm-panel-open {
+      display: flex;
+      animation: nmPanelIn 220ms cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes nmPanelIn {
+      from { opacity: 0; transform: scale(0.92) translateY(12px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
     }
 
-    .mgr-hdr {
-      position: sticky; top: 0; z-index: 10;
+    .nm-hdr {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 28px;
-      background: rgba(13,13,13,0.90);
-      backdrop-filter: blur(14px);
+      padding: 14px 16px 13px;
       border-bottom: 1px solid rgba(124,106,247,0.13);
       flex-shrink: 0;
     }
-
-    .mgr-hdr-left {
-      display: flex; align-items: center; gap: 10px;
-    }
-
-    .mgr-hdr-brain {
-      width: 32px; height: 32px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, rgba(124,106,247,0.3) 0%, rgba(80,64,208,0.2) 100%);
+    .nm-hdr-left { display: flex; align-items: center; gap: 8px; }
+    .nm-hdr-icon {
+      width: 28px; height: 28px; border-radius: 7px; font-size: 14px;
+      background: linear-gradient(135deg,rgba(124,106,247,0.3),rgba(80,64,208,0.2));
       border: 1px solid rgba(124,106,247,0.25);
       display: flex; align-items: center; justify-content: center;
-      font-size: 16px; line-height: 1; flex-shrink: 0;
     }
-
-    .mgr-hdr-title {
-      font-size: 14px; font-weight: 700; letter-spacing: 0.03em; color: var(--text);
+    .nm-hdr-title { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.01em; }
+    .nm-hdr-sub { font-size: 10px; color: #555570; margin-top: 1px; }
+    .nm-close-btn {
+      width: 28px; height: 28px; border-radius: 7px; border: none;
+      background: rgba(255,255,255,0.06); color: #666688; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; line-height: 1; transition: background 0.15s, color 0.15s;
     }
+    .nm-close-btn:hover { background: rgba(255,255,255,0.11); color: #ccc; }
 
-    .mgr-hdr-sub {
-      font-size: 11px; color: var(--muted); letter-spacing: 0.02em; margin-top: 1px;
-    }
-
-    .mgr-back-btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 7px 14px; border-radius: 7px;
-      border: 1px solid rgba(124,106,247,0.25);
-      background: rgba(124,106,247,0.08); color: #c4baf9;
-      font-size: 12px; font-weight: 600; cursor: pointer;
-      transition: background 0.15s, border-color 0.15s;
-    }
-    .mgr-back-btn:hover { background: rgba(124,106,247,0.18); border-color: rgba(124,106,247,0.45); }
-
-    .mgr-body {
-      flex: 1; display: flex; overflow: hidden;
-    }
-
-    /* Sidebar */
-    .mgr-sidebar {
-      width: 260px; flex-shrink: 0;
-      border-right: 1px solid rgba(124,106,247,0.1);
-      background: rgba(10,10,18,0.6);
-      display: flex; flex-direction: column;
-      overflow-y: auto;
-      padding: 20px 0 16px;
-    }
-
-    .mgr-sidebar-section {
-      padding: 0 16px; margin-bottom: 24px;
-    }
-
-    .mgr-sidebar-label {
-      font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
-      text-transform: uppercase; color: #454560;
-      padding: 0 6px; margin-bottom: 8px;
-    }
-
-    .mgr-mem-list {
-      display: flex; flex-direction: column; gap: 2px;
-    }
-
-    .mgr-mem-item {
-      display: flex; align-items: center; gap: 9px;
-      padding: 8px 10px; border-radius: 7px;
-      font-size: 13px; color: var(--muted);
-      cursor: pointer; transition: background 0.12s, color 0.12s;
-      user-select: none;
-    }
-    .mgr-mem-item:hover { background: rgba(124,106,247,0.1); color: #c4baf9; }
-
-    .mgr-mem-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: rgba(124,106,247,0.4); flex-shrink: 0;
-    }
-
-    .mgr-mem-empty {
-      padding: 10px 10px;
-      font-size: 12px; color: #333348; font-style: italic;
-    }
-
-    .mgr-sidebar-divider {
-      height: 1px; background: rgba(124,106,247,0.08);
-      margin: 8px 16px 20px;
-    }
-
-    /* Chat area */
-    .mgr-chat {
-      flex: 1; display: flex; flex-direction: column;
-      overflow: hidden; background: transparent;
-    }
-
-    .mgr-messages {
-      flex: 1; overflow-y: auto; padding: 28px 32px 16px;
-      display: flex; flex-direction: column; gap: 18px;
+    .nm-messages {
+      flex: 1; overflow-y: auto; padding: 16px 14px 8px;
+      display: flex; flex-direction: column; gap: 12px;
       scroll-behavior: smooth;
     }
+    .nm-messages::-webkit-scrollbar { width: 3px; }
+    .nm-messages::-webkit-scrollbar-track { background: transparent; }
+    .nm-messages::-webkit-scrollbar-thumb { background: rgba(124,106,247,0.2); border-radius: 3px; }
 
-    /* Scrollbar */
-    .mgr-messages::-webkit-scrollbar { width: 4px; }
-    .mgr-messages::-webkit-scrollbar-track { background: transparent; }
-    .mgr-messages::-webkit-scrollbar-thumb { background: rgba(124,106,247,0.2); border-radius: 4px; }
+    .nm-msg { display: flex; gap: 8px; }
+    .nm-msg--ai { align-self: flex-start; max-width: 92%; }
+    .nm-msg--user { align-self: flex-end; flex-direction: row-reverse; max-width: 86%; }
 
-    .mgr-msg {
-      display: flex; gap: 12px; max-width: 720px;
+    .nm-msg-avatar {
+      width: 26px; height: 26px; border-radius: 6px; font-size: 13px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      margin-top: 2px;
+      background: linear-gradient(135deg,rgba(124,106,247,0.25),rgba(80,64,208,0.16));
+      border: 1px solid rgba(124,106,247,0.2);
+    }
+    .nm-msg--user .nm-msg-avatar {
+      background: linear-gradient(135deg,rgba(124,106,247,0.5),rgba(80,64,208,0.4));
+      border-color: rgba(124,106,247,0.38);
     }
 
-    .mgr-msg--ai { align-self: flex-start; }
-    .mgr-msg--user { align-self: flex-end; flex-direction: row-reverse; }
-
-    .mgr-msg-avatar {
-      width: 32px; height: 32px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px; flex-shrink: 0; margin-top: 2px;
-      background: linear-gradient(135deg, rgba(124,106,247,0.28) 0%, rgba(80,64,208,0.18) 100%);
-      border: 1px solid rgba(124,106,247,0.22);
+    .nm-msg-bubble {
+      padding: 9px 12px; font-size: 13px; line-height: 1.65; color: #e8e4ff;
     }
-
-    .mgr-msg--user .mgr-msg-avatar {
-      background: linear-gradient(135deg, rgba(124,106,247,0.55) 0%, rgba(80,64,208,0.45) 100%);
-      border-color: rgba(124,106,247,0.4);
+    .nm-msg--ai .nm-msg-bubble {
+      background: linear-gradient(155deg,#17142b,#0f0e1c);
+      border: 1px solid rgba(124,106,247,0.14);
+      border-radius: 4px 10px 10px 10px;
     }
-
-    .mgr-msg-bubble {
-      padding: 12px 16px; border-radius: 12px;
-      font-size: 14px; line-height: 1.7; color: var(--text);
-      max-width: 600px;
-    }
-
-    .mgr-msg--ai .mgr-msg-bubble {
-      background: linear-gradient(155deg, #18152e 0%, #111120 80%);
-      border: 1px solid rgba(124,106,247,0.15);
-      border-radius: 4px 12px 12px 12px;
-    }
-
-    .mgr-msg--user .mgr-msg-bubble {
-      background: linear-gradient(135deg, rgba(124,106,247,0.45) 0%, rgba(80,64,208,0.38) 100%);
-      border: 1px solid rgba(124,106,247,0.35);
-      border-radius: 12px 4px 12px 12px;
+    .nm-msg--user .nm-msg-bubble {
+      background: linear-gradient(135deg,rgba(124,106,247,0.42),rgba(80,64,208,0.34));
+      border: 1px solid rgba(124,106,247,0.3);
+      border-radius: 10px 4px 10px 10px;
       color: #ede9ff;
     }
+    .nm-msg-time { font-size: 10px; color: #2e2e48; margin-top: 4px; padding: 0 2px; }
+    .nm-msg--user .nm-msg-time { text-align: right; }
 
-    .mgr-msg-time {
-      font-size: 10px; color: #333348; margin-top: 5px;
-      padding: 0 4px;
+    .nm-input-bar {
+      padding: 10px 12px 12px; border-top: 1px solid rgba(124,106,247,0.1); flex-shrink: 0;
     }
-
-    .mgr-msg--user .mgr-msg-time { text-align: right; }
-
-    /* Input bar */
-    .mgr-input-bar {
-      padding: 16px 28px 20px;
-      border-top: 1px solid rgba(124,106,247,0.1);
-      background: rgba(10,10,18,0.5);
-      backdrop-filter: blur(8px);
-      flex-shrink: 0;
-    }
-
-    .mgr-input-wrap {
-      display: flex; align-items: flex-end; gap: 10px;
+    .nm-input-wrap {
+      display: flex; align-items: flex-end; gap: 8px;
       background: rgba(18,16,32,0.9);
-      border: 1px solid rgba(124,106,247,0.22);
-      border-radius: 12px; padding: 10px 10px 10px 16px;
+      border: 1px solid rgba(124,106,247,0.2); border-radius: 10px;
+      padding: 8px 8px 8px 12px;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .mgr-input-wrap:focus-within {
-      border-color: rgba(124,106,247,0.5);
-      box-shadow: 0 0 0 3px rgba(124,106,247,0.08);
+    .nm-input-wrap:focus-within {
+      border-color: rgba(124,106,247,0.45);
+      box-shadow: 0 0 0 3px rgba(124,106,247,0.07);
     }
-
-    #mgrInput {
+    #nmInput {
       flex: 1; background: none; border: none; outline: none;
-      color: var(--text); font-size: 14px; line-height: 1.5;
-      font-family: inherit; resize: none; min-height: 22px; max-height: 140px;
-      padding: 0; overflow-y: auto;
+      color: #e8e4ff; font-size: 13px; font-family: inherit;
+      resize: none; min-height: 20px; max-height: 100px; padding: 0;
+      overflow-y: auto; line-height: 1.5;
     }
-    #mgrInput::placeholder { color: #383858; }
-
-    #mgrInput::-webkit-scrollbar { width: 3px; }
-    #mgrInput::-webkit-scrollbar-thumb { background: rgba(124,106,247,0.2); border-radius: 3px; }
-
-    .mgr-send-btn {
-      width: 36px; height: 36px; border-radius: 8px; border: none;
-      background: linear-gradient(135deg, var(--accent) 0%, #5040d0 100%);
-      color: #fff; cursor: pointer; flex-shrink: 0;
+    #nmInput::placeholder { color: #32324e; }
+    #nmInput::-webkit-scrollbar { width: 2px; }
+    #nmInput::-webkit-scrollbar-thumb { background: rgba(124,106,247,0.2); border-radius: 2px; }
+    .nm-send-btn {
+      width: 32px; height: 32px; border-radius: 7px; border: none; flex-shrink: 0;
+      background: linear-gradient(135deg,var(--accent),#5040d0);
+      color: #fff; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       transition: opacity 0.15s, box-shadow 0.15s;
-      box-shadow: 0 0 14px rgba(124,106,247,0.3);
+      box-shadow: 0 0 12px rgba(124,106,247,0.3);
     }
-    .mgr-send-btn:hover { opacity: 0.85; box-shadow: 0 0 20px rgba(124,106,247,0.5); }
-    .mgr-send-btn:disabled { opacity: 0.3; cursor: default; box-shadow: none; }
-    .mgr-send-btn svg { width: 15px; height: 15px; }
-
-    .mgr-input-hint {
-      font-size: 11px; color: #2a2a40;
-      text-align: center; margin-top: 8px; letter-spacing: 0.02em;
-    }
+    .nm-send-btn:hover { opacity: 0.85; box-shadow: 0 0 18px rgba(124,106,247,0.5); }
+    .nm-send-btn svg { width: 13px; height: 13px; }
+    .nm-hint { font-size: 10px; color: #252535; text-align: center; margin-top: 6px; }
 
     /* ─── Game Screen ────────────────────────────────────────── */
     #gameScreen {
@@ -2274,108 +2197,34 @@
         </button>
       </div>
 
-      <!-- Card 5: NS Manager -->
-      <div class="card">
-        <div class="card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2a7 7 0 0 1 7 7c0 2.5-1.3 4.7-3.3 6l-.7 1H9l-.7-1A7 7 0 0 1 5 9a7 7 0 0 1 7-7z" stroke="#9b8ff9" stroke-width="1.5" stroke-linejoin="round"/>
-            <path d="M9 22h6M10 19h4" stroke="#9b8ff9" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M12 6v4M10 8h4" stroke="#9b8ff9" stroke-width="1.2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="card-body">
-          <div class="card-title">NS Manager</div>
-          <div class="card-desc">Dein KI-CEO-Brain — Strategie, Planung, Entscheidungen</div>
-        </div>
-        <button class="card-btn" onclick="openManager()">
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-            <path d="M2 6.5h9M7 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.6"
-                  stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Öffnen
-        </button>
-      </div>
-
     </div>
   </div>
   <div class="hub-footer">NextStructure Solutions &nbsp;·&nbsp; Quickborn</div>
 </div>
 
-<!-- ══════════════════════════════════════════ NS MANAGER -->
-<div id="managerScreen" style="display:none">
-  <div class="mgr-hdr">
-    <div class="mgr-hdr-left">
-      <div class="mgr-hdr-brain">🧠</div>
+<!-- ══════════════════════════ NEXT MANAGER FAB + FLOATING PANEL -->
+<button id="nmFab" onclick="nmToggle()" aria-label="Next Manager öffnen">🧠</button>
+
+<div id="nmPanel">
+  <div class="nm-hdr">
+    <div class="nm-hdr-left">
+      <div class="nm-hdr-icon">🧠</div>
       <div>
-        <div class="mgr-hdr-title">NextStructure · NS Manager</div>
-        <div class="mgr-hdr-sub">Strategischer KI-Kopilot</div>
+        <div class="nm-hdr-title">Next Manager</div>
+        <div class="nm-hdr-sub">Strategischer KI-Kopilot</div>
       </div>
     </div>
-    <button class="mgr-back-btn" onclick="showHub()">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-        <path d="M11 6.5H2M6 2.5L2 6.5l4 4" stroke="currentColor" stroke-width="1.6"
-              stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Hub
-    </button>
+    <button class="nm-close-btn" onclick="nmToggle()" aria-label="Schließen">✕</button>
   </div>
-
-  <div class="mgr-body">
-
-    <!-- Sidebar: Memory -->
-    <aside class="mgr-sidebar">
-      <div class="mgr-sidebar-section">
-        <div class="mgr-sidebar-label">Memory</div>
-        <div class="mgr-mem-list">
-          <div class="mgr-mem-item">
-            <div class="mgr-mem-dot"></div>
-            Kunden
-          </div>
-          <div class="mgr-mem-item">
-            <div class="mgr-mem-dot"></div>
-            Ziele
-          </div>
-          <div class="mgr-mem-item">
-            <div class="mgr-mem-dot"></div>
-            Strategie
-          </div>
-        </div>
-      </div>
-      <div class="mgr-sidebar-divider"></div>
-      <div class="mgr-sidebar-section">
-        <div class="mgr-sidebar-label">Verlauf</div>
-        <div class="mgr-mem-empty">Noch keine Gespräche</div>
-      </div>
-    </aside>
-
-    <!-- Chat -->
-    <div class="mgr-chat">
-      <div class="mgr-messages" id="mgrMessages">
-
-        <!-- Initial AI message -->
-        <div class="mgr-msg mgr-msg--ai">
-          <div class="mgr-msg-avatar">🧠</div>
-          <div>
-            <div class="mgr-msg-bubble">Guten Abend. Ich bin dein NS Manager — dein strategischer Kopilot für NextStructure Solutions. Womit kann ich dir heute helfen?</div>
-            <div class="mgr-msg-time" id="mgrInitTime"></div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="mgr-input-bar">
-        <div class="mgr-input-wrap">
-          <textarea id="mgrInput" rows="1" placeholder="Nachricht eingeben …"></textarea>
-          <button class="mgr-send-btn" id="mgrSendBtn" onclick="mgrSend()" aria-label="Senden">
-            <svg viewBox="0 0 15 15" fill="none">
-              <path d="M13 7.5L2 2l2 5.5-2 5.5 11-5.5z" fill="currentColor"/>
-            </svg>
-          </button>
-        </div>
-        <div class="mgr-input-hint">Enter zum Senden &nbsp;·&nbsp; Shift+Enter für Zeilenumbruch</div>
-      </div>
+  <div class="nm-messages" id="nmMessages"></div>
+  <div class="nm-input-bar">
+    <div class="nm-input-wrap">
+      <textarea id="nmInput" rows="1" placeholder="Nachricht eingeben …"></textarea>
+      <button class="nm-send-btn" onclick="nmSend()" aria-label="Senden">
+        <svg viewBox="0 0 15 15" fill="none"><path d="M13 7.5L2 2l2 5.5-2 5.5 11-5.5z" fill="currentColor"/></svg>
+      </button>
     </div>
-
+    <div class="nm-hint">Enter · Shift+Enter für Zeilenumbruch</div>
   </div>
 </div>
 
@@ -4577,7 +4426,7 @@ function enterDashboard(filter) {
 
 // ─── Hub / Landing navigation ─────────────────────────────────────────────
 function showHub() {
-  ['statsScreen','leadsScreen','generatorScreen','landingScreen','gameScreen','managerScreen'].forEach(_nsHide);
+  ['statsScreen','leadsScreen','generatorScreen','landingScreen','gameScreen'].forEach(_nsHide);
   document.getElementById('pipelineMain').style.display = 'none';
   _nsShow('hubScreen', false, 'flex');
   const greet = getGreeting();
@@ -4599,59 +4448,95 @@ function openLanding() {
   setTimeout(() => nsTriggerCountUp('.ls-kachel-val'), 30);
 }
 
-// ─── NS Manager ───────────────────────────────────────────────────────────
-function openManager() {
-  ['hubScreen','statsScreen','leadsScreen','generatorScreen','landingScreen'].forEach(_nsHide);
-  document.getElementById('pipelineMain').style.display = 'none';
-  _nsShow('managerScreen', true, 'flex');
-  // Set initial message timestamp
-  const t = document.getElementById('mgrInitTime');
-  if (t && !t.textContent) t.textContent = _mgrTime();
-  // Auto-focus input
-  setTimeout(() => { const inp = document.getElementById('mgrInput'); if (inp) inp.focus(); }, 120);
-}
-
-function _mgrTime() {
-  const n = new Date();
-  return n.getHours().toString().padStart(2,'0') + ':' + n.getMinutes().toString().padStart(2,'0');
-}
-
-function mgrSend() {
-  const inp = document.getElementById('mgrInput');
-  const msgs = document.getElementById('mgrMessages');
-  if (!inp || !msgs) return;
-  const text = inp.value.trim();
-  if (!text) return;
-
-  // Append user bubble
-  const userBubble = document.createElement('div');
-  userBubble.className = 'mgr-msg mgr-msg--user';
-  userBubble.innerHTML =
-    '<div class="mgr-msg-avatar">👤</div>' +
-    '<div>' +
-      '<div class="mgr-msg-bubble">' + _mgrEsc(text) + '</div>' +
-      '<div class="mgr-msg-time" style="text-align:right">' + _mgrTime() + '</div>' +
-    '</div>';
-  msgs.appendChild(userBubble);
-  inp.value = '';
-  inp.style.height = '';
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function _mgrEsc(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-}
-
+// ─── Next Manager FAB + Floating Panel ───────────────────────────────────
 (function() {
-  // Auto-resize textarea
-  const inp = document.getElementById('mgrInput');
-  if (!inp) return;
-  inp.addEventListener('input', function() {
-    this.style.height = '';
-    this.style.height = Math.min(this.scrollHeight, 140) + 'px';
-  });
-  inp.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); mgrSend(); }
+  var _nmOpen = false;
+  var _nmGreeted = false;
+
+  // Context-aware greeting based on which screen is visible
+  function _nmGreeting() {
+    var screens = {
+      hubScreen:       'Wie kann ich NextStructure heute weiterbringen?',
+      generatorScreen: 'Soll ich dir bei der Demo helfen?',
+      landingScreen:   'Wie läuft die Pipeline gerade?',
+      leadsScreen:     'Soll ich die aktuellen Leads analysieren?',
+      statsScreen:     'Welche Zahlen interessieren dich?',
+    };
+    for (var id in screens) {
+      var el = document.getElementById(id);
+      if (el && el.style.display !== 'none') return screens[id];
+    }
+    return 'Womit kann ich dir heute helfen?';
+  }
+
+  function _nmTime() {
+    var n = new Date();
+    return n.getHours().toString().padStart(2,'0') + ':' + n.getMinutes().toString().padStart(2,'0');
+  }
+
+  function _nmEsc(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  }
+
+  function _nmAppend(role, text) {
+    var msgs = document.getElementById('nmMessages');
+    if (!msgs) return;
+    var isAi = role === 'ai';
+    var div = document.createElement('div');
+    div.className = 'nm-msg nm-msg--' + (isAi ? 'ai' : 'user');
+    div.innerHTML =
+      '<div class="nm-msg-avatar">' + (isAi ? '🧠' : '👤') + '</div>' +
+      '<div>' +
+        '<div class="nm-msg-bubble">' + _nmEsc(text) + '</div>' +
+        '<div class="nm-msg-time"' + (!isAi ? ' style="text-align:right"' : '') + '>' + _nmTime() + '</div>' +
+      '</div>';
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  window.nmToggle = function() {
+    var panel = document.getElementById('nmPanel');
+    var fab   = document.getElementById('nmFab');
+    if (!panel || !fab) return;
+    _nmOpen = !_nmOpen;
+    if (_nmOpen) {
+      panel.classList.add('nm-panel-open');
+      fab.classList.add('nm-open');
+      // Show greeting on first open
+      if (!_nmGreeted) {
+        _nmGreeted = true;
+        _nmAppend('ai', _nmGreeting());
+      }
+      setTimeout(function() {
+        var inp = document.getElementById('nmInput'); if (inp) inp.focus();
+      }, 180);
+    } else {
+      panel.classList.remove('nm-panel-open');
+      fab.classList.remove('nm-open');
+    }
+  };
+
+  window.nmSend = function() {
+    var inp  = document.getElementById('nmInput');
+    if (!inp) return;
+    var text = inp.value.trim();
+    if (!text) return;
+    _nmAppend('user', text);
+    inp.value = '';
+    inp.style.height = '';
+  };
+
+  // Wire up textarea after DOM ready
+  document.addEventListener('DOMContentLoaded', function() {
+    var inp = document.getElementById('nmInput');
+    if (!inp) return;
+    inp.addEventListener('input', function() {
+      this.style.height = '';
+      this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+    });
+    inp.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); window.nmSend(); }
+    });
   });
 })();
 
