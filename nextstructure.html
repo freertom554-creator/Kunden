@@ -4832,19 +4832,24 @@ function openLanding() {
       });
       _nmHideTyping();
       if (!res.ok) {
-        var err = await res.json().catch(function() { return {}; });
-        var msg = (err.error && err.error.message) || ('API Fehler ' + res.status);
+        var rawBody = await res.text().catch(function() { return '(body unlesbar)'; });
+        console.error('[Next Manager] API error', res.status, res.statusText, rawBody);
+        var errObj = {};
+        try { errObj = JSON.parse(rawBody); } catch(_) {}
+        var msg = (errObj.error && errObj.error.message) || ('HTTP ' + res.status + ' ' + res.statusText + ' — ' + rawBody.slice(0, 200));
         _nmAppend('ai', '⚠️ ' + msg);
-        _nmHistory.pop(); // remove failed user message
+        _nmHistory.pop();
         return;
       }
       var data = await res.json();
+      console.log('[Next Manager] response ok', data);
       var reply = data.content && data.content[0] && data.content[0].text || '';
       _nmHistory.push({ role: 'assistant', content: reply });
       _nmAppend('ai', reply);
     } catch (e) {
       _nmHideTyping();
-      _nmAppend('ai', '⚠️ Netzwerkfehler: ' + e.message);
+      console.error('[Next Manager] fetch exception', e);
+      _nmAppend('ai', '⚠️ Netzwerkfehler: ' + e.message + (e.cause ? ' (' + e.cause + ')' : ''));
       _nmHistory.pop();
     } finally {
       _nmBusy = false;
