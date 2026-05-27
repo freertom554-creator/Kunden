@@ -1927,6 +1927,51 @@
     }
     .nm-expand-btn:hover { background: rgba(255,255,255,0.11); color: #c4baf9; }
 
+    /* Settings row */
+    .nm-settings-row {
+      display: none; align-items: center; gap: 8px;
+      padding: 10px 14px 10px;
+      border-bottom: 1px solid rgba(124,106,247,0.1);
+      background: rgba(10,10,20,0.6);
+      flex-shrink: 0;
+    }
+    .nm-settings-row.nm-settings-open { display: flex; }
+    .nm-settings-input {
+      flex: 1; background: rgba(18,16,32,0.9); border: 1px solid rgba(124,106,247,0.2);
+      border-radius: 7px; padding: 7px 10px; color: #e8e4ff;
+      font-size: 12px; font-family: inherit; outline: none;
+      transition: border-color 0.2s;
+    }
+    .nm-settings-input:focus { border-color: rgba(124,106,247,0.5); }
+    .nm-settings-input::placeholder { color: #383858; }
+    .nm-settings-save {
+      padding: 7px 12px; border-radius: 7px; border: none; cursor: pointer;
+      background: linear-gradient(135deg,var(--accent),#5040d0);
+      color: #fff; font-size: 12px; font-weight: 600;
+      transition: opacity 0.15s; white-space: nowrap;
+    }
+    .nm-settings-save:hover { opacity: 0.85; }
+
+    /* Typing indicator */
+    .nm-typing {
+      display: flex; align-items: center; gap: 8px;
+      padding: 4px 0;
+    }
+    .nm-typing-dots {
+      display: flex; gap: 4px; align-items: center;
+    }
+    .nm-typing-dots span {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(124,106,247,0.6);
+      animation: nmDot 1.2s ease-in-out infinite;
+    }
+    .nm-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .nm-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes nmDot {
+      0%,60%,100% { transform: translateY(0); opacity: 0.4; }
+      30%          { transform: translateY(-5px); opacity: 1; }
+    }
+
     /* Fullscreen overlay */
     #nmFullscreen {
       position: fixed; inset: 0; z-index: 9000;
@@ -2337,9 +2382,14 @@
       </div>
     </div>
     <div class="nm-hdr-actions">
+      <button class="nm-expand-btn" onclick="nmToggleSettings()" aria-label="Einstellungen" title="API Key einstellen">⚙️</button>
       <button class="nm-expand-btn" onclick="nmExpand()" aria-label="Vollbild">⛶</button>
       <button class="nm-close-btn" onclick="nmToggle()" aria-label="Schließen">✕</button>
     </div>
+  </div>
+  <div class="nm-settings-row" id="nmSettingsRow">
+    <input class="nm-settings-input" id="nmApiKeyInput" type="password" placeholder="sk-ant-…  Anthropic API Key">
+    <button class="nm-settings-save" onclick="nmSaveKey()">Speichern</button>
   </div>
   <div class="nm-messages" id="nmMessages"></div>
   <div class="nm-input-bar">
@@ -4617,8 +4667,26 @@ function openLanding() {
   var _nmOpen    = false;
   var _nmFsOpen  = false;
   var _nmGreeted = false;
-  var _nmMsgs    = []; // shared message store for both panel and fullscreen
+  var _nmBusy    = false;
+  var _nmMsgs    = []; // UI store (role:'ai'|'user')
+  var _nmHistory = []; // API conversation history {role:'user'|'assistant', content:''}
 
+  var MANAGER_SYSTEM_PROMPT =
+    'Du bist der Next Manager — der strategische KI-Kopilot von NextStructure Solutions. ' +
+    'Du hast 20 Jahre Erfahrung als CEO und Unternehmensberater. Du kennst NextStructure genau: ' +
+    'Wir sind eine AI- und Automatisierungsagentur aus Quickborn, Deutschland. ' +
+    'Wir bauen Websites, Chatbots und Automatisierungslösungen für lokale Unternehmen. ' +
+    'Unser Team: Tom Freer (Gründer) und Colin (Gründer/Partner). ' +
+    'Unsere Preise: Website 699€, Chatbot 899€, Kombipaket Website + Chatbot 1.299€. ' +
+    'Zielgruppe: lokale KMUs in Deutschland die digitalisieren wollen. ' +
+    'Kurzfristiges Ziel: Kundenpipeline aufbauen, Kaltakquise skalieren, erste stabile Umsätze. ' +
+    'Mittelfristiges Ziel: KI-Rezeptionist als Produkt launchen. ' +
+    'Langfristiges Ziel: Spezialisierung auf umfassende Prozessautomatisierung für Unternehmen. ' +
+    'Du hilfst bei Strategie, Marketing, Priorisierung, Finanzen und Entscheidungen. ' +
+    'Du bist direkt, präzise, lösungsorientiert und denkst wie ein erfahrener Unternehmer. ' +
+    'Antworte immer auf Deutsch. Sei konkret — keine langen Einleitungen.';
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
   function _nmGreeting() {
     var screens = {
       hubScreen:       'Wie kann ich NextStructure heute weiterbringen?',
@@ -4650,8 +4718,16 @@ function openLanding() {
       '<div>' +
         '<div class="nm-msg-bubble">' + _nmEsc(msg.text) + '</div>' +
         '<div class="nm-msg-time"' + (!isAi ? ' style="text-align:right"' : '') + '>' + msg.time + '</div>' +
-      '</div>' +
-    '</div>';
+      '</div></div>';
+  }
+
+  function _nmAddNode(containerId, html) {
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    var d = document.createElement('div');
+    d.innerHTML = html;
+    el.appendChild(d.firstChild);
+    el.scrollTop = el.scrollHeight;
   }
 
   function _nmRenderTo(containerId) {
@@ -4664,35 +4740,140 @@ function openLanding() {
   function _nmAppend(role, text) {
     var msg = { role: role, text: text, time: _nmTime() };
     _nmMsgs.push(msg);
-    // Append to panel messages
-    var panelMsgs = document.getElementById('nmMessages');
-    if (panelMsgs) {
-      var div = document.createElement('div');
-      div.innerHTML = _nmBubbleHtml(msg);
-      panelMsgs.appendChild(div.firstChild);
-      panelMsgs.scrollTop = panelMsgs.scrollHeight;
+    _nmAddNode('nmMessages', _nmBubbleHtml(msg));
+    if (_nmFsOpen) _nmAddNode('nmFsMessages', _nmBubbleHtml(msg));
+  }
+
+  // Typing indicator
+  var _typingEl = null;
+  var _typingFsEl = null;
+  var TYPING_HTML =
+    '<div class="nm-msg nm-msg--ai" id="nmTyping">' +
+      '<div class="nm-msg-avatar">🧠</div>' +
+      '<div class="nm-msg-bubble nm-typing">' +
+        '<div class="nm-typing-dots"><span></span><span></span><span></span></div>' +
+      '</div></div>';
+
+  function _nmShowTyping() {
+    var p = document.getElementById('nmMessages');
+    if (p && !document.getElementById('nmTyping')) {
+      var d = document.createElement('div'); d.innerHTML = TYPING_HTML;
+      _typingEl = d.firstChild; p.appendChild(_typingEl); p.scrollTop = p.scrollHeight;
     }
-    // Mirror to fullscreen if open
     if (_nmFsOpen) {
-      var fsMsgs = document.getElementById('nmFsMessages');
-      if (fsMsgs) {
-        var div2 = document.createElement('div');
-        div2.innerHTML = _nmBubbleHtml(msg);
-        fsMsgs.appendChild(div2.firstChild);
-        fsMsgs.scrollTop = fsMsgs.scrollHeight;
+      var fs = document.getElementById('nmFsMessages');
+      if (fs && !fs.querySelector('#nmTypingFs')) {
+        var t = TYPING_HTML.replace('id="nmTyping"','id="nmTypingFs"');
+        var d2 = document.createElement('div'); d2.innerHTML = t;
+        _typingFsEl = d2.firstChild; fs.appendChild(_typingFsEl); fs.scrollTop = fs.scrollHeight;
       }
     }
   }
 
+  function _nmHideTyping() {
+    if (_typingEl)   { _typingEl.remove();   _typingEl   = null; }
+    if (_typingFsEl) { _typingFsEl.remove(); _typingFsEl = null; }
+    var orphan = document.getElementById('nmTyping');
+    if (orphan) orphan.remove();
+    var orphanFs = document.getElementById('nmTypingFs');
+    if (orphanFs) orphanFs.remove();
+  }
+
+  // ── Settings ───────────────────────────────────────────────────────────────
+  window.nmToggleSettings = function() {
+    var row = document.getElementById('nmSettingsRow');
+    if (!row) return;
+    var opening = !row.classList.contains('nm-settings-open');
+    row.classList.toggle('nm-settings-open', opening);
+    if (opening) {
+      var inp = document.getElementById('nmApiKeyInput');
+      if (inp) {
+        var saved = localStorage.getItem('nm_api_key') || '';
+        inp.value = saved ? '••••••••••••••••' : '';
+        inp.placeholder = saved ? 'Key gespeichert — neu eingeben zum Ändern' : 'sk-ant-…  Anthropic API Key';
+        setTimeout(function() { inp.focus(); }, 60);
+      }
+    }
+  };
+
+  window.nmSaveKey = function() {
+    var inp = document.getElementById('nmApiKeyInput');
+    if (!inp) return;
+    var val = inp.value.trim();
+    if (!val || val.startsWith('••')) return; // unchanged placeholder
+    localStorage.setItem('nm_api_key', val);
+    document.getElementById('nmSettingsRow').classList.remove('nm-settings-open');
+  };
+
+  // ── API call ───────────────────────────────────────────────────────────────
+  async function _nmCallApi(userText) {
+    var apiKey = localStorage.getItem('nm_api_key');
+    if (!apiKey) {
+      _nmAppend('ai', 'Bitte zuerst API Key in den Einstellungen eingeben ⚙️');
+      return;
+    }
+    _nmHistory.push({ role: 'user', content: userText });
+    _nmShowTyping();
+    try {
+      var res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1024,
+          system: MANAGER_SYSTEM_PROMPT,
+          messages: _nmHistory
+        })
+      });
+      _nmHideTyping();
+      if (!res.ok) {
+        var err = await res.json().catch(function() { return {}; });
+        var msg = (err.error && err.error.message) || ('API Fehler ' + res.status);
+        _nmAppend('ai', '⚠️ ' + msg);
+        _nmHistory.pop(); // remove failed user message
+        return;
+      }
+      var data = await res.json();
+      var reply = data.content && data.content[0] && data.content[0].text || '';
+      _nmHistory.push({ role: 'assistant', content: reply });
+      _nmAppend('ai', reply);
+    } catch (e) {
+      _nmHideTyping();
+      _nmAppend('ai', '⚠️ Netzwerkfehler: ' + e.message);
+      _nmHistory.pop();
+    } finally {
+      _nmBusy = false;
+    }
+  }
+
+  // ── Send ───────────────────────────────────────────────────────────────────
+  function _nmDoSend(inp) {
+    if (!inp || _nmBusy) return;
+    var text = inp.value.trim();
+    if (!text) return;
+    _nmBusy = true;
+    _nmAppend('user', text);
+    inp.value = '';
+    inp.style.height = '';
+    _nmCallApi(text);
+  }
+
+  window.nmSend   = function() { _nmDoSend(document.getElementById('nmInput')); };
+  window.nmFsSend = function() { _nmDoSend(document.getElementById('nmFsInput')); };
+
+  // ── Panel open/close ───────────────────────────────────────────────────────
   window.nmToggle = function() {
     var panel = document.getElementById('nmPanel');
     var fab   = document.getElementById('nmFab');
     if (!panel || !fab) return;
-    // If fullscreen is open, close everything
     if (_nmFsOpen) {
       document.getElementById('nmFullscreen').classList.remove('nm-fs-open');
-      _nmFsOpen = false;
-      _nmOpen   = false;
+      _nmFsOpen = false; _nmOpen = false;
       fab.classList.remove('nm-open');
       return;
     }
@@ -4704,12 +4885,11 @@ function openLanding() {
         _nmGreeted = true;
         _nmAppend('ai', _nmGreeting());
       }
-      setTimeout(function() {
-        var inp = document.getElementById('nmInput'); if (inp) inp.focus();
-      }, 180);
+      setTimeout(function() { var i = document.getElementById('nmInput'); if (i) i.focus(); }, 180);
     } else {
       panel.classList.remove('nm-panel-open');
       fab.classList.remove('nm-open');
+      document.getElementById('nmSettingsRow').classList.remove('nm-settings-open');
     }
   };
 
@@ -4717,14 +4897,12 @@ function openLanding() {
     var panel = document.getElementById('nmPanel');
     var fs    = document.getElementById('nmFullscreen');
     if (!panel || !fs) return;
-    // Hide panel, show fullscreen
     panel.classList.remove('nm-panel-open');
+    document.getElementById('nmSettingsRow').classList.remove('nm-settings-open');
     _nmFsOpen = true;
     _nmRenderTo('nmFsMessages');
     fs.classList.add('nm-fs-open');
-    setTimeout(function() {
-      var inp = document.getElementById('nmFsInput'); if (inp) inp.focus();
-    }, 200);
+    setTimeout(function() { var i = document.getElementById('nmFsInput'); if (i) i.focus(); }, 200);
   };
 
   window.nmCollapse = function() {
@@ -4733,34 +4911,11 @@ function openLanding() {
     if (!panel || !fs) return;
     fs.classList.remove('nm-fs-open');
     _nmFsOpen = false;
-    // Re-open panel
     panel.classList.add('nm-panel-open');
-    setTimeout(function() {
-      var inp = document.getElementById('nmInput'); if (inp) inp.focus();
-    }, 60);
+    setTimeout(function() { var i = document.getElementById('nmInput'); if (i) i.focus(); }, 60);
   };
 
-  window.nmSend = function() {
-    var inp = document.getElementById('nmInput');
-    if (!inp) return;
-    var text = inp.value.trim();
-    if (!text) return;
-    _nmAppend('user', text);
-    inp.value = '';
-    inp.style.height = '';
-  };
-
-  window.nmFsSend = function() {
-    var inp = document.getElementById('nmFsInput');
-    if (!inp) return;
-    var text = inp.value.trim();
-    if (!text) return;
-    _nmAppend('user', text);
-    inp.value = '';
-    inp.style.height = '';
-  };
-
-  // Wire up textareas
+  // ── Wire textareas ─────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function() {
     function wireInput(id, sendFn) {
       var inp = document.getElementById(id);
@@ -4773,8 +4928,16 @@ function openLanding() {
         if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendFn(); }
       });
     }
+    function wireSettingsInput(id) {
+      var inp = document.getElementById(id);
+      if (!inp) return;
+      inp.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); window.nmSaveKey(); }
+      });
+    }
     wireInput('nmInput',   window.nmSend);
     wireInput('nmFsInput', window.nmFsSend);
+    wireSettingsInput('nmApiKeyInput');
   });
 })();
 
