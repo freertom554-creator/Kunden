@@ -6042,10 +6042,10 @@ function getServiceDescription(svc,industry,name,usp){
   return svc+' bei '+n+' — professionell, persönlich und auf Sie abgestimmt.';
 }
 function generateWebsite(d) {
-  const pc=d.primaryColor,sc=d.secondaryColor;
-  const pcRgb=hexToRgb(pc),scRgb=hexToRgb(sc);
-  const pcDark=_darken(pc,.18),pcLight=_lighten(pc,.14),pcAccent=_complement(pc);
-  const pcDarkRgb=hexToRgb(pcDark),pcAccentRgb=hexToRgb(pcAccent);
+  let pc=d.primaryColor,sc=d.secondaryColor;
+  let pcRgb=hexToRgb(pc),scRgb=hexToRgb(sc);
+  let pcDark=_darken(pc,.18),pcLight=_lighten(pc,.14),pcAccent=_complement(pc);
+  let pcDarkRgb=hexToRgb(pcDark),pcAccentRgb=hexToRgb(pcAccent);
   const heroImg=(d.images&&d.images[0])?d.images[0]:(INDUSTRY_HERO_IMGS[d.industry]||INDUSTRY_HERO_IMGS.other);
   const industryLabel=INDUSTRY_LABELS[d.industry]||'Dienstleistungen';
   const subline=d.slogan||'Qualität, Leidenschaft und Expertise — in Ihrem Dienst.';
@@ -6066,13 +6066,19 @@ function generateWebsite(d) {
   const year=new Date().getFullYear();
   // Design direction — randomly chosen per generation
   const DESIGN_DIRECTIONS=[
-    {id:'editorial-dark',name:'Editorial Dark',bg:'#0D0D0D',bgAlt:'#111111',text:'#F5F5F5',textMuted:'#888888',font:"'Cormorant Garamond', Georgia, serif",fontSans:"'DM Sans', sans-serif",radius:'2px',googleFont:'Cormorant+Garamond:wght@300;400;600&family=DM+Sans'},
-    {id:'bold-brutalist',name:'Bold Brutalist',bg:'#F5F0E8',bgAlt:'#FFFFFF',text:'#0A0A0A',textMuted:'#444444',font:"'Syne', sans-serif",fontSans:"'Syne', sans-serif",radius:'0px',googleFont:'Syne:wght@400;700;800'},
-    {id:'warm-organic',name:'Warm Organic',bg:'#FAF7F2',bgAlt:'#F0EBE3',text:'#2C2416',textMuted:'#7A6A5A',font:"'Playfair Display', serif",fontSans:"'Lato', sans-serif",radius:'12px',googleFont:'Playfair+Display:wght@400;600;700&family=Lato'},
-    {id:'modern-minimal',name:'Modern Minimal',bg:'#FFFFFF',bgAlt:'#F8F8F8',text:'#111111',textMuted:'#666666',font:"'DM Serif Display', serif",fontSans:"'DM Sans', sans-serif",radius:'4px',googleFont:'DM+Serif+Display&family=DM+Sans'},
-    {id:'vibrant-expressive',name:'Vibrant Expressive',bg:'#0A0A0A',bgAlt:'#141414',text:'#FFFFFF',textMuted:'#AAAAAA',font:"'Fraunces', serif",fontSans:"'Plus Jakarta Sans', sans-serif",radius:'8px',googleFont:'Fraunces:wght@300;400;700&family=Plus+Jakarta+Sans'}
+    {id:'editorial-dark',name:'Editorial Dark',accentColor:'#C8B8A2',bg:'#0D0D0D',bgAlt:'#111111',text:'#F5F5F5',textMuted:'#888888',font:"'Cormorant Garamond', Georgia, serif",fontSans:"'DM Sans', sans-serif",radius:'2px',googleFont:'Cormorant+Garamond:wght@300;400;600&family=DM+Sans'},
+    {id:'bold-brutalist',name:'Bold Brutalist',accentColor:'#FF3B00',bg:'#F5F0E8',bgAlt:'#FFFFFF',text:'#0A0A0A',textMuted:'#444444',font:"'Syne', sans-serif",fontSans:"'Syne', sans-serif",radius:'0px',googleFont:'Syne:wght@400;700;800'},
+    {id:'warm-organic',name:'Warm Organic',accentColor:'#C17F3E',bg:'#FAF7F2',bgAlt:'#F0EBE3',text:'#2C2416',textMuted:'#7A6A5A',font:"'Playfair Display', serif",fontSans:"'Lato', sans-serif",radius:'12px',googleFont:'Playfair+Display:wght@400;600;700&family=Lato'},
+    {id:'modern-minimal',name:'Modern Minimal',accentColor:'#1A1A1A',bg:'#FFFFFF',bgAlt:'#F8F8F8',text:'#111111',textMuted:'#666666',font:"'DM Serif Display', serif",fontSans:"'DM Sans', sans-serif",radius:'4px',googleFont:'DM+Serif+Display&family=DM+Sans'},
+    {id:'vibrant-expressive',name:'Vibrant Expressive',accentColor:'#7C3AED',bg:'#0A0A0A',bgAlt:'#141414',text:'#FFFFFF',textMuted:'#AAAAAA',font:"'Fraunces', serif",fontSans:"'Plus Jakarta Sans', sans-serif",radius:'8px',googleFont:'Fraunces:wght@300;400;700&family=Plus+Jakarta+Sans'}
   ];
   const dir=DESIGN_DIRECTIONS[Math.floor(Math.random()*DESIGN_DIRECTIONS.length)];
+  const isGeneric=(c)=>['#ffffff','#000000','#fff','#000'].includes(c.toLowerCase());
+  pc=isGeneric(d.primaryColor)?dir.accentColor:d.primaryColor;
+  sc=isGeneric(d.secondaryColor)?dir.bg:d.secondaryColor;
+  pcRgb=hexToRgb(pc);scRgb=hexToRgb(sc);
+  pcDark=_darken(pc,.18);pcLight=_lighten(pc,.14);pcAccent=_complement(pc);
+  pcDarkRgb=hexToRgb(pcDark);pcAccentRgb=hexToRgb(pcAccent);
   // Layout variants
   const lv={hero:Math.floor(Math.random()*4),about:Math.floor(Math.random()*2),services:Math.floor(Math.random()*3),usp:Math.floor(Math.random()*2),testi:Math.floor(Math.random()*2)};
   // Industry animation CSS
