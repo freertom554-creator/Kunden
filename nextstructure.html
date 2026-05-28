@@ -6154,6 +6154,8 @@ function generateWebsite(d) {
 <title>${d.name}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?${dir.googleFont}&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
@@ -6239,8 +6241,8 @@ nav.scrolled .nav-links a.nav-active{color:var(--p);border-bottom-color:var(--p)
 .sec-head h2{font-family:${dir.font};font-size:clamp(26px,4vw,42px);font-weight:700;color:${dir.text};letter-spacing:-1px;margin-top:4px;}
 /* Services — Variant A: card grid with top border */
 .srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
-.srv-card{background:${dir.bgAlt};border-radius:${dir.radius};padding:36px 30px;border:1px solid rgba(128,128,128,.12);transition:transform .25s,box-shadow .25s;}
-.srv-card:hover{transform:translateY(-6px);box-shadow:0 20px 56px rgba(0,0,0,.09);}
+.srv-card{background:${dir.bgAlt};border-radius:${dir.radius};padding:36px 30px;border:1px solid rgba(128,128,128,.12);transition:box-shadow .25s;will-change:transform;}
+.srv-card:hover{box-shadow:0 20px 56px rgba(0,0,0,.09);}
 .srv-card-bdr{border-top:3px solid var(--p);border-radius:0 0 ${dir.radius} ${dir.radius};}
 .srv-icon{width:52px;height:52px;border-radius:${dir.radius};background:var(--ptintmid);color:var(--p);display:flex;align-items:center;justify-content:center;margin-bottom:22px;}
 .srv-icon svg{width:24px;height:24px;}
@@ -6281,8 +6283,8 @@ nav.scrolled .nav-links a.nav-active{color:var(--p);border-bottom-color:var(--p)
 /* Testimonials */
 .testimonials{padding:100px 0;background:${dir.bgAlt};}
 .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
-.testi-card{background:${dir.bg};border-radius:${dir.radius};padding:40px 32px 32px;border:1px solid rgba(128,128,128,.12);display:flex;flex-direction:column;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s;}
-.testi-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.08);}
+.testi-card{background:${dir.bg};border-radius:${dir.radius};padding:40px 32px 32px;border:1px solid rgba(128,128,128,.12);display:flex;flex-direction:column;position:relative;overflow:hidden;transition:box-shadow .25s;will-change:transform;}
+.testi-card:hover{box-shadow:0 16px 48px rgba(0,0,0,.08);}
 .testi-quote{position:absolute;top:16px;right:24px;font-family:${dir.font};font-size:96px;line-height:1;color:var(--ptintmid);font-weight:700;pointer-events:none;user-select:none;}
 .testi-body{font-size:15px;line-height:1.8;color:${dir.textMuted};font-style:italic;flex:1;margin-bottom:28px;position:relative;z-index:1;}
 .testi-author{display:flex;align-items:center;gap:12px;}
@@ -6337,8 +6339,7 @@ footer{background:var(--s);padding:72px 0 0;}
 @keyframes cursorBlink{0%,100%{opacity:1}50%{opacity:0}}
 .ch{display:inline-block;opacity:0;animation:charIn .38s cubic-bezier(.22,.61,.36,1) forwards}
 .tw-cursor{animation:cursorBlink .65s step-end infinite;font-weight:200;margin-left:2px}
-[data-anim]{opacity:0;transition:opacity .72s cubic-bezier(.22,.61,.36,1),transform .72s cubic-bezier(.22,.61,.36,1);}
-[data-anim].visible{opacity:1;transform:none;}
+[data-anim]{opacity:0;}
 /* Industry-specific overrides */
 ${indAnimCss}
 </style></head><body>
@@ -6351,26 +6352,39 @@ ${testiHtml}
 <section id="contact" class="contact" data-anim="fade-up"><div class="container"><div class="sec-head"><span class="sec-eyebrow">Kontakt aufnehmen</span><h2>Wir freuen uns von Ihnen zu hören</h2></div><div class="contact-rows">${contactHTML}</div></div></section>
 <footer data-anim="fade-up"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="footer-logo">${d.name}</div><p class="footer-tag">${footerTagline}</p><div class="footer-socials"><a href="#" class="footer-social-btn" aria-label="Facebook">${SOCIAL_FB}</a><a href="#" class="footer-social-btn" aria-label="Instagram">${SOCIAL_IG}</a><a href="#" class="footer-social-btn" aria-label="LinkedIn">${SOCIAL_LI}</a></div></div>${ftContact}${d.hours ? ftHours : ftLinks}</div><div class="footer-bottom"><p class="footer-copy">&copy; ${year} ${d.name}. Alle Rechte vorbehalten.</p></div></div></footer>
 <script>
+gsap.registerPlugin(ScrollTrigger);
+gsap.ticker.lagSmoothing(1000,16);
+var PRM=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 // Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){var id=a.getAttribute('href').slice(1);var el=document.getElementById(id);if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'});}});});
-// Nav scroll + parallax
-var pSpeed=${parallaxSpeed};
-window.addEventListener('scroll',function(){var n=document.getElementById('mainNav');n.classList.toggle('scrolled',window.scrollY>70);var hero=document.querySelector('.hero:not(.hero-v2)');if(hero)hero.style.backgroundPositionY=(window.scrollY*pSpeed)+'px';});
+// Nav scroll
+window.addEventListener('scroll',function(){document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>70);});
+// Hero parallax (GSAP scrub)
+if(!PRM){(function(){var hPx=document.querySelector('.hero:not(.hero-v2)');if(!hPx)return;gsap.to(hPx,{backgroundPositionY:'40%',ease:'none',scrollTrigger:{trigger:hPx,start:'top top',end:'bottom top',scrub:true}});})();}
+// Hero entrance timeline
+(function(){var ey=document.querySelector('.hero-eyebrow'),h1=document.getElementById('heroH1'),sb=document.querySelector('.hero-sub'),ac=document.querySelector('.hero-actions');if(!h1)return;if(PRM)return;var tl=gsap.timeline({defaults:{ease:'power3.out'}});if(ey)tl.from(ey,{y:24,opacity:0,duration:.6},0.1);tl.from(h1,{y:52,opacity:0,duration:.95},0.25);if(sb)tl.from(sb,{y:32,opacity:0,duration:.7},0.48);if(ac&&ac.children.length)tl.from(Array.from(ac.children),{y:22,opacity:0,duration:.5,stagger:.13},0.64);})();
 // Nav active link on scroll
 (function(){var secs=document.querySelectorAll('section[id]'),lks=document.querySelectorAll('.nav-links a[href^="#"]');if(!secs.length)return;var sio=new IntersectionObserver(function(entries){entries.forEach(function(e){if(!e.isIntersecting)return;lks.forEach(function(a){a.classList.toggle('nav-active',a.getAttribute('href')==='#'+e.target.id);});});},{threshold:.35,rootMargin:'-80px 0px 0px 0px'});secs.forEach(function(s){sio.observe(s);});})();
-// Section reveal
-var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(!e.isIntersecting)return;e.target.classList.add('visible');io.unobserve(e.target);});},{threshold:.1});
-document.querySelectorAll('[data-anim]').forEach(function(el){io.observe(el);});
-// Counter animation on USP numbers
-(function(){var els=document.querySelectorAll('.usp-num-val,.trust-item span');if(!els.length)return;var cio=new IntersectionObserver(function(ents){ents.forEach(function(en){if(!en.isIntersecting)return;var el=en.target;cio.unobserve(el);var m=el.textContent.match(/^(\d+)(.*)/);if(!m)return;var target=parseInt(m[1]),suf=m[2],t0=null;requestAnimationFrame(function step(ts){if(!t0)t0=ts;var p=Math.min((ts-t0)/1200,1);el.textContent=Math.round(p*target)+suf;if(p<1)requestAnimationFrame(step);});});},{threshold:.6});els.forEach(function(el){cio.observe(el);});})();
-// 3D tilt on cards (max 8deg)
-document.querySelectorAll('.srv-card,.testi-card').forEach(function(card){card.addEventListener('mousemove',function(e){var r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform='translateY(-6px) perspective(600px) rotateX('+(-y*8)+'deg) rotateY('+(x*8)+'deg)';card.style.boxShadow='0 20px 56px rgba(0,0,0,.12)';});card.addEventListener('mouseleave',function(){card.style.transform='';card.style.boxShadow='';});});
+// Section reveals with ScrollTrigger.batch
+if(!PRM){ScrollTrigger.batch('[data-anim]',{onEnter:function(els){gsap.fromTo(els,{opacity:0,y:36},{opacity:1,y:0,duration:.75,ease:'power2.out',stagger:.09});},start:'top 92%',once:true});}else{document.querySelectorAll('[data-anim]').forEach(function(el){el.style.opacity=1;});}
+// Service cards staggered entrance
+if(!PRM){(function(){var $s=gsap.utils.toArray('.srv-card');if(!$s.length)return;ScrollTrigger.batch('.srv-card',{onEnter:function(els){gsap.fromTo(els,{y:52,opacity:0},{y:0,opacity:1,duration:.68,ease:'power2.out',stagger:.1});},start:'top 90%',once:true});})();}
+// Testimonial cards staggered entrance
+if(!PRM){(function(){var $t=gsap.utils.toArray('.testi-card');if(!$t.length)return;ScrollTrigger.batch('.testi-card',{onEnter:function(els){gsap.fromTo(els,{y:44,opacity:0,scale:.96},{y:0,opacity:1,scale:1,duration:.65,ease:'power2.out',stagger:.12});},start:'top 90%',once:true});})();}
+// About section reveal (slide in from sides)
+if(!PRM){(function(){var aiw=document.querySelector('.about-img-wrap'),ait=document.querySelector('.about-text');if(aiw)gsap.fromTo(aiw,{x:-48,opacity:0},{x:0,opacity:1,duration:.95,ease:'power2.out',scrollTrigger:{trigger:aiw,start:'top 82%',once:true}});if(ait)gsap.fromTo(ait,{x:48,opacity:0},{x:0,opacity:1,duration:.95,ease:'power2.out',scrollTrigger:{trigger:ait,start:'top 82%',once:true}});})();}
+// USP / trust counters (GSAP tween)
+(function(){var els=gsap.utils.toArray('.usp-num-val,.trust-item span');if(!els.length)return;els.forEach(function(el){var m=el.textContent.match(/^(\d+)(.*)/);if(!m)return;var target=parseInt(m[1]),suf=m[2];el.textContent='0'+suf;ScrollTrigger.create({trigger:el,start:'top 88%',once:true,onEnter:function(){var obj={v:0};gsap.to(obj,{v:target,duration:1.4,ease:'power2.out',onUpdate:function(){el.textContent=Math.round(obj.v)+suf;}});}});});})();
+// 3D tilt on cards (GSAP smooth, 14deg)
+gsap.utils.toArray('.srv-card,.testi-card').forEach(function(card){card.addEventListener('mousemove',function(e){var r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;gsap.to(card,{rotateY:x*14,rotateX:-y*14,translateY:-9,transformPerspective:900,force3D:true,duration:.28,ease:'power2.out'});});card.addEventListener('mouseleave',function(){gsap.to(card,{rotateY:0,rotateX:0,translateY:0,duration:.55,ease:'power3.out'});});});
 var FX=${fxJson};
-// Magnetic buttons
-if(FX.magneticBtns){document.querySelectorAll('.btn-primary,.btn-ghost,.nav-cta').forEach(function(btn){btn.addEventListener('mousemove',function(e){var r=btn.getBoundingClientRect(),x=(e.clientX-r.left-r.width/2)*.16,y=(e.clientY-r.top-r.height/2)*.16;btn.style.transform='translate('+x+'px,'+y+'px)';});btn.addEventListener('mouseleave',function(){btn.style.transform='';});});}
+// Magnetic buttons (GSAP elastic return)
+if(FX.magneticBtns){gsap.utils.toArray('.btn-primary,.btn-ghost,.nav-cta').forEach(function(btn){btn.addEventListener('mousemove',function(e){var r=btn.getBoundingClientRect(),x=(e.clientX-r.left-r.width/2)*.18,y=(e.clientY-r.top-r.height/2)*.18;gsap.to(btn,{x:x,y:y,duration:.28,ease:'power2.out'});});btn.addEventListener('mouseleave',function(){gsap.to(btn,{x:0,y:0,duration:.65,ease:'elastic.out(1,.5)'});});});}
+// Button scale micro-interaction
+gsap.utils.toArray('.btn-primary,.btn-ghost').forEach(function(btn){btn.addEventListener('mouseenter',function(){gsap.to(btn,{scale:1.05,duration:.2,ease:'power2.out'});});btn.addEventListener('mouseleave',function(){gsap.to(btn,{scale:1,duration:.32,ease:'power2.out'});});});
 // Typewriter on hero h1
 if(FX.typewriter){var h1=document.getElementById('heroH1');if(h1){var txt=h1.textContent;h1.innerHTML='<span id="twTxt"></span><span class="tw-cursor">|</span>';var idx=0,ti=setInterval(function(){document.getElementById('twTxt').textContent=txt.slice(0,++idx);if(idx>=txt.length)clearInterval(ti);},55);}}
-// Hero image preload — reveal once background image is loaded
+// Hero image preload
 (function(){var sec=document.getElementById('heroSec');if(!sec||sec.classList.contains('hero-ready'))return;var img=new Image();img.onload=img.onerror=function(){sec.classList.add('hero-ready');};img.src='${heroImg}';})();
 <\/script></body></html>`;
 }
