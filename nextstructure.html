@@ -5927,108 +5927,120 @@ function getIndustryAnimationCSS(industry){
   return a[m[industry]]||a.other;
 }
 
-function getServiceDescription(svc,industry){
-  const s=svc.toLowerCase().trim();
-  const d={
-    'mittagsmenü':'Täglich wechselndes Mittagsangebot aus frischen, regionalen Zutaten.',
-    'abendessen':'Mehrgängige Abendmenüs mit saisonalen Kreationen direkt aus unserer Küche.',
-    'catering':'Professionelles Catering für Firmen- und Privatveranstaltungen jeder Größe.',
-    'reservierungen':'Unkomplizierte Tischreservierung für besondere Anlässe und Gruppen.',
-    'takeaway':'Frisch zubereitete Gerichte zur schnellen Abholung — jederzeit genussbereit.',
-    'eventbewirtung':'Rundum-Bewirtung für Ihre Veranstaltung — von der Planung bis zum letzten Gang.',
-    'personal training':'Individuell abgestimmte Trainingseinheiten für maximale Ergebnisse.',
-    'gruppenklassen':'Motivierende Gruppentrainings von Yoga bis HIIT für jedes Fitnesslevel.',
-    'ernährungsberatung':'Maßgeschneiderte Ernährungspläne zur gezielten Unterstützung Ihrer Fitnessziele.',
-    'kraft & kondition':'Strukturiertes Kraft- und Ausdauertraining für nachhaltige Leistungssteigerung.',
-    'yoga':'Geführte Yogaeinheiten für mehr Balance, Flexibilität und innere Ruhe.',
-    'physiotherapie':'Gezielte Therapie zur Regeneration, Schmerzlinderung und Verletzungsprävention.',
-    'massagen':'Entspannende und therapeutische Massagen für tiefe Muskelentspannung.',
-    'massage':'Entspannende und therapeutische Massagen für tiefe Muskelentspannung.',
-    'gesichtsbehandlungen':'Intensive Pflegebehandlungen für ein strahlendes, gepflegtes Hautbild.',
-    'körperpflege':'Luxuriöse Körperanwendungen für regenerierte, weiche und verwöhnte Haut.',
-    'ayurveda':'Traditionelle ayurvedische Behandlungen für Körper, Geist und Seele.',
-    'hot stone':'Wärmebehandlung mit Vulkansteinen — tiefe Entspannung für Muskeln und Nerven.',
-    'paarbehandlungen':'Entspannungsrituale für zwei — gemeinsam loslassen in ruhiger Atmosphäre.',
-    'haarschnitt':'Präziser Schnitt, individuell auf Ihre Gesichtsform und Persönlichkeit abgestimmt.',
-    'färben & highlights':'Farbbehandlungen von natürlichen Tönen bis zu kühnen Looks — dauerhaft brillant.',
-    'styling':'Professionelles Styling für Alltag, Anlass und unvergessliche Momente.',
-    'make-up':'Make-up für jeden Anlass — von natürlich-frisch bis zu dramatisch-glamourös.',
-    'maniküre':'Gepflegte Hände und perfekte Nägel — für einen makellosen ersten Eindruck.',
-    'haarpflege':'Intensive Pflegekuren für gesundes, glänzendes und starkes Haar.',
-    'softwareentwicklung':'Maßgeschneiderte Softwarelösungen, die Ihre Prozesse beschleunigen und skalieren.',
-    'app-entwicklung':'Native und Cross-Platform-Apps mit klarem Design und flüssiger Performance.',
-    'cloud-lösungen':'Skalierbare Cloud-Infrastruktur für zuverlässigen Betrieb und schnelles Wachstum.',
-    'it-beratung':'Strategische IT-Beratung zur Modernisierung und Absicherung Ihrer Infrastruktur.',
-    'datensicherheit':'Umfassende Sicherheitskonzepte zum Schutz sensibler Daten und Systeme.',
-    'support':'Reaktionsschneller IT-Support für reibungslosen Betrieb ohne ungeplante Ausfälle.',
-    'webdesign':'Maßgeschneiderte Websites, die überzeugen — optisch stark und technisch sauber.',
-    'branding':'Unverwechselbare Markenidentitäten, die in Erinnerung bleiben und Vertrauen aufbauen.',
-    'seo':'Nachhaltige Suchmaschinenoptimierung für mehr Reichweite und qualifizierten Traffic.',
-    'social media':'Strategisches Social-Media-Management für wachsende Communities und Markenbindung.',
-    'content marketing':'Inhalte, die informieren, begeistern und Ihre Zielgruppe gezielt ansprechen.',
-    'fotografie':'Professionelle Bildwelten, die Ihre Marke und Produkte in bestem Licht zeigen.',
-    'allgemeinmedizin':'Ganzheitliche Grundversorgung mit Zeit für Ihre persönlichen Gesundheitsfragen.',
-    'vorsorge':'Regelmäßige Vorsorgeuntersuchungen zur frühzeitigen Erkennung und Prävention.',
-    'diagnostik':'Moderne diagnostische Verfahren für präzise Befunde und sichere Therapieplanung.',
-    'hausbesuche':'Ärztliche Betreuung bei Ihnen zu Hause — sicher, bequem und persönlich.',
-    'telemedizin':'Videosprechstunden für unkomplizierte Konsultationen von überall.',
-    'wohnungsvermittlung':'Diskrete Vermittlung von Wohn- und Gewerbeobjekten in bester Lage.',
-    'immobilienbewertung':'Fundierte Marktbewertungen für sichere Kauf- und Verkaufsentscheidungen.',
-    'kaufberatung':'Persönliche Begleitung von der Besichtigung bis zum Notartermin.',
-    'vermietung':'Professionelles Vermietungsmanagement für sorgenfreie Erträge.',
-    'verwaltung':'Zuverlässige Objektverwaltung — transparent, effizient und rechtssicher.',
-    'neubau':'Qualitätsvoller Neubau nach Ihren Vorstellungen — pünktlich und im Budget.',
-    'renovierung':'Fachgerechte Renovierungen mit handwerklicher Präzision und sauberem Ergebnis.',
-    'sanierung':'Umfassende Sanierungsarbeiten für energieeffiziente und wertstabile Immobilien.',
-    'schlüsselfertigbau':'Schlüsselfertiges Bauen aus einer Hand — vom Entwurf bis zur Übergabe.',
-    'trockenbau':'Saubere Trockenbaulösungen für flexible Raumgestaltung und optimale Akustik.',
-    'projektmanagement':'Professionelle Bauleitung für koordinierte Abläufe und termingerechte Fertigstellung.',
-    'übernachtung':'Komfortable Zimmer und Suiten für erholsame Nächte und unvergessliche Aufenthalte.',
-    'spa & wellness':'Luxuriöse Wellnessangebote für vollkommene Erholung während Ihres Aufenthalts.',
-    'veranstaltungen':'Professionelle Eventbetreuung für Tagungen, Feiern und besondere Anlässe.',
-    'konferenzräume':'Modern ausgestattete Räume für produktive Meetings jeder Größenordnung.',
-    'concierge-service':'Persönlicher Service für maßgeschneiderte Empfehlungen und Buchungen.',
-    'einzelunterricht':'Intensiver Einzelunterricht mit individuellem Fokus auf Ihre Lernziele.',
-    'gruppentraining':'Interaktive Gruppeneinheiten für kollaboratives Lernen und gegenseitige Motivation.',
-    'online-kurse':'Flexible Online-Kurse für ortsunabhängiges Lernen im eigenen Tempo.',
-    'prüfungsvorbereitung':'Zielgerichtete Vorbereitung mit erprobten Methoden für sichere Prüfungsergebnisse.',
-    'workshops':'Praxisorientierte Workshops für unmittelbar anwendbares Wissen.',
-    'rechtsberatung':'Fundierte Beratung für klare Orientierung in komplexen Rechtssituationen.',
-    'vertragsrecht':'Sichere Vertragsgestaltung und -prüfung zum Schutz Ihrer Interessen.',
-    'arbeitsrecht':'Kompetente Vertretung in allen Fragen des individuellen und kollektiven Arbeitsrechts.',
-    'familienrecht':'Einfühlsame Begleitung in sensiblen Familien- und Sorgerechtsangelegenheiten.',
-    'strafrecht':'Entschlossene Strafverteidigung mit strategischer Prozessführung.',
-    'unternehmensrecht':'Rechtssichere Beratung für Gründung, Wachstum und Unternehmenstransaktionen.',
-    'maßanfertigung':'Individuelle Maßanfertigungen für Kleidungsstücke, die perfekt sitzen.',
-    'online-shop':'Bequemes Shopping von zuhause — mit schnellem Versand und einfacher Rückgabe.',
-    'lieferservice':'Prompter Lieferservice direkt zu Ihnen — frisch, verpackt und zuverlässig.',
-    'geschenkgutscheine':'Das perfekte Geschenk für jeden Anlass — immer richtig, immer willkommen.',
-    'personal styling':'Persönliche Stilberatung für einen Look, der zu Ihnen und Ihrem Leben passt.',
-    'architekturplanung':'Kreative und funktionale Entwürfe, die Ihre Vision in Realität umsetzen.',
-    'innenarchitektur':'Durchdachte Raumkonzepte, die Ästhetik, Funktion und Lebensqualität vereinen.',
-    'bestandssanierung':'Revitalisierung bestehender Gebäude mit modernen Standards und zeitlosem Design.',
-    'visualisierung':'Fotorealistische 3D-Visualisierungen, die Ihr Projekt erlebbar machen.',
-    'hochzeitsfotografie':'Authentische Reportagen, die Ihre Liebesgeschichte für immer festhalten.',
-    'portraitfotografie':'Charakterstarke Porträts, die Persönlichkeit und Ausstrahlung sichtbar machen.',
-    'business-fotografie':'Professionelle Unternehmensfotos für einen überzeugenden ersten Eindruck.',
-    'produktfotografie':'Verkaufsstarke Produktbilder, die Details und Qualität in Szene setzen.',
-    'eventfotografie':'Lebendige Dokumentation, die die Stimmung Ihres Anlasses einfängt.',
-    'bildbearbeitung':'Professionelle Nachbearbeitung für konsistente, hochwertige Bildsprache.',
-    'strategieberatung':'Datengetriebene Strategieentwicklung für nachhaltiges Unternehmenswachstum.',
-    'finanzplanung':'Strukturierte Finanzplanung für Transparenz, Stabilität und Wachstumsfähigkeit.',
-    'marktanalyse':'Tiefgreifende Marktanalysen als Grundlage für fundierte Geschäftsentscheidungen.',
-    'unternehmensberatung':'Ganzheitliche Beratung zur Optimierung von Strukturen, Prozessen und Ergebnissen.',
-    'prozessoptimierung':'Systematische Verbesserung Ihrer Abläufe für mehr Effizienz und Qualität.',
-    'coaching':'Lösungsorientiertes Coaching für persönliche und berufliche Weiterentwicklung.',
-    'beratung':'Kompetente Beratung, die Ihre individuelle Situation in den Mittelpunkt stellt.',
+function getServiceDescription(svc,industry,name,usp){
+  var s=svc.toLowerCase().trim();
+  var n=name||'uns';
+  var u=usp?(usp.split(/[,—–\-]/)[0]||'').trim():'';
+  // Industry + service matrix — company name and USP woven in
+  var M={
+    restaurant:{
+      catering:'Professionelles Catering für Ihre Veranstaltung — von der Planung bis zum letzten Teller, mit dem Geschmack der '+n+' Küche.',
+      mittagsmenü:'Täglich wechselndes Mittagsangebot bei '+n+' — frisch, regional und mit Leidenschaft zubereitet.',
+      abendessen:'Mehrgängige Abendmenüs bei '+n+' — saisonale Kreationen direkt aus unserer Küche.',
+      reservierungen:'Tischreservierung bei '+n+' — für besondere Anlässe und unvergessliche Abende.',
+      takeaway:'Frisch zubereitete Gerichte von '+n+' zum Mitnehmen — Genuss ohne Wartezeit.',
+      eventbewirtung:n+' bewirtet Ihre Veranstaltung von A bis Z — stilsicher, reibungslos, lecker.'
+    },
+    gym:{
+      'personal training':'Individuell geplantes Training bei '+n+(u?' — abgestimmt auf Ihr Ziel: '+u.toLowerCase():' — für messbare Ergebnisse in kürzerer Zeit')+'.',
+      gruppenklassen:'Motivierende Gruppentrainings bei '+n+' — von Yoga bis HIIT, für jedes Fitnesslevel.',
+      ernährungsberatung:'Maßgeschneiderte Ernährungspläne von '+n+(u?' — für Ihr Ziel: '+u.toLowerCase():' — für nachhaltige Ergebnisse')+'.',
+      yoga:'Geführte Yoga-Einheiten bei '+n+' — für Balance, Flexibilität und innere Stärke.',
+      physiotherapie:'Gezielte Therapie bei '+n+' — Schmerzlinderung, Regeneration und Prävention.',
+      'kraft & kondition':'Strukturiertes Krafttraining bei '+n+' — nachhaltig, effektiv, auf Sie abgestimmt.'
+    },
+    spa:{
+      massagen:'Entspannende und therapeutische Massagen bei '+n+(u?' — '+u.toLowerCase():' — für tiefe Muskelentspannung und innere Ruhe')+'.',
+      massage:'Entspannende und therapeutische Massagen bei '+n+(u?' — '+u.toLowerCase():' — für tiefe Muskelentspannung und innere Ruhe')+'.',
+      gesichtsbehandlungen:'Intensive Pflegebehandlungen bei '+n+' — für ein strahlendes Hautbild, das für sich spricht.',
+      ayurveda:'Traditionelle Ayurveda-Anwendungen bei '+n+' — Körper, Geist und Seele in Einklang.',
+      'hot stone':'Hot-Stone-Massage bei '+n+' — Vulkansteinwärme, die tief entspannt und regeneriert.',
+      körperpflege:'Luxuriöse Körperpflege-Anwendungen bei '+n+' — für verwöhnte, weiche und strahlende Haut.',
+      paarbehandlungen:'Entspannungsrituale für zwei bei '+n+' — gemeinsam loslassen in stiller Atmosphäre.'
+    },
+    construction:{
+      neubau:n+' baut Ihr Zuhause — qualitätsvoll, pünktlich und exakt nach Ihren Vorstellungen.',
+      renovierung:'Fachgerechte Renovierungen von '+n+(u?' — '+u.toLowerCase():' — handwerkliche Präzision für dauerhaften Wert')+'.',
+      sanierung:'Umfassende Sanierungsarbeiten von '+n+' — energieeffizient, wertstabil, sauber.',
+      schlüsselfertigbau:'Schlüsselfertiges Bauen mit '+n+' — vom Entwurf bis zur Übergabe, alles aus einer Hand.',
+      projektmanagement:n+' koordiniert Ihr Bauprojekt — transparente Abläufe, klare Termine.',
+      trockenbau:'Präziser Trockenbau von '+n+' — flexible Raumgestaltung, optimale Akustik.'
+    },
+    medical:{
+      allgemeinmedizin:'Ganzheitliche Grundversorgung bei '+n+' — mit Zeit für Ihre persönlichen Gesundheitsfragen.',
+      vorsorge:'Regelmäßige Vorsorge bei '+n+(u?' — '+u.toLowerCase():' — frühzeitig erkennen, gezielt handeln')+'.',
+      diagnostik:'Präzise Diagnostik bei '+n+' — moderne Verfahren für sichere Befunde.',
+      hausbesuche:'Ärztliche Betreuung zu Hause durch '+n+' — sicher, bequem und persönlich.',
+      telemedizin:'Videosprechstunde mit '+n+' — Beratung wann und wo Sie sie brauchen.'
+    },
+    tech:{
+      softwareentwicklung:'Individuelle Softwarelösungen von '+n+(u?' — '+u.toLowerCase():' — für Prozesse, die skalieren und performen')+'.',
+      'app-entwicklung':'Apps von '+n+' — nativ, cross-platform und mit dem Design Ihrer Marke.',
+      'cloud-lösungen':'Skalierbare Cloud-Infrastruktur von '+n+' — zuverlässig, sicher, zukunftsfähig.',
+      'it-beratung':'Strategische IT-Beratung von '+n+(u?' — '+u.toLowerCase():' — für eine Infrastruktur, die Wachstum ermöglicht')+'.',
+      datensicherheit:n+' schützt Ihre Daten — umfassende Sicherheitskonzepte ohne Kompromisse.',
+      webdesign:'Maßgeschneiderte Websites von '+n+' — visuell stark und technisch sauber.'
+    },
+    hotel:{
+      übernachtung:'Komfortable Zimmer bei '+n+' — für erholsame Nächte und unvergessliche Aufenthalte.',
+      'spa & wellness':'Luxuriöse Wellness bei '+n+(u?' — '+u.toLowerCase():' — vollkommene Erholung für Körper und Geist')+'.',
+      veranstaltungen:'Professionelles Eventmanagement bei '+n+' — für Tagungen, Feiern und besondere Anlässe.',
+      konferenzräume:'Modern ausgestattete Räume bei '+n+' — produktives Arbeiten in stilvoller Atmosphäre.',
+      'concierge-service':'Persönlicher Concierge-Service bei '+n+' — wir denken jeden Wunsch voraus.'
+    },
+    agency:{
+      webdesign:'Maßgeschneiderte Websites von '+n+(u?' — '+u.toLowerCase():' — Design, das überzeugt und konvertiert')+'.',
+      branding:'Unverwechselbare Markenwelt von '+n+' — Identitäten, die in Erinnerung bleiben.',
+      seo:'Nachhaltige SEO-Strategien von '+n+' — mehr Sichtbarkeit, mehr qualifizierter Traffic.',
+      'social media':'Social-Media-Strategien von '+n+(u?' — '+u.toLowerCase():' — echte Communities, echte Wirkung')+'.',
+      fotografie:'Professionelle Fotografie von '+n+' — Bilder, die Ihre Marke in bestem Licht zeigen.'
+    },
+    law:{
+      rechtsberatung:'Fundierte Rechtsberatung bei '+n+' — klare Orientierung in jeder Situation.',
+      vertragsrecht:'Sichere Vertragsgestaltung durch '+n+(u?' — '+u.toLowerCase():' — zum konsequenten Schutz Ihrer Interessen')+'.',
+      arbeitsrecht:'Kompetente Arbeitsrechtsvertretung bei '+n+' — auf Ihrer Seite, zu jeder Zeit.',
+      familienrecht:'Einfühlsame Familienrechtsbegleitung bei '+n+' — persönlich, diskret, lösungsorientiert.',
+      strafrecht:'Entschlossene Strafverteidigung durch '+n+' — mit Strategie und Überzeugungskraft.',
+      unternehmensrecht:'Rechtssichere Unternehmensberatung von '+n+(u?' — '+u.toLowerCase():' — von der Gründung bis zur Transaktion')+'.'
+    }
   };
-  if(d[s])return d[s];
-  for(var k in d){if(s.includes(k)||k.includes(s))return d[k];}
-  const fb={restaurant:'Frisch zubereitet nach Hausrezept — Genuss, der begeistert.',gym:'Professionell begleitet zu Ihrem nächsten Fitnesslevel.',spa:'Wohltuende Behandlung für Körper, Geist und Seele.',construction:'Handwerkliche Präzision für Ergebnisse, die Bestand haben.',medical:'Einfühlsame und kompetente medizinische Betreuung.',tech:'Technologielösungen, die Ihr Unternehmen voranbringen.',hotel:'Außergewöhnlicher Service für unvergessliche Momente.',retail:'Sorgfältig ausgewählt für anspruchsvolle Geschmäcker.',agency:'Kreative Lösungen mit messbarer Wirkung.',law:'Juristische Expertise, die Ihre Interessen konsequent schützt.',other:'Professionell umgesetzt, individuell auf Sie abgestimmt.'};
-  const im={restaurant:'restaurant',bar:'restaurant',cafe:'restaurant',gym:'gym',fitness:'gym',sport:'gym',spa:'spa',beauty:'spa',kosmetik:'spa',construction:'construction',handwerk:'construction',bau:'construction',renovierung:'construction',medical:'medical',medizin:'medical',arzt:'medical',gesundheit:'medical',tech:'tech',it:'tech',software:'tech',hotel:'hotel',tourismus:'hotel',reise:'hotel',retail:'retail',shop:'retail',einzelhandel:'retail',agency:'agency',agentur:'agency',law:'law',recht:'law',anwalt:'law'};
-  return fb[im[industry]]||fb.other;
+  var iMap=M[industry];
+  if(iMap){if(iMap[s])return iMap[s];for(var k in iMap){if(s.includes(k)||k.includes(s))return iMap[k];}}
+  // Generic keyword fallback with name injected
+  var G={
+    massagen:'Entspannende und therapeutische Massagen bei '+n+' — für tiefe Entspannung.',
+    massage:'Entspannende und therapeutische Massagen bei '+n+' — für tiefe Entspannung.',
+    yoga:'Geführte Yoga-Einheiten bei '+n+' — für Balance und innere Ruhe.',
+    physiotherapie:'Gezielte Therapie bei '+n+' — Regeneration und Schmerzlinderung.',
+    fotografie:'Professionelle Fotografie von '+n+' — Bilder mit klarer Bildsprache.',
+    webdesign:'Maßgeschneiderte Websites von '+n+' — visuell stark, technisch sauber.',
+    branding:'Unverwechselbare Markenidentität von '+n+' — die in Erinnerung bleibt.',
+    seo:'Nachhaltige SEO von '+n+' — für mehr Sichtbarkeit und Traffic.',
+    coaching:'Lösungsorientiertes Coaching bei '+n+' — für persönliche Entwicklung.',
+    beratung:'Kompetente Beratung bei '+n+' — individuell und ergebnisorientiert.',
+    training:'Individuell abgestimmtes Training bei '+n+(u?' — '+u.toLowerCase():'')+'.',
+    catering:'Professionelles Catering von '+n+' — von der Planung bis zum letzten Gang.',
+    renovierung:'Fachgerechte Renovierungen von '+n+' — handwerkliche Präzision.',
+    software:'Maßgeschneiderte Software von '+n+' — für Prozesse, die skalieren.',
+    app:'Apps von '+n+' — klares Design, flüssige Performance.',
+    cloud:'Skalierbare Cloud-Lösungen von '+n+' — zuverlässig und sicher.',
+    support:'Reaktionsschneller Support von '+n+' — für reibungslosen Betrieb.',
+    marketing:'Zielgerichtetes Marketing von '+n+' — für wachsende Sichtbarkeit.',
+    strategie:'Datengetriebene Strategie von '+n+(u?' — '+u.toLowerCase():'')+'.',
+    buchhaltung:'Präzise Buchhaltung von '+n+' — transparent und termingerecht.',
+    steuerberatung:'Fundierte Steuerberatung bei '+n+' — für finanzielle Klarheit.',
+    architektur:'Kreative Entwürfe von '+n+' — Funktion und Ästhetik in Einklang.',
+    innenarchitektur:'Durchdachte Raumkonzepte von '+n+' — Ästhetik trifft Lebensqualität.',
+    recht:'Juristische Expertise von '+n+' — konsequent für Ihre Interessen.',
+    immobilien:'Diskrete Immobilienvermittlung durch '+n+' — in bester Lage.',
+    finanz:'Strukturierte Finanzplanung von '+n+' — Transparenz und Stabilität.',
+    verwaltung:'Professionelle Verwaltung durch '+n+' — effizient und rechtssicher.'
+  };
+  for(var k in G){if(s===k||s.includes(k)||k.includes(s))return G[k];}
+  // Dynamic final fallback
+  if(u)return svc+' bei '+n+' — '+u.toLowerCase()+'.';
+  return svc+' bei '+n+' — professionell, persönlich und auf Sie abgestimmt.';
 }
-
 function generateWebsite(d) {
   const pc=d.primaryColor,sc=d.secondaryColor;
   const pcRgb=hexToRgb(pc),scRgb=hexToRgb(sc);
@@ -6062,7 +6074,7 @@ function generateWebsite(d) {
   ];
   const dir=DESIGN_DIRECTIONS[Math.floor(Math.random()*DESIGN_DIRECTIONS.length)];
   // Layout variants
-  const lv={hero:Math.floor(Math.random()*3),about:Math.floor(Math.random()*2),services:Math.floor(Math.random()*3),usp:Math.floor(Math.random()*2),testi:Math.floor(Math.random()*2)};
+  const lv={hero:Math.floor(Math.random()*4),about:Math.floor(Math.random()*2),services:Math.floor(Math.random()*3),usp:Math.floor(Math.random()*2),testi:Math.floor(Math.random()*2)};
   // Industry animation CSS
   const indAnimCss=getIndustryAnimationCSS(d.industry);
   // FX flags
@@ -6088,7 +6100,7 @@ function generateWebsite(d) {
   // 2: large numbered format (oversized watermark number)
   const srvItems=resolvedServices.map(function(svc,i){
     const ico=GEN_SERVICE_ICONS[i%GEN_SERVICE_ICONS.length];
-    const desc=getServiceDescription(svc,d.industry);
+    const desc=getServiceDescription(svc,d.industry,d.name,resolvedUsp);
     const num=String(i+1).padStart(2,'0');
     if(lv.services===1)return '<div class="srv-row-b"'+(i%2===1?' style="background:rgba('+pcRgb+',.04);border-radius:12px;margin:0 -16px;padding:28px 16px;"':'')+'>'+
       '<div class="srv-row-b-ico">'+ico+'</div>'+
@@ -6139,13 +6151,21 @@ function generateWebsite(d) {
     heroHtml='<section class="hero" id="heroSec"><div class="hero-shimmer"></div><div class="hero-overlay"></div><div class="hero-content container"><p class="hero-eyebrow">'+d.location+' · '+industryLabel+'</p><h1 id="heroH1">'+d.name+'</h1><p class="hero-sub">'+subline+'</p><div class="hero-actions"><a href="#services" class="btn-primary">Leistungen entdecken</a><a href="#contact" class="btn-ghost">Jetzt anfragen</a></div></div></section>';
   }else if(lv.hero===1){
     heroHtml='<section class="hero hero-v1" id="heroSec"><div class="hero-shimmer"></div><div class="hero-overlay"></div><div class="container hero-v1-grid"><div class="hero-v1-text"><p class="hero-eyebrow">'+d.location+' · '+industryLabel+'</p><h1 id="heroH1">'+d.name+'</h1><p class="hero-sub">'+subline+'</p><div class="hero-actions"><a href="#services" class="btn-primary">Leistungen entdecken</a><a href="#contact" class="btn-ghost">Jetzt anfragen</a></div></div><div class="hero-v1-img"><img src="'+aboutImg+'" alt="'+d.name+'"></div></div></section>';
-  }else{
+  }else if(lv.hero===2){
     heroHtml='<section class="hero hero-v2 hero-ready" id="heroSec"><div class="hero-shimmer"></div><div class="hero-v2-left"><div class="hero-v2-text"><p class="hero-eyebrow">'+d.location+' · '+industryLabel+'</p><h1 id="heroH1">'+d.name+'</h1><p class="hero-sub">'+subline+'</p><div class="hero-actions"><a href="#services" class="btn-primary">Leistungen entdecken</a></div></div></div><div class="hero-v2-right" id="heroV2Bg" style="background-image:url(\''+heroImg+'\')"><div class="hero-v2-right-ov"></div></div></section>';
+  }else{
+    heroHtml='<section class="hero hero-v3 hero-ready" id="heroSec"><div class="hero-v3-left"><div class="hero-v3-text"><p class="hero-eyebrow">'+d.location+' · '+industryLabel+'</p><h1 id="heroH1">'+d.name+'</h1><p class="hero-sub">'+subline+'</p><div class="hero-actions"><a href="#services" class="btn-v3-primary">Leistungen entdecken</a><a href="#contact" class="btn-v3-ghost">Jetzt anfragen</a></div></div></div><div class="hero-v3-right" style="background-image:url(\''+heroImg+'\')"></div></section>';
   }
   // Footer cols
   const ftContact='<div class="footer-col"><h4 class="fc-h">Kontakt</h4>'+(d.phone?'<p><a href="tel:'+d.phone.replace(/\s/g,'')+'">'+d.phone+'</a></p>':'')+(d.email?'<p><a href="mailto:'+d.email+'">'+d.email+'</a></p>':'')+(d.address?'<p>'+d.address+'</p>':'')+'</div>';
   const ftHours=d.hours?'<div class="footer-col"><h4 class="fc-h">Öffnungszeiten</h4><p>'+d.hours.replace(/\n/g,'<br>')+'</p></div>':'';
   const ftLinks='<div class="footer-col"><h4 class="fc-h">Navigation</h4><ul class="footer-links"><li><a href="#about">Über uns</a></li><li><a href="#services">Leistungen</a></li><li><a href="#contact">Kontakt</a></li></ul></div>';
+  // Randomize section order after hero
+  const servicesSec='<section id="services" class="services" data-anim="fade-up"><div class="container"><div class="sec-head"><span class="sec-eyebrow">Unser Angebot</span><h2>Unsere Leistungen</h2></div>'+srvWrapper+'</div></section>';
+  const SECTION_ORDERS=[[aboutHtml,servicesSec,uspHtml,testiHtml],[testiHtml,servicesSec,aboutHtml,uspHtml],[servicesSec,aboutHtml,testiHtml,uspHtml]];
+  const mainSections=SECTION_ORDERS[Math.floor(Math.random()*3)].join('');
+  // Direction-specific bold color overrides (Vibrant Expressive)
+  const dirOverrides=dir.id==='vibrant-expressive'?`.hero-shimmer{background:${pc};animation:none;}.hero-overlay{background:linear-gradient(160deg,rgba(${pcRgb},.88) 0%,rgba(${pcRgb},.55) 60%,rgba(${pcRgb},.08) 100%);}.usp-v1{background:${pc};}.usp-v1 .sec-head h2{color:#fff;}.usp-v1 .sec-eyebrow{color:rgba(255,255,255,.7);}.usp-num-val{color:#fff;}.usp-num-label{color:rgba(255,255,255,.75);}`:``
 
   return `<!-- ns-direction:${dir.id} | ${dir.name} -->
 <!DOCTYPE html>
@@ -6204,6 +6224,17 @@ nav.scrolled .nav-links a.nav-active{color:var(--p);border-bottom-color:var(--p)
 .hero-v2-right{background-size:cover;background-position:center;position:relative;}
 .hero-v2-right-ov{position:absolute;inset:0;background:linear-gradient(to right,rgba(${scRgb},.3) 0%,transparent 60%);}
 @media(max-width:768px){.hero-v2{grid-template-columns:1fr;}.hero-v2-right{display:none;}}
+/* Hero v3 — full-width split: solid primaryColor left, image right */
+.hero-v3{height:100vh;min-height:600px;display:flex;background:none;}
+.hero-v3-left{width:50%;background:var(--p);display:flex;align-items:center;padding:40px 72px;position:relative;overflow:hidden;}
+.hero-v3-left::after{content:'';position:absolute;bottom:-120px;right:-80px;width:320px;height:320px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none;}
+.hero-v3-text{padding-top:60px;max-width:500px;position:relative;z-index:1;}
+.hero-v3-right{flex:1;background-size:cover;background-position:center;}
+.btn-v3-primary{display:inline-flex;align-items:center;padding:15px 34px;background:rgba(255,255,255,.95);color:var(--p);font-family:${dir.fontSans};font-size:15px;font-weight:700;border-radius:${dir.radius};box-shadow:0 4px 20px rgba(0,0,0,.15);transition:transform .2s,box-shadow .2s;}
+.btn-v3-primary:hover{transform:translateY(-2px);background:#fff;box-shadow:0 8px 28px rgba(0,0,0,.22);}
+.btn-v3-ghost{display:inline-flex;align-items:center;padding:15px 34px;background:transparent;color:#fff;font-family:${dir.fontSans};font-size:15px;font-weight:600;border-radius:${dir.radius};border:2px solid rgba(255,255,255,.55);transition:background .2s,border-color .2s;}
+.btn-v3-ghost:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.9);}
+@media(max-width:900px){.hero-v3{flex-direction:column;height:auto;}.hero-v3-left{width:100%;padding:100px 24px 60px;}.hero-v3-right{height:280px;width:100%;}}
 /* Buttons */
 .btn-primary{display:inline-flex;align-items:center;padding:15px 34px;background:var(--p);color:#fff;font-family:${dir.fontSans};font-size:15px;font-weight:600;border-radius:${dir.radius};box-shadow:0 4px 22px rgba(${pcRgb},.4);transition:transform .2s,box-shadow .2s,filter .2s;position:relative;overflow:hidden;}
 .btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);background-size:200% 100%;border-radius:inherit;opacity:0;}
@@ -6341,14 +6372,12 @@ footer{background:var(--s);padding:72px 0 0;}
 .tw-cursor{animation:cursorBlink .65s step-end infinite;font-weight:200;margin-left:2px}
 [data-anim]{opacity:0;}
 /* Industry-specific overrides */
+${dirOverrides}
 ${indAnimCss}
 </style></head><body>
 <nav id="mainNav"><div class="nav-in"><a href="#" class="nav-logo">${d.name}</a><div class="nav-links"><a href="#about">Über uns</a><a href="#services">Leistungen</a><a href="#contact">Kontakt</a></div><a href="#contact" class="nav-cta">Jetzt anfragen</a></div></nav>
 ${heroHtml}
-${aboutHtml}
-<section id="services" class="services" data-anim="fade-up"><div class="container"><div class="sec-head"><span class="sec-eyebrow">Unser Angebot</span><h2>Unsere Leistungen</h2></div>${srvWrapper}</div></section>
-${uspHtml}
-${testiHtml}
+${mainSections}
 <section id="contact" class="contact" data-anim="fade-up"><div class="container"><div class="sec-head"><span class="sec-eyebrow">Kontakt aufnehmen</span><h2>Wir freuen uns von Ihnen zu hören</h2></div><div class="contact-rows">${contactHTML}</div></div></section>
 <footer data-anim="fade-up"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="footer-logo">${d.name}</div><p class="footer-tag">${footerTagline}</p><div class="footer-socials"><a href="#" class="footer-social-btn" aria-label="Facebook">${SOCIAL_FB}</a><a href="#" class="footer-social-btn" aria-label="Instagram">${SOCIAL_IG}</a><a href="#" class="footer-social-btn" aria-label="LinkedIn">${SOCIAL_LI}</a></div></div>${ftContact}${d.hours ? ftHours : ftLinks}</div><div class="footer-bottom"><p class="footer-copy">&copy; ${year} ${d.name}. Alle Rechte vorbehalten.</p></div></div></footer>
 <script>
