@@ -18,7 +18,7 @@ load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
 
 API_KEY = os.getenv("GOOGLE_PLACES_API_KEY")
 
-GEOCODE_URL     = "https://maps.googleapis.com/maps/api/geocode/json"
+NOMINATIM_URL   = "https://nominatim.openstreetmap.org/search"
 TEXT_SEARCH_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json"
 DETAILS_URL     = "https://maps.googleapis.com/maps/api/place/details/json"
 
@@ -30,20 +30,20 @@ DETAIL_FIELDS = (
 SEARCH_RADIUS = 10000  # metres
 
 
-# ── Geocoding ──────────────────────────────────────────────────────────────────
+# ── Geocoding via OpenStreetMap Nominatim (no extra API activation needed) ─────
 
 def get_city_coords(city: str) -> tuple[float, float] | None:
     r = requests.get(
-        GEOCODE_URL,
-        params={"address": city, "key": API_KEY, "language": "de"},
+        NOMINATIM_URL,
+        params={"q": city, "format": "json", "limit": 1},
+        headers={"User-Agent": "NextStructure-LeadScraper/1.0"},
         timeout=10,
     )
     r.raise_for_status()
-    results = r.json().get("results", [])
+    results = r.json()
     if not results:
         return None
-    loc = results[0]["geometry"]["location"]
-    return loc["lat"], loc["lng"]
+    return float(results[0]["lat"]), float(results[0]["lon"])
 
 
 # ── Places search ──────────────────────────────────────────────────────────────
@@ -122,7 +122,7 @@ def scrape(city: str, category: str) -> list[dict]:
     print("Koordinaten ermitteln …", end=" ", flush=True)
     coords = get_city_coords(city)
     if not coords:
-        print(f"Fehler — Stadt „{city}" nicht gefunden.")
+        print(f'Fehler — Stadt "{city}" nicht gefunden.')
         sys.exit(1)
     lat, lng = coords
     print(f"{lat:.4f}, {lng:.4f}")
@@ -137,7 +137,7 @@ def scrape(city: str, category: str) -> list[dict]:
 
     all_ids: set[str] = set()
     for q in queries:
-        print(f"  Suche: „{q}" …", end=" ", flush=True)
+        print(f'  Suche: "{q}" …', end=" ", flush=True)
         ids = collect_place_ids(q, lat, lng)
         new = ids - all_ids
         all_ids |= ids
