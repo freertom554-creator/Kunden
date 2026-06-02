@@ -2039,6 +2039,24 @@
     }
     .nm-fs-mem-empty { padding: 6px 16px; font-size: 12px; color: #333348; font-style: italic; }
     .nm-fs-divider { height: 1px; background: rgba(124,106,247,0.08); margin: 10px 16px 18px; }
+    .nm-mem-count { padding: 0 16px 10px; font-size: 11px; color: #454560; }
+    .nm-mem-entry { padding: 7px 16px; font-size: 12px; color: var(--muted); display: flex; align-items: flex-start; gap: 7px; line-height: 1.45; }
+    .nm-mem-entry-text { flex: 1; }
+    .nm-mem-entry-date { font-size: 10px; color: #454560; white-space: nowrap; margin-top: 1px; }
+    .nm-mem-del { background: none; border: none; color: #454560; cursor: pointer; font-size: 13px; line-height: 1; padding: 0 0 0 4px; flex-shrink: 0; transition: color .12s; }
+    .nm-mem-del:hover { color: #ff6b6b; }
+    .nm-mem-actions { padding: 8px 16px 4px; display: flex; gap: 6px; flex-direction: column; }
+    .nm-mem-add-btn { background: rgba(124,106,247,0.12); border: 1px solid rgba(124,106,247,0.2); color: #7c6af7; border-radius: 6px; font-size: 12px; padding: 5px 10px; cursor: pointer; transition: background .12s; text-align: left; }
+    .nm-mem-add-btn:hover { background: rgba(124,106,247,0.22); }
+    .nm-mem-clear-btn { background: none; border: 1px solid rgba(255,107,107,0.2); color: #ff6b6b; border-radius: 6px; font-size: 12px; padding: 5px 10px; cursor: pointer; transition: background .12s; text-align: left; }
+    .nm-mem-clear-btn:hover { background: rgba(255,107,107,0.08); }
+    .nm-mem-note-wrap { padding: 0 16px 8px; display: none; }
+    .nm-mem-note-wrap.open { display: block; }
+    .nm-mem-note-inp { width: 100%; background: rgba(124,106,247,0.07); border: 1px solid rgba(124,106,247,0.2); color: #e0deff; border-radius: 6px; font-size: 12px; padding: 6px 8px; resize: none; font-family: inherit; box-sizing: border-box; }
+    .nm-mem-note-inp:focus { outline: none; border-color: rgba(124,106,247,0.5); }
+    .nm-mem-note-save { margin-top: 4px; background: rgba(124,106,247,0.2); border: none; color: #c4baf9; border-radius: 5px; font-size: 11px; padding: 4px 10px; cursor: pointer; }
+    .nm-mem-save-btn { background: rgba(124,106,247,0.1); border: 1px solid rgba(124,106,247,0.18); color: #7c6af7; border-radius: 6px; font-size: 11px; padding: 4px 10px; cursor: pointer; transition: background .12s; white-space: nowrap; flex-shrink: 0; }
+    .nm-mem-save-btn:hover { background: rgba(124,106,247,0.25); }
 
     .nm-fs-chat { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
     #nmFsMessages {
@@ -2395,6 +2413,7 @@
   <div class="nm-input-bar">
     <div class="nm-input-wrap">
       <textarea id="nmInput" rows="1" placeholder="Nachricht eingeben …"></textarea>
+      <button class="nm-mem-save-btn" onclick="nmSaveMemory()" title="Gespräch als Memory speichern" aria-label="Memory speichern">💾</button>
       <button class="nm-send-btn" onclick="nmSend()" aria-label="Senden">
         <svg viewBox="0 0 15 15" fill="none"><path d="M13 7.5L2 2l2 5.5-2 5.5 11-5.5z" fill="currentColor"/></svg>
       </button>
@@ -2420,12 +2439,17 @@
   <div class="nm-fs-body">
     <aside class="nm-fs-sidebar">
       <span class="nm-fs-sidebar-label">Memory</span>
-      <div class="nm-fs-mem-item"><div class="nm-fs-mem-dot"></div>Kunden</div>
-      <div class="nm-fs-mem-item"><div class="nm-fs-mem-dot"></div>Ziele</div>
-      <div class="nm-fs-mem-item"><div class="nm-fs-mem-dot"></div>Strategie</div>
-      <div class="nm-fs-divider"></div>
-      <span class="nm-fs-sidebar-label">Verlauf</span>
-      <div class="nm-fs-mem-empty">Noch keine Gespräche</div>
+      <div class="nm-mem-count" id="nmMemCount">0 Einträge</div>
+      <div id="nmMemList"></div>
+      <div class="nm-mem-actions">
+        <button class="nm-mem-add-btn" onclick="nmMemToggleAdd()">+ Notiz hinzufügen</button>
+        <button class="nm-mem-save-btn" onclick="nmSaveMemory()" style="border-radius:6px;font-size:12px;padding:5px 10px;">💾 Memory speichern</button>
+        <button class="nm-mem-clear-btn" onclick="nmMemClearAll()">Alle löschen</button>
+      </div>
+      <div class="nm-mem-note-wrap" id="nmMemNoteWrap">
+        <textarea class="nm-mem-note-inp" id="nmMemNoteInp" rows="3" placeholder="Notiz eingeben …"></textarea>
+        <button class="nm-mem-note-save" onclick="nmMemAddManual()">Speichern</button>
+      </div>
     </aside>
     <div class="nm-fs-chat">
       <div id="nmFsMessages"></div>
@@ -4670,6 +4694,7 @@ function openLanding() {
   var _nmBusy    = false;
   var _nmMsgs    = []; // UI store (role:'ai'|'user')
   var _nmHistory = []; // API conversation history {role:'user'|'assistant', content:''}
+  var _nmMsgCount = 0; // counts messages for auto-memory trigger
 
   var MANAGER_SYSTEM_PROMPT =
     'Du bist der Next Manager — der strategische KI-Kopilot und CEO-Brain von NextStructure Solutions. Du hast 20 Jahre Erfahrung als Unternehmer und hast bereits 3 Firmen erfolgreich aufgebaut. Du denkst wie ein erfahrener Geschäftsführer: direkt, lösungsorientiert, ohne Umschweife.\n\n' +
@@ -4818,6 +4843,115 @@ function openLanding() {
     document.getElementById('nmSettingsRow').classList.remove('nm-settings-open');
   };
 
+  // ── Memory helpers ─────────────────────────────────────────────────────────
+  function _nmLoadMemory() {
+    try { return JSON.parse(localStorage.getItem('nm_memory') || '{"entries":[]}'); }
+    catch(e) { return { entries: [] }; }
+  }
+  function _nmSaveMemoryData(data) {
+    localStorage.setItem('nm_memory', JSON.stringify(data));
+  }
+  function _nmMemDate() {
+    var d = new Date();
+    return d.getDate().toString().padStart(2,'0') + '.' + (d.getMonth()+1).toString().padStart(2,'0') + '.' + d.getFullYear();
+  }
+  function _nmAddMemoryEntry(content) {
+    var data = _nmLoadMemory();
+    data.entries.push({ date: _nmMemDate(), content: content });
+    _nmSaveMemoryData(data);
+    nmMemRender();
+  }
+  function nmMemRender() {
+    var data = _nmLoadMemory();
+    var list = document.getElementById('nmMemList');
+    var count = document.getElementById('nmMemCount');
+    if (count) count.textContent = (data.entries.length) + ' Einträge';
+    if (!list) return;
+    if (!data.entries.length) {
+      list.innerHTML = '<div class="nm-fs-mem-empty">Noch keine Einträge gespeichert</div>';
+      return;
+    }
+    list.innerHTML = data.entries.map(function(e, i) {
+      return '<div class="nm-mem-entry">' +
+        '<div class="nm-fs-mem-dot" style="margin-top:4px"></div>' +
+        '<div class="nm-mem-entry-text">' +
+          '<div>' + _nmEsc(e.content) + '</div>' +
+          '<div class="nm-mem-entry-date">' + _nmEsc(e.date) + '</div>' +
+        '</div>' +
+        '<button class="nm-mem-del" onclick="nmMemDelete(' + i + ')" title="Löschen">✕</button>' +
+      '</div>';
+    }).join('');
+  }
+  window.nmMemDelete = function(i) {
+    var data = _nmLoadMemory();
+    data.entries.splice(i, 1);
+    _nmSaveMemoryData(data);
+    nmMemRender();
+  };
+  window.nmMemClearAll = function() {
+    if (!confirm('Alle Memory-Einträge löschen?')) return;
+    _nmSaveMemoryData({ entries: [] });
+    nmMemRender();
+  };
+  window.nmMemToggleAdd = function() {
+    var wrap = document.getElementById('nmMemNoteWrap');
+    if (!wrap) return;
+    var open = wrap.classList.toggle('open');
+    if (open) setTimeout(function() { var inp = document.getElementById('nmMemNoteInp'); if (inp) inp.focus(); }, 60);
+  };
+  window.nmMemAddManual = function() {
+    var inp = document.getElementById('nmMemNoteInp');
+    if (!inp) return;
+    var val = inp.value.trim();
+    if (!val) return;
+    _nmAddMemoryEntry(val);
+    inp.value = '';
+    document.getElementById('nmMemNoteWrap').classList.remove('open');
+  };
+  window.nmSaveMemory = async function() {
+    var apiKey = localStorage.getItem('nm_api_key');
+    if (!_nmHistory.length) { alert('Noch kein Gesprächsverlauf zum Speichern.'); return; }
+    if (!apiKey) { alert('API Key fehlt.'); return; }
+    var transcript = _nmHistory.map(function(m) { return (m.role === 'user' ? 'User' : 'Manager') + ': ' + m.content; }).join('\n');
+    try {
+      var res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-5', max_tokens: 200,
+          system: 'Du extrahierst die wichtigsten Fakten aus einem Gespräch in einem Satz auf Deutsch. Nur die wichtigste Information, kein Präambel.',
+          messages: [{ role: 'user', content: 'Fasse die wichtigste neue Information aus diesem Gespräch in einem kurzen Satz zusammen:\n\n' + transcript }]
+        })
+      });
+      if (res.ok) {
+        var data = await res.json();
+        var summary = data.content && data.content[0] && data.content[0].text || '';
+        if (summary) { _nmAddMemoryEntry(summary.trim()); alert('Memory gespeichert: ' + summary.trim()); }
+      }
+    } catch(e) { console.error('[NM Memory]', e); }
+  };
+  async function _nmAutoMemory() {
+    var apiKey = localStorage.getItem('nm_api_key');
+    if (!apiKey || _nmHistory.length < 2) return;
+    var transcript = _nmHistory.map(function(m) { return (m.role === 'user' ? 'User' : 'Manager') + ': ' + m.content; }).join('\n');
+    try {
+      var res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-5', max_tokens: 150,
+          system: 'Du extrahierst die wichtigsten Fakten aus einem Gespräch in einem Satz auf Deutsch. Nur die wichtigste Information, kein Präambel.',
+          messages: [{ role: 'user', content: 'Fasse die wichtigste neue Information aus diesem Gespräch in einem kurzen Satz zusammen:\n\n' + transcript }]
+        })
+      });
+      if (res.ok) {
+        var data = await res.json();
+        var summary = data.content && data.content[0] && data.content[0].text || '';
+        if (summary) _nmAddMemoryEntry('[Auto] ' + summary.trim());
+      }
+    } catch(e) { console.error('[NM AutoMemory]', e); }
+  }
+
   // ── API call ───────────────────────────────────────────────────────────────
   async function _nmCallApi(userText) {
     var apiKey = localStorage.getItem('nm_api_key');
@@ -4825,7 +4959,14 @@ function openLanding() {
       _nmAppend('ai', 'Bitte zuerst API Key in den Einstellungen eingeben ⚙️');
       return;
     }
+    // Append saved memory context to system prompt
+    var savedMemory = _nmLoadMemory();
+    var memoryContext = savedMemory.entries && savedMemory.entries.length
+      ? '\n\nGESPEICHERTES WISSEN AUS BISHERIGEN GESPRÄCHEN:\n' + savedMemory.entries.map(function(e) { return '- ' + e.date + ': ' + e.content; }).join('\n')
+      : '';
+    var fullPrompt = MANAGER_SYSTEM_PROMPT + memoryContext;
     _nmHistory.push({ role: 'user', content: userText });
+    _nmMsgCount++;
     _nmShowTyping();
     try {
       var res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -4839,7 +4980,7 @@ function openLanding() {
         body: JSON.stringify({
           model: 'claude-sonnet-4-5',
           max_tokens: 1024,
-          system: MANAGER_SYSTEM_PROMPT,
+          system: fullPrompt,
           messages: _nmHistory
         })
       });
@@ -4859,6 +5000,8 @@ function openLanding() {
       var reply = data.content && data.content[0] && data.content[0].text || '';
       _nmHistory.push({ role: 'assistant', content: reply });
       _nmAppend('ai', reply);
+      // Auto-memory every 5 messages (counting assistant replies)
+      if (_nmMsgCount % 5 === 0) _nmAutoMemory();
     } catch (e) {
       _nmHideTyping();
       console.error('[Next Manager] fetch exception', e);
@@ -4919,6 +5062,7 @@ function openLanding() {
     document.getElementById('nmSettingsRow').classList.remove('nm-settings-open');
     _nmFsOpen = true;
     _nmRenderTo('nmFsMessages');
+    nmMemRender();
     fs.classList.add('nm-fs-open');
     setTimeout(function() { var i = document.getElementById('nmFsInput'); if (i) i.focus(); }, 200);
   };
@@ -4956,6 +5100,13 @@ function openLanding() {
     wireInput('nmInput',   window.nmSend);
     wireInput('nmFsInput', window.nmFsSend);
     wireSettingsInput('nmApiKeyInput');
+    var nmMemNoteInp = document.getElementById('nmMemNoteInp');
+    if (nmMemNoteInp) {
+      nmMemNoteInp.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); window.nmMemAddManual(); }
+      });
+    }
+    nmMemRender();
   });
 })();
 
