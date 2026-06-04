@@ -240,6 +240,7 @@ def scrape(
             "Branche":           branch_label,
             "Status":            bstatus,
             "Website_vorhanden": "Ja" if d.get("website") else "Nein",
+            "Google_Maps_Link":  f"https://www.google.com/maps/place/?q=place_id:{place_id}",
         })
         _progress(i, total, len(leads), skipped_website, skipped_phone, skipped_closed)
 
@@ -270,7 +271,7 @@ def save_csv(rows: list[dict], city: str, branch_label: str) -> str:
     )
     fieldnames = [
         "Name", "Adresse", "Telefon", "Bewertung",
-        "Anzahl_Reviews", "Branche", "Status", "Website_vorhanden",
+        "Anzahl_Reviews", "Branche", "Status", "Website_vorhanden", "Google_Maps_Link",
     ]
     with open(filename, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
