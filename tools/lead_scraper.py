@@ -112,22 +112,11 @@ def format_hours(opening_hours: dict) -> str:
 
 # ── Main scrape ────────────────────────────────────────────────────────────────
 
-def scrape(city: str, category: str) -> list[dict]:
-    print(f"\nStadt:     {city}")
-    print(f"Kategorie: {category}")
-    print(f"Radius:    {SEARCH_RADIUS // 1000} km")
-    print("─" * 56)
+def scrape(city: str, category: str, lat: float, lng: float,
+           seen_ids: set[str]) -> list[dict]:
+    print(f"\n── Kategorie: {category} " + "─" * max(0, 40 - len(category)))
 
-    # Step 1: geocode
-    print("Koordinaten ermitteln …", end=" ", flush=True)
-    coords = get_city_coords(city)
-    if not coords:
-        print(f'Fehler — Stadt "{city}" nicht gefunden.')
-        sys.exit(1)
-    lat, lng = coords
-    print(f"{lat:.4f}, {lng:.4f}")
-
-    # Step 2: collect place_ids via multiple query variants
+    # Collect place_ids via multiple query variants
     queries = [
         f"{category} {city}",
         f"{category} in {city}",
@@ -135,53 +124,53 @@ def scrape(city: str, category: str) -> list[dict]:
         f"{category} {city} altstadt",
     ]
 
-    all_ids: set[str] = set()
+    cat_ids: set[str] = set()
     for q in queries:
         print(f'  Suche: "{q}" …', end=" ", flush=True)
         ids = collect_place_ids(q, lat, lng)
-        new = ids - all_ids
-        all_ids |= ids
-        print(f"{len(ids)} Treffer, {len(new)} neu (gesamt {len(all_ids)})")
+        new = ids - cat_ids
+        cat_ids |= ids
+        print(f"{len(ids)} Treffer, {len(new)} neu (Kategorie gesamt {len(cat_ids)})")
 
-    print(f"\nEindeutige Orte gesamt: {len(all_ids)}")
-    print("Details abrufen …\n")
+    # Exclude place_ids already processed by a previous category
+    new_ids = cat_ids - seen_ids
+    seen_ids |= cat_ids
+    print(f"  Neu (kategorieübergreifend): {len(new_ids)} von {len(cat_ids)}")
+    print("  Details abrufen …\n")
 
-    # Step 3: fetch details + filter
     leads: list[dict] = []
-    total     = len(all_ids)
+    total     = len(new_ids)
     skipped   = 0
     no_website = 0
 
-    for i, place_id in enumerate(all_ids, 1):
+    for i, place_id in enumerate(new_ids, 1):
         d = get_details(place_id)
 
-        # Skip closed businesses
         bstatus = d.get("business_status", "OPERATIONAL")
         if bstatus != "OPERATIONAL":
             skipped += 1
             _print_progress(i, total, no_website, skipped)
             continue
 
-        has_website = bool(d.get("website"))
-        if has_website:
+        if d.get("website"):
             skipped += 1
             _print_progress(i, total, no_website, skipped)
             continue
 
         no_website += 1
         leads.append({
-            "Name":             d.get("name", ""),
-            "Adresse":          d.get("formatted_address", ""),
-            "Telefon":          d.get("formatted_phone_number", ""),
-            "Bewertung":        d.get("rating", ""),
-            "Anzahl_Reviews":   d.get("user_ratings_total", ""),
-            "Kategorie":        category,
-            "Status":           bstatus,
+            "Name":              d.get("name", ""),
+            "Adresse":           d.get("formatted_address", ""),
+            "Telefon":           d.get("formatted_phone_number", ""),
+            "Bewertung":         d.get("rating", ""),
+            "Anzahl_Reviews":    d.get("user_ratings_total", ""),
+            "Kategorie":         category,
+            "Status":            bstatus,
             "Website_vorhanden": "Nein",
         })
         _print_progress(i, total, no_website, skipped)
 
-    print()  # newline after progress line
+    print()
     return leads
 
 
@@ -196,13 +185,13 @@ def _print_progress(current: int, total: int, kept: int, skipped: int) -> None:
 
 # ── CSV export ─────────────────────────────────────────────────────────────────
 
-def save_csv(rows: list[dict], city: str, category: str) -> str:
+def save_csv(rows: list[dict], city: str, label: str) -> str:
     timestamp  = datetime.now().strftime("%Y%m%d_%H%M%S")
     safe_city  = city.replace(" ", "_")
-    safe_cat   = category.replace(" ", "_")
+    safe_label = label.replace(" ", "_").replace(",", "-")[:40]
     filename   = os.path.join(
         os.path.dirname(__file__),
-        f"leads_{safe_city}_{safe_cat}_{timestamp}.csv",
+        f"leads_{safe_city}_{safe_label}_{timestamp}.csv",
     )
     fieldnames = [
         "Name", "Adresse", "Telefon", "Bewertung",
@@ -219,8 +208,9 @@ def save_csv(rows: list[dict], city: str, category: str) -> str:
 
 def main() -> None:
     if len(sys.argv) < 3:
-        print("Usage: python lead_scraper.py \"<Stadt>\" \"<Kategorie>\"")
-        print("  z.B.: python lead_scraper.py \"Lübeck\" \"Restaurant\"")
+        print("Usage: python lead_scraper.py \"<Stadt>\" \"<Kategorien>\"")
+        print("  Einzeln:   python lead_scraper.py \"Lübeck\" \"Restaurant\"")
+        print("  Mehrere:   python lead_scraper.py \"Lübeck\" \"Restaurant,Bar,Friseur\"")
         sys.exit(1)
 
     if not API_KEY:
@@ -228,21 +218,45 @@ def main() -> None:
         print("Kopiere tools/.env.example → tools/.env und trage deinen API Key ein.")
         sys.exit(1)
 
-    city     = sys.argv[1].strip()
-    category = sys.argv[2].strip()
+    city       = sys.argv[1].strip()
+    categories = [c.strip() for c in sys.argv[2].split(",") if c.strip()]
 
-    leads = scrape(city, category)
+    print(f"\nStadt:      {city}")
+    print(f"Kategorien: {', '.join(categories)}")
+    print(f"Radius:     {SEARCH_RADIUS // 1000} km")
+    print("═" * 56)
 
-    if not leads:
-        print("\nKeine Leads ohne Website gefunden.")
-        sys.exit(0)
+    # Geocode once for all categories
+    print("Koordinaten ermitteln …", end=" ", flush=True)
+    coords = get_city_coords(city)
+    if not coords:
+        print(f'Fehler — Stadt "{city}" nicht gefunden.')
+        sys.exit(1)
+    lat, lng = coords
+    print(f"{lat:.4f}, {lng:.4f}")
 
-    filename = save_csv(leads, city, category)
+    # Scrape each category; share seen_ids to deduplicate across categories
+    all_leads: list[dict] = []
+    seen_ids: set[str] = set()
+
+    for category in categories:
+        leads = scrape(city, category, lat, lng, seen_ids)
+        all_leads.extend(leads)
+        print(f"  → {len(leads)} neue Leads für {category} (gesamt bisher: {len(all_leads)})")
 
     print("\n" + "═" * 56)
-    print(f"  Leads ohne Website:   {len(leads)}")
+
+    if not all_leads:
+        print("  Keine Leads ohne Website gefunden.")
+        print("═" * 56)
+        sys.exit(0)
+
+    label    = categories[0] if len(categories) == 1 else f"{len(categories)}_Kategorien"
+    filename = save_csv(all_leads, city, label)
+
+    print(f"  Leads ohne Website:   {len(all_leads)}")
     print(f"  Stadt:                {city}")
-    print(f"  Kategorie:            {category}")
+    print(f"  Kategorien:           {', '.join(categories)}")
     print(f"  Gespeichert in:       {filename}")
     print("═" * 56)
 
