@@ -74,16 +74,26 @@ def show_menu() -> tuple[str, list[str], str, bool, bool]:
     branch_label = ""
     search_terms: list[str] = []
     while not branch_label:
-        choice = prompt(f"Auswahl [1-{len(BRANCHEN)+1}]: ")
-        if choice.isdigit():
-            idx = int(choice)
-            if 1 <= idx <= len(BRANCHEN):
-                branch_label, search_terms = BRANCHEN[idx - 1]
-            elif idx == len(BRANCHEN) + 1:
-                custom = prompt("Branche eingeben: ")
-                if custom:
-                    branch_label = custom
-                    search_terms = [custom]
+        choice = prompt(f"Auswahl [1-{len(BRANCHEN)+1}], mehrere mit Komma oder 'und': ")
+        # Normalise: "4 und 5" or "4,5" or "4 5" → ["4","5"]
+        import re as _re
+        tokens = [t.strip() for t in _re.split(r'[,\s]+(?:und\s*)?|und\s*', choice) if t.strip()]
+        tokens = [t for t in tokens if t.isdigit()]
+        indices = [int(t) for t in tokens]
+
+        # Custom entry
+        if indices == [len(BRANCHEN) + 1]:
+            custom = prompt("Branche eingeben: ")
+            if custom:
+                branch_label = custom
+                search_terms = [custom]
+        elif indices and all(1 <= i <= len(BRANCHEN) for i in indices):
+            labels = [BRANCHEN[i - 1][0] for i in indices]
+            terms  = []
+            for i in indices:
+                terms.extend(BRANCHEN[i - 1][1])
+            branch_label = " & ".join(labels)
+            search_terms = terms
         if not branch_label:
             print("  ⚠  Ungültige Auswahl.")
 
@@ -98,17 +108,23 @@ def show_menu() -> tuple[str, list[str], str, bool, bool]:
 # ── Geocoding ──────────────────────────────────────────────────────────────────
 
 def get_city_coords(city: str) -> tuple[float, float] | None:
-    r = requests.get(
-        NOMINATIM_URL,
-        params={"q": city, "format": "json", "limit": 1},
-        headers={"User-Agent": "NextStructure-LeadScraper/2.0"},
-        timeout=10,
-    )
-    r.raise_for_status()
-    results = r.json()
-    if not results:
-        return None
-    return float(results[0]["lat"]), float(results[0]["lon"])
+    for attempt in range(5):
+        if attempt:
+            time.sleep(3 ** attempt)
+        r = requests.get(
+            NOMINATIM_URL,
+            params={"q": city, "format": "json", "limit": 1},
+            headers={"User-Agent": "NextStructure-LeadScraper/2.0"},
+            timeout=10,
+        )
+        if r.status_code == 429:
+            continue
+        r.raise_for_status()
+        results = r.json()
+        if not results:
+            return None
+        return float(results[0]["lat"]), float(results[0]["lon"])
+    return None
 
 
 # ── Places search ──────────────────────────────────────────────────────────────
